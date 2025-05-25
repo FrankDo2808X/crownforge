@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrownForge - Your Ultimate Gaming Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="text-3xl font-bold text-yellow-400">CrownForge</div>
+            <div class="hidden md:flex space-x-8">
+                <a href="games.html" class="text-gray-300 hover:text-white transition">Games</a>
+                <a href="upload-game.html" class="text-gray-300 hover:text-white transition">Upload Game</a>
+                <a href="#" class="text-gray-300 hover:text-white transition">Community</a>
+                <a href="#" class="text-gray-300 hover:text-white transition">Support</a>
+            </div>
+            <!-- Login/Signup buttons -->
+            <div id="loginSignup" class="flex space-x-4">
+                <a href="login.html" class="px-4 py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 transition">Login</a>
+                <a href="signup.html" class="px-4 py-2 text-sm font-medium text-white bg-transparent border border-yellow-500 rounded-lg hover:bg-yellow-500/10 transition">Sign Up</a>
+            </div>
+            <!-- Profile dropdown -->
+            <div id="profileSection" class="relative hidden">
+                <button id="profileButton" onclick="toggleProfileDropdown()" class="flex items-center focus:outline-none">
+                    <img src="https://ui-avatars.com/api/?name=User&background=random" alt="Profile" class="w-8 h-8 rounded-full">
+                </button>
+                <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg py-1 z-50">
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">
+                        <i class="fas fa-user mr-2"></i> Profile
+                    </a>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">
+                        <i class="fas fa-cog mr-2"></i> Settings
+                    </a>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">
+                        <i class="fas fa-wallet mr-2"></i> Wallet
+                    </a>
+                    <a href="#" onclick="handleLogout()" class="block px-4 py-2 text-sm text-red-500 hover:bg-gray-700">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="container mx-auto px-6 py-20">
+        <div class="flex flex-col md:flex-row items-center justify-between">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                    Discover. Play. Create.
+                </h1>
+                <p class="text-xl text-gray-300 mb-8">
+                    Step into CrownForge, the ultimate hub for gamers and developers alike! Whether you're here to explore new worlds, enjoy epic adventures, or bring your own creations to life, we've got you covered.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="signup.html" class="px-8 py-3 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600 transition">Get Started</a>
+                    <a href="#" class="px-8 py-3 bg-transparent border border-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-500/10 transition">Learn More</a>
+                </div>
+            </div>
+            <div class="md:w-1/2">
+                <img src="https://placehold.co/600x400" alt="Gaming Illustration" class="rounded-lg shadow-2xl">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="container mx-auto px-6 py-20">
+        <h2 class="text-4xl font-bold text-center mb-16">Why Choose CrownForge?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="p-6 hero-gradient rounded-lg">
+                <div class="text-yellow-500 text-4xl mb-4">🎮</div>
+                <h3 class="text-xl font-semibold mb-2">Massive Game Library</h3>
+                <p class="text-gray-300">Explore a vast collection of free and premium games from various genres.</p>
+            </div>
+            <div class="p-6 hero-gradient rounded-lg">
+                <div class="text-yellow-500 text-4xl mb-4">⚡</div>
+                <h3 class="text-xl font-semibold mb-2">Instant Access</h3>
+                <p class="text-gray-300">Download and play your favorite titles anytime, anywhere.</p>
+            </div>
+            <div class="p-6 hero-gradient rounded-lg">
+                <div class="text-yellow-500 text-4xl mb-4">🌍</div>
+                <h3 class="text-xl font-semibold mb-2">Global Reach</h3>
+                <p class="text-gray-300">Publish your games and reach a worldwide audience of gamers.</p>
+            </div>
+            <div class="p-6 hero-gradient rounded-lg">
+                <div class="text-yellow-500 text-4xl mb-4">👥</div>
+                <h3 class="text-xl font-semibold mb-2">Vibrant Community</h3>
+                <p class="text-gray-300">Join discussions, share experiences, and connect with fellow gamers.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="container mx-auto px-6 py-12">
+        <div class="bg-yellow-500/10 rounded-2xl p-12 text-center">
+            <h2 class="text-3xl font-bold mb-6">Start Your Gaming Journey Now!</h2>
+            <p class="text-xl text-gray-300 mb-8">Find your next favorite game and dive into the action.</p>
+            <div id="ctaButtons">
+                <!-- For logged out users -->
+                <div id="ctaLoggedOut">
+                    <p class="text-xl text-gray-300 mb-8">Ready to Start Your Journey? Join thousands of gamers and developers on CrownForge today!</p>
+                    <a href="signup.html" class="px-8 py-3 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600 transition inline-block">Create Your Account</a>
+                </div>
+                <!-- For logged in users -->
+                <div id="ctaLoggedIn" class="hidden">
+                    <a href="all-games.html" class="px-8 py-3 bg-yellow-500 text-white rounded-lg font-medium hover:bg-yellow-600 transition inline-block">🛒 Browse Games</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="container mx-auto px-6 py-8 border-t border-gray-800">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="text-2xl font-bold text-yellow-400 mb-4 md:mb-0">CrownForge</div>
+            <div class="flex space-x-6">
+                <a href="#" class="text-gray-400 hover:text-white transition">About</a>
+                <a href="#" class="text-gray-400 hover:text-white transition">Support</a>
+                <a href="#" class="text-gray-400 hover:text-white transition">Terms</a>
+                <a href="#" class="text-gray-400 hover:text-white transition">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Add this before closing body tag -->
+    <script>
+        // Check login status
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const loginSignup = document.getElementById('loginSignup');
+        const profileSection = document.getElementById('profileSection');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const profileButton = document.getElementById('profileButton');
+        const ctaLoggedOut = document.getElementById('ctaLoggedOut');
+        const ctaLoggedIn = document.getElementById('ctaLoggedIn');
+
+        // Update navigation and CTA based on login status
+        if (isLoggedIn) {
+            loginSignup.classList.add('hidden');
+            profileSection.classList.remove('hidden');
+            ctaLoggedOut.classList.add('hidden');
+            ctaLoggedIn.classList.remove('hidden');
+        } else {
+            loginSignup.classList.remove('hidden');
+            profileSection.classList.add('hidden');
+            ctaLoggedOut.classList.remove('hidden');
+            ctaLoggedIn.classList.add('hidden');
+        }
+
+        // Toggle profile dropdown
+        profileButton.addEventListener('click', () => {
+            profileDropdown.classList.toggle('hidden');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!profileSection.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        // Handle logout
+        function handleLogout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.reload();
+        }
+    </script>
+    <script src="script.js"></script>
+</body>
+</html> 
