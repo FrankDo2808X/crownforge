@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Support - CrownForge</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+   
+</head>
+<body class="bg-[#0f1123] text-white font-['Poppins']">
+  <header class="bg-[#0f1123] px-5 py-5 md:px-10 flex justify-between items-center">
+    <div class="text-2xl font-bold text-yellow-400">CrownForge</div>
+    <nav class="hidden md:flex gap-4">
+        <a href="games.html" class="text-white">Games</a>
+        <a href="upload-game.html" class="text-gray-300 hover:text-white transition">Upload Game</a>
+        <a href="community.html" class="text-gray-300 hover:text-white transition">Community</a>
+        <a href="support.html" class="text-gray-300 hover:text-white transition">Support</a>
+    </nav>
+    <div id="loginSignup" class="flex items-center space-x-4">
+        <a href="login.html" class="px-4 py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 transition">Login</a>
+        <a href="signup.html" class="px-4 py-2 text-sm font-medium text-white bg-transparent border border-yellow-500 rounded-lg hover:bg-yellow-500/10 transition">Sign Up</a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-5 py-16">
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-extrabold mb-4">Contact Support</h1>
+      <p class="text-gray-400 text-lg">Get help with your account, technical issues, or general inquiries</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="bg-[#1a1c33] p-8 rounded-xl">
+        <form id="supportForm" class="space-y-6">
+          <div>
+            <label class="block text-gray-300 mb-2">Your Name</label>
+            <input type="text" required 
+                   class="w-full p-3 rounded-lg bg-[#0f1123] border-none focus:ring-2 focus:ring-yellow-400">
+          </div>
+          
+          <div>
+            <label class="block text-gray-300 mb-2">Email Address</label>
+            <input type="email" required 
+                   class="w-full p-3 rounded-lg bg-[#0f1123] border-none focus:ring-2 focus:ring-yellow-400">
+          </div>
+
+          <div>
+            <label class="block text-gray-300 mb-2">Subject</label>
+            <select class="w-full p-3 rounded-lg bg-[#0f1123] border-none focus:ring-2 focus:ring-yellow-400">
+              <option>Technical Support</option>
+              <option>Account Help</option>
+              <option>Payment Issues</option>
+              <option>General Inquiry</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-gray-300 mb-2">Message</label>
+            <textarea rows="5" required 
+                      class="w-full p-3 rounded-lg bg-[#0f1123] border-none focus:ring-2 focus:ring-yellow-400"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-gray-300 mb-2">Attach File (optional)</label>
+            <input type="file" 
+                   class="w-full file:bg-yellow-400 file:text-black file:border-0 file:px-4 file:py-2 file:rounded-lg file:font-bold">
+          </div>
+
+          <button type="submit" 
+                  class="bg-yellow-400 px-6 py-3 rounded-lg font-bold hover:bg-yellow-500 transition-colors w-full">
+            Send Message
+          </button>
+        </form>
+      </div>
+
+      <div class="space-y-6">
+        <div class="bg-[#1a1c33] p-8 rounded-xl">
+          <h2 class="text-2xl font-bold mb-4">Support Information</h2>
+          <div class="space-y-4 text-gray-300">
+            <div>
+              <p class="font-semibold">Email Support:</p>
+              <p>support@crownforge.com</p>
+            </div>
+            <div>
+              <p class="font-semibold">Phone Support:</p>
+              <p>+1 (800) 123-4567</p>
+            </div>
+            <div>
+              <p class="font-semibold">Office Hours:</p>
+              <p>Mon-Fri: 9AM - 8PM (EST)<br>Sat-Sun: 10AM - 6PM (EST)</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#1a1c33] p-8 rounded-xl">
+          <h2 class="text-2xl font-bold mb-4">FAQs</h2>
+          <div class="space-y-4 text-gray-300">
+            <details class="border-b border-[#0f1123] pb-4">
+              <summary class="cursor-pointer font-semibold">How do I reset my password?</summary>
+              <p class="mt-2">Visit the login page and click "Forgot Password" to reset via email.</p>
+            </details>
+            <details class="border-b border-[#0f1123] pb-4">
+              <summary class="cursor-pointer font-semibold">Where are my purchases?</summary>
+              <p class="mt-2">All purchases can be accessed through your account dashboard.</p>
+            </details>
+            <details class="pb-4">
+              <summary class="cursor-pointer font-semibold">Refund policy</summary>
+              <p class="mt-2">We offer 30-day refunds for all digital purchases.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="text-center py-5 text-gray-400 text-sm">
+    © 2025 CrownForge. All rights reserved.
+  </footer>
+
+  <script>
+    document.getElementById('supportForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Add your form submission logic here
+      alert('Your support request has been submitted successfully!');
+      this.reset();
+      
+      // You can add AJAX submission here
+      // fetch('your-endpoint', { method: 'POST', body: new FormData(this) })
+    });
+  </script>
+</body>
+</html>

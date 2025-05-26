@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Community - CrownForge</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#181D34] text-white font-['Poppins']">
+  <header class="bg-[#181D34] px-5 py-5 md:px-10 flex justify-between items-center">
+    <div class="text-2xl font-bold text-yellow-400">CrownForge</div>
+    <nav class="  hidden md:flex gap-4">
+        <a href="games.html" class="text-white">Games</a>
+        <a href="upload-game.html" class="text-gray-300 hover:text-white transition">Upload Game</a>
+        <a href="community.html" class="text-gray-300 hover:text-white transition">Community</a>
+        <a href="support.html" class="text-gray-300 hover:text-white transition">Support</a>
+    </nav>
+    <div id="loginSignup" class="flex items-center space-x-4">
+        <a href="login.html" class="px-4 py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 transition">Login</a>
+        <a href="signup.html" class="px-4 py-2 text-sm font-medium text-white bg-transparent border border-yellow-500 rounded-lg hover:bg-yellow-500/10 transition">Sign Up</a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-5 py-16">
+    <h1 class="text-4xl md:text-5xl font-bold text-center mb-6">Welcome to the Community</h1>
+    <p class="text-gray-400 text-lg text-center mb-10">Connect, share, and engage with fellow gamers.</p>
+
+    <div id="posts" class="space-y-4"></div>
+
+    <form id="postForm" onsubmit="return addPost(event)" class="mt-8 space-y-4">
+      <input type="text" id="username" placeholder="Your name" 
+             class="w-full p-3 rounded-lg bg-[#2B2E43] border-none focus:ring-2 focus:ring-yellow-400">
+      <textarea id="postInput" placeholder="Share something cool..." rows="3"
+                class="w-full p-3 rounded-lg bg-[#2B2E43] border-none focus:ring-2 focus:ring-yellow-400"></textarea>
+      
+      <div class="flex flex-col gap-4">
+        <label class="border-2 border-yellow-400 rounded-lg px-4 py-2 text-yellow-400 cursor-pointer w-fit">
+          📷 Upload Image
+          <input type="file" id="imageInput" accept="image/*" class="hidden">
+        </label>
+        <div id="imagePreview" class="max-w-[400px]"></div>
+      </div>
+
+      <button type="submit" class="bg-[#FACB14] px-6 py-2 rounded-lg font-bold hover:bg-yellow-500 transition-colors">
+        Post
+      </button>
+    </form>
+  </main>
+
+  <footer class="text-center py-5 text-gray-400 text-sm">
+    © 2025 CrownForge. All rights reserved.
+  </footer>
+
+  <script>
+    // Generate unique user ID if none exists
+    let userId = localStorage.getItem('userId') || crypto.randomUUID();
+    localStorage.setItem('userId', userId);
+
+    // Load posts from localStorage
+    let posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+    window.onload = () => {
+      posts.forEach(post => createPostElement(post));
+      document.getElementById('username').value = localStorage.getItem('username') || '';
+    }
+
+    // Image preview handler
+    document.getElementById('imageInput').addEventListener('change', function(e) {
+      const preview = document.getElementById('imagePreview');
+      preview.innerHTML = '';
+      
+      if (e.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.innerHTML = `
+            <img src="${e.target.result}" 
+                 class="rounded-lg mt-2 border-2 border-[#1a1c33]">
+          `;
+        }
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    });
+
+    function addPost(event) {
+      event.preventDefault();
+      
+      const username = document.getElementById('username').value.trim() || 'Anonymous';
+      const text = document.getElementById('postInput').value.trim();
+      const imageInput = document.getElementById('imageInput');
+      
+      if (!text && !imageInput.files[0]) return;
+
+      // Save username for future posts
+      localStorage.setItem('username', username);
+
+      const newPost = {
+        id: Date.now(),
+        userId: userId,
+        username: username,
+        text: text,
+        image: imageInput.files[0] ? URL.createObjectURL(imageInput.files[0]) : null,
+        timestamp: new Date().toLocaleString()
+      };
+
+      posts.unshift(newPost);
+      localStorage.setItem('posts', JSON.stringify(posts));
+      
+      createPostElement(newPost);
+      document.getElementById('postForm').reset();
+      document.getElementById('imagePreview').innerHTML = '';
+    }
+
+    function createPostElement(post) {
+      const postDiv = document.createElement('div');
+      postDiv.id = post.id;
+      postDiv.className = 'bg-[#2B2E43] p-5 rounded-xl';
+      
+      const isCurrentUser = post.userId === userId;
+      
+      postDiv.innerHTML = `
+        <div class="flex justify-between items-start mb-4">
+          <div class="flex items-center gap-3">
+            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(post.username)}&background=random" 
+                 class="w-10 h-10 rounded-full">
+            <div>
+              <h3 class="font-semibold">${post.username}</h3>
+              <p class="text-gray-400 text-sm">${post.timestamp}</p>
+            </div>
+          </div>
+          ${isCurrentUser ? `
+            <button onclick="deletePost(${post.id})" 
+                    class="text-red-400 hover:text-red-500 transition-colors">
+              ✕
+            </button>
+          ` : ''}
+        </div>
+        ${post.text ? `<p class="text-gray-300 mb-4">${post.text}</p>` : ''}
+        ${post.image ? `
+          <img src="${post.image}" 
+               class="rounded-lg mb-4 border-2 border-[#0f1123]">
+        ` : ''}
+      `;
+
+      document.getElementById('posts').prepend(postDiv);
+    }
+
+    function deletePost(postId) {
+      posts = posts.filter(post => post.id !== postId);
+      localStorage.setItem('posts', JSON.stringify(posts));
+      document.getElementById(postId).remove();
+    }
+  </script>
+</body>
+</html>

@@ -30,10 +30,10 @@
         <div class="flex items-center justify-between">
             <div class="text-3xl font-bold text-yellow-400">CrownForge</div>
             <div class="hidden md:flex space-x-8">
-                <a href="games.html" class="text-gray-300 hover:text-white transition">Games</a>
+                <a href="games.html" class="text-white">Games</a>
                 <a href="upload-game.html" class="text-gray-300 hover:text-white transition">Upload Game</a>
-                <a href="#" class="text-gray-300 hover:text-white transition">Community</a>
-                <a href="#" class="text-gray-300 hover:text-white transition">Support</a>
+                <a href="community.html" class="text-gray-300 hover:text-white transition">Community</a>
+                <a href="support.html" class="text-gray-300 hover:text-white transition">Support</a>
             </div>
             <div id="loginSignup" class="flex space-x-4">
                 <a href="login.html" class="px-4 py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 transition">Login</a>
@@ -95,73 +95,59 @@
             </select>
         </div>
     </div>
-
-    <!-- Games Grid -->
     <div class="container mx-auto px-6 py-8">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             <!-- Game Card 1 -->
             <div class="game-card bg-gray-800/50 backdrop-blur-sm rounded-xl overflow-hidden">
-                <img src="https://placehold.co/600x400" alt="Game 1" class="w-full h-48 object-cover">
+                <img src="" class="w-full h-48 object-cover">
                 <div class="p-4">
                     <h3 class="text-xl font-semibold text-white mb-2">Cyber Adventure</h3>
                     <p class="text-gray-400 text-sm mb-4">Action, Adventure, RPG</p>
                     <div class="flex items-center justify-between">
-                        <span class="text-yellow-500 font-bold">$29.99</span>
-                        <div class="flex items-center">
-                            <i class="fas fa-star text-yellow-400"></i>
-                            <span class="ml-1 text-gray-300">4.8</span>
+                        <div class="flex items-center gap-4">
+                            <span class="text-yellow-500 font-bold">₹1,299</span>
+                            <div class="flex items-center text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <span class="ml-1 text-gray-300">4.8</span>
+                            </div>
                         </div>
+                        <button 
+      onclick="redirectToBuyPage('cyber-adventure', 1999)" 
+      class="..."
+    >
+      Buy Now
+    </button>
                     </div>
                 </div>
             </div>
-
+    
             <!-- Game Card 2 -->
             <div class="game-card bg-gray-800/50 backdrop-blur-sm rounded-xl overflow-hidden">
-                <img src="https://placehold.co/600x400" alt="Game 2" class="w-full h-48 object-cover">
+                <img src="racing-legends.jpg" alt="Racing Legends" class="w-full h-48 object-cover">
                 <div class="p-4">
                     <h3 class="text-xl font-semibold text-white mb-2">Racing Legends</h3>
                     <p class="text-gray-400 text-sm mb-4">Racing, Sports</p>
                     <div class="flex items-center justify-between">
-                        <span class="text-yellow-500 font-bold">$49.99</span>
-                        <div class="flex items-center">
-                            <i class="fas fa-star text-yellow-400"></i>
-                            <span class="ml-1 text-gray-300">4.6</span>
+                        <div class="flex items-center gap-4">
+                            <span class="text-yellow-500 font-bold">₹1,799</span>
+                            <div class="flex items-center text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <span class="ml-1 text-gray-300">4.6</span>
+                            </div>
                         </div>
+                        <button onclick="redirectToPurchase('racing-legends', 1799)" 
+                                class="bg-yellow-500 text-black px-4 py-2 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
+                            Buy Now
+                        </button>
                     </div>
                 </div>
             </div>
-
-            <!-- Game Card 3 -->
-            <div class="game-card bg-gray-800/50 backdrop-blur-sm rounded-xl overflow-hidden">
-                <img src="https://placehold.co/600x400" alt="Game 3" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-semibold text-white mb-2">Strategy Empire</h3>
-                    <p class="text-gray-400 text-sm mb-4">Strategy, Simulation</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-yellow-500 font-bold">$39.99</span>
-                        <div class="flex items-center">
-                            <i class="fas fa-star text-yellow-400"></i>
-                            <span class="ml-1 text-gray-300">4.9</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Game Card 4 -->
-            <div class="game-card bg-gray-800/50 backdrop-blur-sm rounded-xl overflow-hidden">
-                <img src="https://placehold.co/600x400" alt="Game 4" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-semibold text-white mb-2">Sports Arena</h3>
-                    <p class="text-gray-400 text-sm mb-4">Sports, Action</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-yellow-500 font-bold">$19.99</span>
-                        <div class="flex items-center">
-                            <i class="fas fa-star text-yellow-400"></i>
-                            <span class="ml-1 text-gray-300">4.5</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    
+            <!-- Other game cards follow same structure -->
+        </div>
+    </div>
+    
+   
 
             <!-- Add more game cards as needed -->
         </div>
@@ -202,6 +188,17 @@
     </footer>
 
     <script>
+
+
+// Add this function to handle navigation
+function redirectToBuyPage(gameId) {
+    // Store game ID in localStorage
+    localStorage.setItem('selectedGameId', gameId);
+    
+    // Redirect to buy page
+    window.location.href = `buy.html?game=${gameId}`;
+}
+
         // Check login status from localStorage
         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
@@ -241,6 +238,22 @@
             localStorage.removeItem('userEmail');
             window.location.reload();
         }
+        
+    function redirectToPurchase(gameId, price) {
+        // Store game details in localStorage
+        const gameData = {
+            id: gameId,
+            price: price,
+            currency: '₹'
+        };
+        localStorage.setItem('selectedGame', JSON.stringify(gameData));
+        
+        // Redirect to buy page
+        window.location.href = `buy.html?game=${gameId}`;
+
+        
+    }
+
     </script>
 </body>
 </html> 
