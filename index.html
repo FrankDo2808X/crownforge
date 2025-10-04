@@ -1,297 +1,474 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CrownForge Studio</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CrownForge Studio — Diwali Event & TDM Update</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Orbitron:wght@600;900&display=swap');
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #0a0a0f;
-      color: #f5f5f5;
-      line-height: 1.6;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
+    :root{
+      --bg-1: #070506;
+      --bg-2: #0f0611;
+      --gold-1: #ffb347;
+      --gold-2: #ff8c00;
+      --accent: #ffd36b;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,140,0,0.06);
+      --muted: rgba(255,255,255,0.75);
     }
 
-    /* Glow animations */
-    @keyframes glow {
-      0% { text-shadow: 0 0 10px #00e6ff, 0 0 20px #00e6ff; }
-      50% { text-shadow: 0 0 20px #00b3cc, 0 0 40px #00b3cc; }
-      100% { text-shadow: 0 0 10px #00e6ff, 0 0 20px #00e6ff; }
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* NAVBAR */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 40px;
-      background: rgba(20,20,30,0.85);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    nav img { width: 60px; }
-    .nav-links {
-      display: flex;
-      gap: 30px;
-    }
-    .nav-links a {
-      color: #f5f5f5;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s, text-shadow 0.3s;
-    }
-    .nav-links a:hover {
-      color: #00e6ff;
-      text-shadow: 0 0 8px #00e6ff;
+    /* --- Reset --- */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color: #fff;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(255,140,0,0.06), transparent 10%),
+                  radial-gradient(1000px 500px at 90% 90%, rgba(255,183,71,0.04), transparent 8%),
+                  linear-gradient(180deg,var(--bg-1),var(--bg-2));
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
     }
 
-    /* Hamburger */
-    .menu-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
+    /* --- Background canvases (stacked) --- */
+    #bg-canvas, #fireworks-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
+    #diya-layer { position:fixed; inset:0; z-index:1; pointer-events:none; }
+
+    /* --- Page content --- */
+    .wrap { position:relative; z-index:2; min-height:100vh; display:flex; flex-direction:column; }
+
+    /* --- NAV --- */
+    nav{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 36px; gap:20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,140,0,0.02));
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,183,71,0.06);
+      position: sticky; top:0; z-index:10;
     }
-    .menu-toggle span {
-      width: 25px;
-      height: 3px;
-      background: #f5f5f5;
-      border-radius: 3px;
+    .brand { display:flex; align-items:center; gap:14px; }
+    .logo {
+      width:60px; height:60px; border-radius:10px;
+      background: linear-gradient(135deg,var(--gold-1),var(--gold-2));
+      box-shadow: 0 6px 24px rgba(255,140,0,0.12), inset 0 -4px 8px rgba(0,0,0,0.25);
+      display:flex; align-items:center; justify-content:center; font-weight:900; font-family:'Orbitron';
+      color:#2b0a00; font-size:20px;
     }
-    @media (max-width: 768px) {
-      .nav-links {
-        position: absolute;
-        top: 70px;
-        right: 0;
-        background: rgba(20,20,30,0.95);
-        flex-direction: column;
-        width: 220px;
-        display: none;
-        padding: 20px;
-        border-radius: 8px 0 0 8px;
-      }
-      .nav-links.active { display: flex; }
-      .menu-toggle { display: flex; }
+    nav .links { display:flex; gap:20px; align-items:center; }
+    nav a { color:var(--muted); text-decoration:none; font-weight:600; padding:8px 10px; border-radius:8px; }
+    nav a:hover{ color:var(--accent); text-shadow:0 0 8px rgba(255,183,71,0.25) }
+
+    /* --- HERO --- */
+    header.hero{
+      padding:70px 20px 40px; text-align:center; position:relative; overflow:visible;
+      background: linear-gradient(180deg, rgba(255,140,0,0.02), transparent 60%);
+    }
+    .hero-inner{
+      max-width:1100px; margin:0 auto; padding:24px; display:grid; grid-template-columns:1fr; gap:20px;
+      align-items:center;
+    }
+    .title-wrap { display:flex; flex-direction:column; gap:12px; align-items:center; }
+    h1 {
+      font-family:'Orbitron',sans-serif; font-size:3.2rem; letter-spacing:1px;
+      background: linear-gradient(90deg,var(--gold-1),var(--gold-2)); -webkit-background-clip:text; color:transparent;
+      text-shadow: 0 6px 30px rgba(255,140,0,0.09);
+      margin-bottom:6px;
+    }
+    p.lead { color: rgba(255,235,200,0.9); font-size:1.05rem; max-width:900px; opacity:0.95; }
+    /* TDM banner + countdown card */
+    .tdm-banner {
+      margin-top:18px;
+      display:flex; gap:16px; align-items:center; justify-content:center; flex-wrap:wrap;
+      background: linear-gradient(90deg, rgba(255,200,120,0.05), rgba(255,140,0,0.03));
+      border:1px solid rgba(255,160,80,0.08);
+      padding:14px 18px; border-radius:14px; box-shadow:0 12px 40px rgba(255,120,10,0.04);
+      backdrop-filter: blur(6px);
+      animation: floaty 6s ease-in-out infinite;
+    }
+    @keyframes floaty { 0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)} }
+    .tdm-left { display:flex; gap:12px; align-items:center; }
+    .tdm-pill {
+      background: linear-gradient(180deg, var(--gold-1), var(--gold-2));
+      padding:8px 12px; border-radius:999px; font-weight:800; color:#2b0a00; box-shadow:0 6px 16px rgba(255,140,0,0.18);
+      display:inline-flex; align-items:center; gap:8px; font-family:'Orbitron';
+    }
+    .tdm-text { text-align:left; min-width:220px; }
+    .tdm-text h3 { margin:0; font-size:1.05rem; color:#fff; letter-spacing:0.6px; }
+    .tdm-text p { margin:0; font-size:0.9rem; color:rgba(255,235,200,0.9); opacity:0.95; }
+    .countdown {
+      display:flex; gap:10px; align-items:center; justify-content:center;
+      background: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(255,140,0,0.02));
+      border:1px solid rgba(255,183,71,0.06);
+      padding:8px 12px; border-radius:10px;
+    }
+    .time-seg{ min-width:64px; text-align:center; }
+    .time-seg .num { font-family:'Orbitron'; font-size:1.3rem; color:var(--accent); display:block; }
+    .time-seg .lab { font-size:0.7rem; color:rgba(255,235,200,0.8); margin-top:4px; }
+
+    /* --- GAMES SECTION --- */
+    section#games { padding:60px 24px 36px; }
+    .games-grid { max-width:1200px; margin:0 auto; display:grid; gap:22px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,140,0,0.02));
+      border: 1px solid rgba(255,160,80,0.04);
+      border-radius:14px; padding:18px; text-align:center; backdrop-filter:blur(6px);
+      transition: transform .35s ease, box-shadow .35s ease;
+    }
+    .card:hover{ transform:translateY(-8px); box-shadow:0 20px 60px rgba(255,120,10,0.06) }
+    .card img{ width:100%; height:160px; object-fit:contain; background:linear-gradient(180deg,#0b0710,#120712); padding:18px; border-radius:10px; }
+    .card h4{ margin-top:12px; font-size:1.1rem; }
+    .card .btn{ margin-top:12px; display:inline-block; padding:10px 18px; border-radius:10px; font-weight:700; color:#2b0a00;
+      background: linear-gradient(90deg,var(--gold-1),var(--gold-2)); text-decoration:none; box-shadow:0 10px 30px rgba(255,140,0,0.12); }
+
+    /* --- ABOUT & CONTACT --- */
+    section.about, section.contact { padding:48px 20px 60px; }
+    .panel {
+      max-width:980px; margin:0 auto; text-align:center; color:rgba(255,235,200,0.95);
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,140,0,0.01));
+      border-radius:12px; padding:18px; border:1px solid rgba(255,160,80,0.03);
     }
 
-    /* HERO */
-    header {
-      background: linear-gradient(135deg, #0f0f17, #1a1a25);
-      text-align: center;
-      padding: 120px 20px;
-      animation: fadeInUp 1.5s ease-in-out;
-    }
-    header img {
-      width: 180px;
-      margin-bottom: 20px;
-      animation: fadeInUp 2s ease-in-out;
-    }
-    header h1 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 3rem;
-      margin-bottom: 10px;
-      color: #ffffff;
-      animation: glow 2s infinite alternate;
-    }
-    header p { font-size: 1.2rem; opacity: 0.9; animation: fadeInUp 2.5s ease; }
+    /* --- FOOTER --- */
+    footer{ padding:28px 18px; text-align:center; color:rgba(255,235,200,0.8); font-size:0.9rem; border-top:1px solid rgba(255,160,80,0.03); }
 
-    /* SECTION TITLES */
-    section h2 {
-      text-align: center;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 2.3rem;
-      margin: 60px 0 30px;
-      color: #00e6ff;
-      animation: fadeInUp 1.2s ease-in-out;
+    /* --- Small screens --- */
+    @media (max-width:720px){
+      h1{font-size:2.2rem}
+      .tdm-text{ min-width:160px }
+      .countdown{ gap:6px }
     }
 
-    /* GAMES GRID */
-    .games {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 30px;
-      padding: 0 30px 60px;
-      max-width: 1200px;
-      margin: auto;
-    }
-    .game-card {
-      background: rgba(22,22,30,0.85);
-      border-radius: 14px;
-      overflow: hidden;
-      text-align: center;
-      transition: transform 0.3s, box-shadow 0.3s;
-      box-shadow: 0 0 0 transparent;
-    }
-    .game-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 0 20px rgba(0,230,255,0.5);
-    }
-    .game-card img {
-      width: 100%;
-      height: 180px;
-      object-fit: contain;
-      background: #0d0d0f;
-      padding: 20px;
-    }
-    .game-card h3 { margin: 15px 0 10px; font-size: 1.3rem; }
-    .btn {
-      display: inline-block;
-      margin: 15px 0 25px;
-      padding: 12px 22px;
-      background: linear-gradient(90deg, #00e6ff, #00b3cc);
-      color: #0d0d0f;
-      font-weight: 700;
-      border-radius: 6px;
-      text-decoration: none;
-      transition: all 0.3s;
-      box-shadow: 0 0 10px rgba(0,230,255,0.6);
-    }
-    .btn:hover {
-      background: linear-gradient(90deg, #00b3cc, #00e6ff);
-      box-shadow: 0 0 20px rgba(0,230,255,0.8);
-      transform: scale(1.05);
+    /* --- Decorative diya (SVG will be injected for better control) --- */
+    .diya { position:absolute; width:80px; height:80px; transform-origin:center; filter: drop-shadow(0 8px 26px rgba(255,140,0,0.14)); }
+    .diya .flame { animation: flicker 1.2s infinite; transform-origin:50% 80%;}
+    @keyframes flicker {
+      0% { transform: translateY(0) scaleY(1); opacity:1 }
+      50% { transform: translateY(-3px) scaleY(0.98); opacity:0.9 }
+      100% { transform: translateY(0) scaleY(1); opacity:1 }
     }
 
-    /* ABOUT */
-    .about {
-      max-width: 900px;
-      margin: auto;
-      padding: 0 20px 60px;
-      text-align: center;
-      animation: fadeInUp 1.5s ease;
-    }
-    .about p { font-size: 1.1rem; opacity: 0.85; }
-
-    /* CONTACT */
-    .contact {
-      max-width: 700px;
-      margin: auto;
-      padding: 0 20px 60px;
-      text-align: center;
-      animation: fadeInUp 1.5s ease;
-    }
-    .contact p { opacity: 0.85; font-size: 1.05rem; }
-    .contact a {
-      color: #00e6ff;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    /* FOOTER */
-    footer {
-      background: #111;
-      padding: 40px 20px;
-      text-align: center;
-    }
-    .socials { margin-bottom: 20px; }
-    .socials a {
-      display: inline-block;
-      margin: 0 12px;
-      transition: transform 0.3s, filter 0.3s;
-    }
-    .socials a:hover {
-      transform: scale(1.2);
-      filter: drop-shadow(0 0 8px #00e6ff);
-    }
-    .socials img { width: 35px; }
-    footer p { font-size: 0.9rem; opacity: 0.6; }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <img src="https://i.ibb.co/WNtd2tTK/logo.png" alt="CrownForge Logo">
-    <div class="menu-toggle" id="menu-toggle">
-      <span></span><span></span><span></span>
-    </div>
-    <div class="nav-links" id="nav-links">
-      <a href="#home">Home</a>
-      <a href="#games">Games</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </div>
-  </nav>
+  <!-- Background canvases -->
+  <canvas id="bg-canvas"></canvas>         <!-- soft sparks -->
+  <canvas id="fireworks-canvas"></canvas> --><!-- fireworks on click -->
+  <div id="diya-layer" aria-hidden="true"></div>
 
-  <!-- HERO -->
-  <header id="home">
-    <img src="https://i.ibb.co/WNtd2tTK/logo.png" alt="CrownForge Studio Logo">
-    <h1>CrownForge Studio</h1>
-    <p>Creating immersive worlds, one game at a time.</p>
-  </header>
-
-  <!-- GAMES -->
-  <section id="games">
-    <h2>Our Games</h2>
-    <div class="games">
-      <div class="game-card">
-        <img src="https://i.ibb.co/WWBbB53F/warx-logo.png" alt="WarX">
-        <h3>WarX</h3>
-        <a class="btn" href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.Uitesting&hl=en_IN" target="_blank">Download</a>
+  <div class="wrap">
+    <!-- NAV -->
+    <nav>
+      <div class="brand">
+        <div class="logo">CF</div>
+        <div>
+          <div style="font-weight:700">CrownForge</div>
+          <div style="font-size:12px; color:rgba(255,235,200,0.85)">Studio</div>
+        </div>
       </div>
-      <div class="game-card">
-        <img src="https://i.ibb.co/BKZDrBHJ/zombie-strike-force-logo.png" alt="Zombie Strike Force">
-        <h3>Zombie Strike Force</h3>
-        <a class="btn" href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.ZombieStrikeForce&hl=en_IN" target="_blank">Download</a>
+      <div class="links" role="navigation" aria-label="Main navigation">
+        <a href="#home">Home</a>
+        <a href="#games">Games</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
       </div>
-      <div class="game-card">
-        <img src="https://i.ibb.co/0pM8N2z0/the-black-veil-logo.png" alt="The Black Veil">
-        <h3>The Black Veil</h3>
-        <a class="btn" href="http://play.google.com/store/apps/details?id=com.PRA3KGAMES.THEBLACKVEIL&hl=en_IN" target="_blank">Download</a>
+    </nav>
+
+    <!-- HERO -->
+    <header id="home" class="hero" role="banner">
+      <div class="hero-inner">
+        <div class="title-wrap">
+          <h1>CrownForge Studio</h1>
+          <p class="lead">Forging worlds beyond imagination — Celebrate Diwali with exclusive events & get ready for the TDM update.</p>
+
+          <!-- TDM Banner + Countdown -->
+          <div class="tdm-banner" role="region" aria-label="TDM update banner">
+            <div class="tdm-left">
+              <div class="tdm-pill">🔥 TDM</div>
+              <div class="tdm-text">
+                <h3>TDM Update — Coming Soon</h3>
+                <p>New maps, balance changes & a festival event drop. Light up the battlefield!</p>
+              </div>
+            </div>
+
+            <div class="countdown" id="countdown" aria-live="polite" title="Time until TDM update">
+              <div class="time-seg"><span class="num" id="days">00</span><span class="lab">Days</span></div>
+              <div class="time-seg"><span class="num" id="hours">00</span><span class="lab">Hours</span></div>
+              <div class="time-seg"><span class="num" id="mins">00</span><span class="lab">Mins</span></div>
+              <div class="time-seg"><span class="num" id="secs">00</span><span class="lab">Secs</span></div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <h2>About Us</h2>
-    <div class="about">
-      <p>
-        CrownForge Studio is a passionate game development studio creating unique, immersive, and action-packed experiences for players worldwide.  
-        Our mission is to push creativity and deliver unforgettable adventures across genres with stunning visuals, smooth gameplay, and engaging stories.
-      </p>
-    </div>
-  </section>
+    <!-- GAMES -->
+    <section id="games" aria-labelledby="games-title">
+      <h2 id="games-title" style="text-align:center; font-family:Orbitron, sans-serif; color:var(--gold-1); margin:20px 0 8px">Our Games</h2>
+      <div class="games-grid">
+        <div class="card">
+          <img src="https://i.ibb.co/WWBbB53F/warx-logo.png" alt="WarX logo">
+          <h4>WarX</h4>
+          <a class="btn" href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.Uitesting" target="_blank" rel="noopener">Play</a>
+        </div>
+        <div class="card">
+          <img src="https://i.ibb.co/BKZDrBHJ/zombie-strike-force-logo.png" alt="Zombie Strike Force logo">
+          <h4>Zombie Strike Force</h4>
+          <a class="btn" href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.ZombieStrikeForce" target="_blank" rel="noopener">Play</a>
+        </div>
+        <div class="card">
+          <img src="https://i.ibb.co/0pM8N2z0/the-black-veil-logo.png" alt="The Black Veil logo">
+          <h4>The Black Veil</h4>
+          <a class="btn" href="https://play.google.com/store/apps/details?id=com.PRA3KGAMES.THEBLACKVEIL" target="_blank" rel="noopener">Play</a>
+        </div>
+      </div>
+    </section>
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <h2>Contact</h2>
-    <div class="contact">
-      <p>Have questions, ideas, or business inquiries? Reach us at:</p>
-      <p><a href="mailto:crownforgegames@gmail.com">crownforgegames@gmail.com</a></p>
-    </div>
-  </section>
+    <!-- ABOUT -->
+    <section id="about" class="about" aria-labelledby="about-title">
+      <h2 id="about-title" style="color:var(--gold-2); font-family:Orbitron, sans-serif;">About Us</h2>
+      <div class="panel">
+        <p>CrownForge Studio is an indie game developer crafting cinematic and action-packed experiences. This Diwali join our festivities — light diyas, earn limited rewards and prepare for the TDM update.</p>
+      </div>
+    </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="socials">
-      <a href="https://x.com/crownforgegames/status/1921596023857623419" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter"></a>
-      <a href="https://www.instagram.com/crownforge_official/?igsh=eTJ5cG8wczBiODE%3D#" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"></a>
-      <a href="https://discord.com/invite/mrUMkG6NvK" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord"></a>
-      <a href="https://www.youtube.com/@CrownForgeStudio" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"></a>
-      <a href="https://play.google.com/store/apps/dev?id=5783002895025924726" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/888/888857.png" alt="Google Play"></a>
-    </div>
-    <p>© 2025 CrownForge Studio. All Rights Reserved.</p>
-  </footer>
+    <!-- CONTACT -->
+    <section id="contact" class="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title" style="color:var(--gold-2); font-family:Orbitron, sans-serif;">Contact</h2>
+      <div class="panel">
+        <p>Business & press: <a href="mailto:crownforgebusiness@gmail.com" style="color:var(--accent); text-decoration:none; font-weight:700;">crownforgebusiness@gmail.com</a></p>
+      </div>
+    </section>
 
-  <!-- JS for Menu -->
+    <footer>
+      <div style="margin-bottom:8px">Follow us for live updates & event drops</div>
+      <div style="margin-bottom:10px"><a href="#" style="color:var(--accent); text-decoration:none">Twitter</a> • <a href="#" style="color:var(--accent); text-decoration:none">Instagram</a> • <a href="#" style="color:var(--accent); text-decoration:none">Discord</a></div>
+      <div>© 2025 CrownForge Studio — Happy Diwali ✨</div>
+    </footer>
+  </div>
+
+  <!-- ===== Scripts: particles, fireworks, diyas & countdown ===== -->
   <script>
-    const menuToggle = document.getElementById('menu-toggle');
-    const navLinks = document.getElementById('nav-links');
-    menuToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
+    /* --- Helpers & sizing --- */
+    function fitCanvas(c){
+      c.width = innerWidth * devicePixelRatio;
+      c.height = innerHeight * devicePixelRatio;
+      c.style.width = innerWidth + "px";
+      c.style.height = innerHeight + "px";
+      c.getContext('2d').setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    }
+
+    /* -------- Soft spark background (bg-canvas) -------- */
+    const bgCanvas = document.getElementById('bg-canvas');
+    const bgCtx = bgCanvas.getContext('2d');
+    fitCanvas(bgCanvas);
+    let sparks = [];
+    function initSparks(){
+      sparks = [];
+      const count = Math.round((innerWidth * innerHeight) / 60000); // scale with screen
+      for(let i=0;i<count;i++){
+        sparks.push({
+          x: Math.random() * innerWidth,
+          y: Math.random() * innerHeight,
+          r: Math.random()*1.6 + 0.6,
+          a: Math.random()*0.8 + 0.2,
+          dx: (Math.random()-0.5) * 0.2,
+          dy: (Math.random()-0.5) * 0.2,
+          hue: 40 + Math.random()*20
+        });
+      }
+    }
+    function drawSparks(){
+      bgCtx.clearRect(0,0,innerWidth,innerHeight);
+      for(const s of sparks){
+        bgCtx.beginPath();
+        const g = bgCtx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r*6);
+        g.addColorStop(0, `rgba(255,200,120,${s.a})`);
+        g.addColorStop(0.4, `rgba(255,140,0,${s.a*0.18})`);
+        g.addColorStop(1, `rgba(0,0,0,0)`);
+        bgCtx.fillStyle = g;
+        bgCtx.arc(s.x, s.y, s.r*8, 0, Math.PI*2);
+        bgCtx.fill();
+        s.x += s.dx; s.y += s.dy;
+        if(s.x < -20) s.x = innerWidth + 20;
+        if(s.x > innerWidth + 20) s.x = -20;
+        if(s.y < -20) s.y = innerHeight + 20;
+        if(s.y > innerHeight + 20) s.y = -20;
+      }
+      requestAnimationFrame(drawSparks);
+    }
+
+    /* -------- Fireworks canvas (on click / periodic) -------- */
+    const fwCanvas = document.getElementById('fireworks-canvas');
+    const fwCtx = fwCanvas.getContext('2d');
+    fitCanvas(fwCanvas);
+    let fireworks = [];
+
+    function spawnFirework(x,y){
+      const hue = 30 + Math.random()*40;
+      const count = 18 + Math.round(Math.random()*14);
+      for(let i=0;i<count;i++){
+        const angle = Math.random()*Math.PI*2;
+        const speed = 1.6 + Math.random()*3.2;
+        fireworks.push({
+          x, y,
+          vx: Math.cos(angle)*speed,
+          vy: Math.sin(angle)*speed,
+          life: 60 + Math.random()*40,
+          r: 1.6 + Math.random()*2.6,
+          hue,
+          alpha:1
+        });
+      }
+    }
+
+    function drawFireworks(){
+      fwCtx.clearRect(0,0,innerWidth,innerHeight);
+      for(let i=fireworks.length-1;i>=0;i--){
+        const p = fireworks[i];
+        fwCtx.beginPath();
+        fwCtx.fillStyle = `rgba(255,${170 + (p.hue%40)},${50},${p.alpha})`;
+        fwCtx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        fwCtx.fill();
+        p.x += p.vx; p.y += p.vy;
+        p.vy += 0.02; // gravity
+        p.vx *= 0.995; p.vy *= 0.995;
+        p.life--;
+        p.alpha = Math.max(0, p.life / 100);
+        if(p.life <= 0) fireworks.splice(i,1);
+      }
+      requestAnimationFrame(drawFireworks);
+    }
+
+    /* Trigger fireworks every 6-10s at random top area */
+    setInterval(() => {
+      spawnFirework(100 + Math.random()*(innerWidth-200), 120 + Math.random()*200);
+    }, 6000 + Math.random()*4000);
+
+    /* click spawn */
+    window.addEventListener('click', (e) => {
+      spawnFirework(e.clientX, e.clientY);
     });
+
+    /* -------- floating diyas (SVG injection into diya-layer) -------- */
+    const diyaLayer = document.getElementById('diya-layer');
+    function createDiya(x, y, scale = 1, rot = 0, delay = 0){
+      const ns = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(ns, 'svg');
+      svg.setAttribute('viewBox','0 0 64 64');
+      svg.setAttribute('class','diya');
+      svg.style.left = x + 'px';
+      svg.style.top = y + 'px';
+      svg.style.width = 64 * scale + 'px';
+      svg.style.height = 64 * scale + 'px';
+      svg.style.transform = `translate(-50%,-50%) rotate(${rot}deg)`;
+      svg.style.opacity = 0;
+      svg.innerHTML = `
+        <defs>
+          <radialGradient id="g1" cx="50%" cy="30%">
+            <stop offset="0%" stop-color="#fff9d6" stop-opacity="1"/>
+            <stop offset="60%" stop-color="#ffd36b" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#ff8c00" stop-opacity="0.2"/>
+          </radialGradient>
+        </defs>
+        <g transform="translate(0,0)">
+          <ellipse cx="32" cy="40" rx="18" ry="7" fill="#2b0a00" opacity="0.9"/>
+          <path d="M12 40 C20 22,44 22,52 40 Q32 48 12 40 Z" fill="#65310a" />
+          <ellipse cx="32" cy="34" rx="12" ry="6" fill="#ffb347"/>
+          <g class="flame" transform="translate(32,19)">
+            <path d="M0 0 C-6 7 -2 14 0 20 C2 14 6 7 0 0 Z" fill="#fff3d6"/>
+            <path d="M0 3 C-3 8 -1 12 0 16 C1 12 3 8 0 3 Z" fill="#ffd36b"/>
+            <path d="M0 7 C-1 9 -0.3 11 0 13 C0.3 11 1 9 0 7 Z" fill="#ff8c00"/>
+          </g>
+        </g>
+      `;
+      diyaLayer.appendChild(svg);
+      // staggered fade-in + float
+      setTimeout(()=> {
+        svg.style.transition = 'opacity 900ms ease, transform 900ms cubic-bezier(.2,.9,.3,1)';
+        svg.style.opacity = 1;
+        const amp = 8 + Math.random()*12;
+        const dur = 4000 + Math.random()*4000;
+        let t = 0;
+        function float(){
+          t += 0.02;
+          svg.style.transform = `translate(-50%,-50%) rotate(${rot + Math.sin(t) * amp/10}deg) translateY(${Math.sin(t*2) * amp}px)`;
+          requestAnimationFrame(float);
+        }
+        float();
+      }, delay);
+      return svg;
+    }
+
+    /* Place some diyas across the hero edges */
+    function placeDiyas(){
+      diyaLayer.innerHTML = '';
+      const cols = Math.min(8, Math.round(innerWidth / 160));
+      for(let i=0;i<cols;i++){
+        const x = (i+0.5) * (innerWidth / cols);
+        const y = 60 + Math.random()*140;
+        createDiya(x, y, 0.8 + Math.random()*0.8, (-10 + Math.random()*20), i*220);
+      }
+    }
+
+    /* -------- Countdown logic (10 days from now) -------- */
+    const target = new Date(Date.now() + 10 * 24 * 60 * 60 * 1000); // 10 days from load
+    function updateCountdown(){
+      const now = new Date();
+      let diff = Math.max(0, target - now);
+      const days = Math.floor(diff / (24*60*60*1000));
+      diff -= days * 24*60*60*1000;
+      const hours = Math.floor(diff / (60*60*1000));
+      diff -= hours * 60*60*1000;
+      const mins = Math.floor(diff / (60*1000));
+      diff -= mins * 60*1000;
+      const secs = Math.floor(diff / 1000);
+      document.getElementById('days').textContent = String(days).padStart(2,'0');
+      document.getElementById('hours').textContent = String(hours).padStart(2,'0');
+      document.getElementById('mins').textContent = String(mins).padStart(2,'0');
+      document.getElementById('secs').textContent = String(secs).padStart(2,'0');
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    /* -------- Resize handling & start animations -------- */
+    function onResize(){
+      fitCanvas(bgCanvas); fitCanvas(fwCanvas);
+      initSparks();
+      placeDiyas();
+    }
+    window.addEventListener('resize', onResize);
+
+    // initialize & run
+    initSparks();
+    drawSparks();
+    drawFireworks();
+    placeDiyas();
+
+    /* Keep a subtle interactive "sparkle" on mouse move */
+    let lastMove = 0;
+    window.addEventListener('mousemove', (e) => {
+      const now = Date.now();
+      if(now - lastMove > 80){
+        // spawn a tiny sparkle at mouse pos on bg layer
+        sparks.push({ x:e.clientX + (Math.random()*40-20), y:e.clientY + (Math.random()*40-20), r: (Math.random()*1.2)+0.6, a:0.9, dx:(Math.random()-0.5)*0.6, dy:(Math.random()-0.5)*0.6, hue: 35 + Math.random()*25 });
+        lastMove = now;
+      }
+    });
+
+    /* Accessibility: reduce motion support */
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(prefersReduced) {
+      // stop animations if user prefers reduced motion
+      sparks = [];
+      fireworks = [];
+      document.querySelectorAll('.diya').forEach(d=>d.style.transition='none');
+    }
+
   </script>
 
 </body>
