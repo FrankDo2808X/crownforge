@@ -11,166 +11,207 @@
   <style>
     :root{
       --bg-1: #070506;
-      --bg-2: #0f0611;
+      --bg-2: #0b0508;
       --gold-1: #ffb347;
       --gold-2: #ff8c00;
       --accent: #ffd36b;
+      --muted: rgba(255,235,200,0.85);
       --glass: rgba(255,255,255,0.04);
-      --glass-2: rgba(255,140,0,0.06);
-      --muted: rgba(255,255,255,0.75);
     }
+    
 
-    /* --- Reset --- */
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%}
+    /* ---------- Reset ---------- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html,body { height: 100%; }
     body{
       font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       color: #fff;
-      background: radial-gradient(1200px 600px at 10% 10%, rgba(255,140,0,0.06), transparent 10%),
-                  radial-gradient(1000px 500px at 90% 90%, rgba(255,183,71,0.04), transparent 8%),
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(255,140,0,0.04), transparent 8%),
+                  radial-gradient(1000px 500px at 90% 90%, rgba(255,183,71,0.03), transparent 8%),
                   linear-gradient(180deg,var(--bg-1),var(--bg-2));
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      overflow-x: hidden;
+      
     }
 
-    /* --- Background canvases (stacked) --- */
-    #bg-canvas, #fireworks-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
-    #diya-layer { position:fixed; inset:0; z-index:1; pointer-events:none; }
+    /* ---------- Background layers ---------- */
+    canvas.bg, canvas.fw { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    #diya-layer { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
 
-    /* --- Page content --- */
-    .wrap { position:relative; z-index:2; min-height:100vh; display:flex; flex-direction:column; }
+    .site { position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* --- NAV --- */
-    nav{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:18px 36px; gap:20px;
+    /* ---------- NAV ---------- */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 28px;
+      gap: 16px;
       background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,140,0,0.02));
       backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(255,183,71,0.06);
-      position: sticky; top:0; z-index:10;
+      border-bottom: 1px solid rgba(255,160,80,0.05);
+      position: sticky; top: 0; z-index: 3;
     }
-    .brand { display:flex; align-items:center; gap:14px; }
-    .logo {
-      width:60px; height:60px; border-radius:10px;
-      background: linear-gradient(135deg,var(--gold-1),var(--gold-2));
-      box-shadow: 0 6px 24px rgba(255,140,0,0.12), inset 0 -4px 8px rgba(0,0,0,0.25);
-      display:flex; align-items:center; justify-content:center; font-weight:900; font-family:'Orbitron';
-      color:#2b0a00; font-size:20px;
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand img.logo {
+      width:56px; height:56px; border-radius:10px; object-fit:cover; filter: drop-shadow(0 8px 22px rgba(255,140,0,0.12));
     }
-    nav .links { display:flex; gap:20px; align-items:center; }
-    nav a { color:var(--muted); text-decoration:none; font-weight:600; padding:8px 10px; border-radius:8px; }
-    nav a:hover{ color:var(--accent); text-shadow:0 0 8px rgba(255,183,71,0.25) }
+    .brand .title {
+      display:flex; flex-direction:column; line-height:1;
+    }
+    .brand .title .name {
+      font-family: 'Orbitron', sans-serif; font-weight:700; font-size:18px; color:var(--accent);
+      text-shadow: 0 6px 24px rgba(255,140,0,0.06);
+    }
+    .brand .title .sub { font-size:11px; color: rgba(255,235,200,0.75); margin-top:2px; }
 
-    /* --- HERO --- */
-    header.hero{
-      padding:70px 20px 40px; text-align:center; position:relative; overflow:visible;
-      background: linear-gradient(180deg, rgba(255,140,0,0.02), transparent 60%);
+    .nav-links { display:flex; gap:18px; align-items:center; }
+    .nav-links a { color: rgba(255,235,200,0.9); text-decoration:none; font-weight:600; padding:8px 10px; border-radius:8px; }
+    .nav-links a:hover { color: #0b0b0b; background: linear-gradient(90deg,var(--gold-1),var(--gold-2)); box-shadow: 0 10px 30px rgba(255,140,0,0.08); }
+
+    .menu-toggle { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+    .menu-toggle span { width:24px; height:3px; background:#fff; border-radius:3px; }
+
+    @media (max-width:900px) {
+      .nav-links { display:none; position:absolute; right:18px; top:72px; background: rgba(10,10,10,0.9); padding:12px; border-radius:10px; flex-direction:column; gap:12px; width:200px; }
+      .nav-links.active { display:flex; }
+      .menu-toggle { display:flex; }
     }
-    .hero-inner{
-      max-width:1100px; margin:0 auto; padding:24px; display:grid; grid-template-columns:1fr; gap:20px;
-      align-items:center;
+
+    /* ---------- HERO ---------- */
+    header.hero {
+      padding: 72px 20px 36px;
+      text-align: center;
+      position: relative;
+      background: linear-gradient(180deg, rgba(255,140,0,0.02), transparent 50%);
+      overflow: visible;
+      z-index:2;
     }
-    .title-wrap { display:flex; flex-direction:column; gap:12px; align-items:center; }
-    h1 {
-      font-family:'Orbitron',sans-serif; font-size:3.2rem; letter-spacing:1px;
-      background: linear-gradient(90deg,var(--gold-1),var(--gold-2)); -webkit-background-clip:text; color:transparent;
-      text-shadow: 0 6px 30px rgba(255,140,0,0.09);
-      margin-bottom:6px;
-    }
-    p.lead { color: rgba(255,235,200,0.9); font-size:1.05rem; max-width:900px; opacity:0.95; }
-    /* TDM banner + countdown card */
+
+    header .hero-inner { max-width:1100px; margin: 0 auto; padding: 10px; display:flex; flex-direction:column; gap:12px; align-items:center; }
+
+    header .logo-lg { width:160px; height:auto; filter: drop-shadow(0 18px 48px rgba(255,140,0,0.12)); }
+
+    header h1 { font-family: 'Orbitron', sans-serif; font-size:2.9rem; color:var(--gold-2); background: linear-gradient(90deg,var(--gold-1),var(--gold-2)); -webkit-background-clip:text; color: transparent; }
+    header p.lead { max-width:880px; color: var(--muted); font-size:1.05rem; margin-top:6px; }
+
+    /* ---------- TDM Banner / Countdown ---------- */
     .tdm-banner {
-      margin-top:18px;
-      display:flex; gap:16px; align-items:center; justify-content:center; flex-wrap:wrap;
-      background: linear-gradient(90deg, rgba(255,200,120,0.05), rgba(255,140,0,0.03));
-      border:1px solid rgba(255,160,80,0.08);
-      padding:14px 18px; border-radius:14px; box-shadow:0 12px 40px rgba(255,120,10,0.04);
+      margin-top:18px; display:flex; gap:14px; align-items:center; justify-content:center; flex-wrap:wrap;
+      background: linear-gradient(90deg, rgba(255,200,120,0.06), rgba(255,140,0,0.03));
+      border: 1px solid rgba(255,160,80,0.06);
+      padding:12px 16px; border-radius:14px; box-shadow: 0 12px 40px rgba(255,120,10,0.03);
       backdrop-filter: blur(6px);
-      animation: floaty 6s ease-in-out infinite;
     }
-    @keyframes floaty { 0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)} }
-    .tdm-left { display:flex; gap:12px; align-items:center; }
-    .tdm-pill {
-      background: linear-gradient(180deg, var(--gold-1), var(--gold-2));
-      padding:8px 12px; border-radius:999px; font-weight:800; color:#2b0a00; box-shadow:0 6px 16px rgba(255,140,0,0.18);
-      display:inline-flex; align-items:center; gap:8px; font-family:'Orbitron';
-    }
-    .tdm-text { text-align:left; min-width:220px; }
-    .tdm-text h3 { margin:0; font-size:1.05rem; color:#fff; letter-spacing:0.6px; }
-    .tdm-text p { margin:0; font-size:0.9rem; color:rgba(255,235,200,0.9); opacity:0.95; }
-    .countdown {
-      display:flex; gap:10px; align-items:center; justify-content:center;
-      background: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(255,140,0,0.02));
-      border:1px solid rgba(255,183,71,0.06);
-      padding:8px 12px; border-radius:10px;
-    }
-    .time-seg{ min-width:64px; text-align:center; }
-    .time-seg .num { font-family:'Orbitron'; font-size:1.3rem; color:var(--accent); display:block; }
-    .time-seg .lab { font-size:0.7rem; color:rgba(255,235,200,0.8); margin-top:4px; }
+    .tdm-pill { background: linear-gradient(180deg, var(--gold-1), var(--gold-2)); color:#2b0a00; font-weight:800; padding:8px 12px; border-radius:999px; font-family:'Orbitron'; }
+    .tdm-text h3 { margin:0; font-size:1.02rem; color:#fff; }
+    .tdm-text p { margin:0; color:var(--muted); font-size:0.92rem; }
 
-    /* --- GAMES SECTION --- */
-    section#games { padding:60px 24px 36px; }
-    .games-grid { max-width:1200px; margin:0 auto; display:grid; gap:22px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+    .countdown { display:flex; gap:10px; align-items:center; justify-content:center; background: linear-gradient(180deg, rgba(0,0,0,0.16), rgba(255,140,0,0.02)); padding:8px 10px; border-radius:10px; border:1px solid rgba(255,183,71,0.04); }
+    .time-seg { min-width:58px; text-align:center; }
+    .time-seg .num { font-family:'Orbitron'; font-size:1.05rem; color:var(--accent); display:block; }
+    .time-seg .lab { font-size:0.68rem; color: rgba(255,235,200,0.85); margin-top:4px; }
+
+    /* ---------- GAMES GRID ---------- */
+    section#games { padding:48px 20px 28px; }
+    #games h2 { text-align:center; font-family:'Orbitron',sans-serif; color:var(--gold-1); font-size:1.9rem; margin-bottom:18px; }
+    .games-grid { max-width:1200px; margin: 0 auto; display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:20px; }
+
     .card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,140,0,0.02));
-      border: 1px solid rgba(255,160,80,0.04);
-      border-radius:14px; padding:18px; text-align:center; backdrop-filter:blur(6px);
-      transition: transform .35s ease, box-shadow .35s ease;
-    }
-    .card:hover{ transform:translateY(-8px); box-shadow:0 20px 60px rgba(255,120,10,0.06) }
-    .card img{ width:100%; height:160px; object-fit:contain; background:linear-gradient(180deg,#0b0710,#120712); padding:18px; border-radius:10px; }
-    .card h4{ margin-top:12px; font-size:1.1rem; }
-    .card .btn{ margin-top:12px; display:inline-block; padding:10px 18px; border-radius:10px; font-weight:700; color:#2b0a00;
-      background: linear-gradient(90deg,var(--gold-1),var(--gold-2)); text-decoration:none; box-shadow:0 10px 30px rgba(255,140,0,0.12); }
-
-    /* --- ABOUT & CONTACT --- */
-    section.about, section.contact { padding:48px 20px 60px; }
-    .panel {
-      max-width:980px; margin:0 auto; text-align:center; color:rgba(255,235,200,0.95);
       background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,140,0,0.01));
-      border-radius:12px; padding:18px; border:1px solid rgba(255,160,80,0.03);
+      border-radius:14px; padding:16px; text-align:center; border: 1px solid rgba(255,160,80,0.04); backdrop-filter: blur(6px);
+      transition: transform .28s ease, box-shadow .28s ease;
+    }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(255,120,10,0.05); }
+    .card img { width:100%; height:150px; object-fit:contain; background: linear-gradient(180deg,#0b0710,#120712); padding:14px; border-radius:10px; }
+    .card h4 { margin-top:10px; font-size:1.02rem; color: #fff; }
+    .card .play { display:inline-block; margin-top:12px; padding:10px 16px; border-radius:10px; background:linear-gradient(90deg,var(--gold-1),var(--gold-2)); color:#2b0a00; font-weight:800; text-decoration:none; box-shadow: 0 12px 30px rgba(255,140,0,0.08); }
+
+    /* ---------- ABOUT (Card layout) ---------- */
+    section#about { padding:44px 20px 44px; }
+    #about h2 { text-align:center; font-family:'Orbitron'; color:var(--gold-2); font-size:1.8rem; margin-bottom:14px; }
+
+    .about-grid { max-width:1100px; margin:0 auto; display:grid; grid-template-columns: 1fr 340px; gap:22px; align-items:start; }
+    @media (max-width:980px) { .about-grid { grid-template-columns: 1fr; } }
+
+    .about-main {
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,140,0,0.01));
+      border-radius:12px; padding:18px; border:1px solid rgba(255,160,80,0.04); backdrop-filter: blur(6px);
+      color: var(--muted);
+    }
+    .about-main p.intro { margin-bottom:12px; line-height:1.6; color:rgba(255,235,200,0.95); }
+    .about-list { display:flex; flex-direction:column; gap:10px; }
+
+    .info-card {
+      background: rgba(255,255,255,0.02); border-radius:10px; padding:12px; display:flex; gap:12px; align-items:flex-start; border:1px solid rgba(255,160,80,0.03);
+    }
+    .info-card .icon {
+      min-width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:800; color:#2b0a00; background: linear-gradient(180deg,var(--gold-1),var(--gold-2));
+      box-shadow: 0 8px 22px rgba(255,140,0,0.08);
+      font-family:'Orbitron';
+    }
+    .info-card .meta { font-size:0.95rem; color: rgba(255,235,200,0.95); }
+    .info-card .meta small { display:block; color: rgba(255,235,200,0.75); margin-top:6px; font-size:0.82rem; }
+
+    /* ---------- QUICK FACTS SIDEBAR ---------- */
+    .about-side {
+      display:flex; flex-direction:column; gap:12px;
+    }
+    .side-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,140,0,0.01));
+      border-radius:12px; padding:14px; border:1px solid rgba(255,160,80,0.03);
+      text-align:center;
+    }
+    .side-card h4 { margin-bottom:8px; font-family:'Orbitron'; color:var(--gold-1); }
+    .side-card p { color:rgba(255,235,200,0.95); font-size:0.95rem; }
+
+    /* ---------- CONTACT & FOOTER ---------- */
+    section#contact { padding:36px 20px 60px; }
+    .contact-panel { max-width:980px; margin:0 auto; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,140,0,0.01)); padding:16px; border-radius:12px; border:1px solid rgba(255,160,80,0.03); text-align:center; color:var(--muted); }
+
+    footer { padding:26px 16px; text-align:center; color:rgba(255,235,200,0.8); border-top:1px solid rgba(255,160,80,0.03); }
+
+    /* ---------- Misc ---------- */
+    .center { text-align:center; }
+    a.btn-ghost { color:var(--accent); text-decoration:none; font-weight:700; }
+
+    /* ---------- Accessibility: reduced motion ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
     }
 
-    /* --- FOOTER --- */
-    footer{ padding:28px 18px; text-align:center; color:rgba(255,235,200,0.8); font-size:0.9rem; border-top:1px solid rgba(255,160,80,0.03); }
-
-    /* --- Small screens --- */
+    /* ---------- Responsive tweaks ---------- */
     @media (max-width:720px){
-      h1{font-size:2.2rem}
-      .tdm-text{ min-width:160px }
-      .countdown{ gap:6px }
+      header h1 { font-size:1.8rem; }
+      .brand .title .name { font-size:15px; }
+      .brand img.logo { width:48px; height:48px; }
+      .time-seg { min-width:48px; }
+      .about-grid { gap:14px; }
     }
-
-    /* --- Decorative diya (SVG will be injected for better control) --- */
-    .diya { position:absolute; width:80px; height:80px; transform-origin:center; filter: drop-shadow(0 8px 26px rgba(255,140,0,0.14)); }
-    .diya .flame { animation: flicker 1.2s infinite; transform-origin:50% 80%;}
-    @keyframes flicker {
-      0% { transform: translateY(0) scaleY(1); opacity:1 }
-      50% { transform: translateY(-3px) scaleY(0.98); opacity:0.9 }
-      100% { transform: translateY(0) scaleY(1); opacity:1 }
-    }
-
   </style>
 </head>
 <body>
 
   <!-- Background canvases -->
-  <canvas id="bg-canvas"></canvas>         <!-- soft sparks -->
-  <canvas id="fireworks-canvas"></canvas> --><!-- fireworks on click -->
+  <canvas id="bg" class="bg"></canvas>        <!-- soft spark particles -->
+  <canvas id="fw" class="fw"></canvas>        <!-- fireworks -->
   <div id="diya-layer" aria-hidden="true"></div>
 
-  <div class="wrap">
+  <div class="site">
+
     <!-- NAV -->
-    <nav>
+    <nav role="navigation" aria-label="Main">
       <div class="brand">
-        <div class="logo">CF</div>
-        <div>
-          <div style="font-weight:700">CrownForge</div>
-          <div style="font-size:12px; color:rgba(255,235,200,0.85)">Studio</div>
+        <a href="https://imgbb.com/"><img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="channels4-profile" border="0"></a>
+        <div class="title">
+          <div class="name">CrownForge Studio</div>
+          <div class="sub">Indie Game Developer</div>
         </div>
       </div>
-      <div class="links" role="navigation" aria-label="Main navigation">
+
+      <div class="menu-toggle" id="menu-toggle" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+
+      <div class="nav-links" id="nav-links">
         <a href="#home">Home</a>
         <a href="#games">Games</a>
         <a href="#about">About</a>
@@ -179,28 +220,27 @@
     </nav>
 
     <!-- HERO -->
-    <header id="home" class="hero" role="banner">
+    <header id="home" class="hero" role="banner" aria-label="Hero">
       <div class="hero-inner">
-        <div class="title-wrap">
-          <h1>CrownForge Studio</h1>
-          <p class="lead">Forging worlds beyond imagination — Celebrate Diwali with exclusive events & get ready for the TDM update.</p>
+        <a href="https://imgbb.com/"><img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="channels4-profile" border="0"></a>
+        <h1>Happy Diwali from CrownForge</h1>
+        <p class="lead">Forging worlds beyond imagination — celebrate with our Diwali event and stay tuned for the TDM update.</p>
 
-          <!-- TDM Banner + Countdown -->
-          <div class="tdm-banner" role="region" aria-label="TDM update banner">
-            <div class="tdm-left">
-              <div class="tdm-pill">🔥 TDM</div>
-              <div class="tdm-text">
-                <h3>TDM Update — Coming Soon</h3>
-                <p>New maps, balance changes & a festival event drop. Light up the battlefield!</p>
-              </div>
+        <!-- TDM banner with countdown -->
+        <div class="tdm-banner" role="region" aria-label="TDM update">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="tdm-pill">🔥 TDM</div>
+            <div class="tdm-text">
+              <h3>TDM Update — Coming Soon</h3>
+              <p>New maps, balance changes & a festival event drop. Light up the battlefield!</p>
             </div>
+          </div>
 
-            <div class="countdown" id="countdown" aria-live="polite" title="Time until TDM update">
-              <div class="time-seg"><span class="num" id="days">00</span><span class="lab">Days</span></div>
-              <div class="time-seg"><span class="num" id="hours">00</span><span class="lab">Hours</span></div>
-              <div class="time-seg"><span class="num" id="mins">00</span><span class="lab">Mins</span></div>
-              <div class="time-seg"><span class="num" id="secs">00</span><span class="lab">Secs</span></div>
-            </div>
+          <div class="countdown" id="countdown" aria-live="polite" style="margin-left:8px;">
+            <div class="time-seg"><span class="num" id="days">00</span><span class="lab">Days</span></div>
+            <div class="time-seg"><span class="num" id="hours">00</span><span class="lab">Hours</span></div>
+            <div class="time-seg"><span class="num" id="mins">00</span><span class="lab">Mins</span></div>
+            <div class="time-seg"><span class="num" id="secs">00</span><span class="lab">Secs</span></div>
           </div>
         </div>
       </div>
@@ -208,176 +248,235 @@
 
     <!-- GAMES -->
     <section id="games" aria-labelledby="games-title">
-      <h2 id="games-title" style="text-align:center; font-family:Orbitron, sans-serif; color:var(--gold-1); margin:20px 0 8px">Our Games</h2>
+      <h2 id="games-title">Our Games</h2>
       <div class="games-grid">
         <div class="card">
-          <img src="https://i.ibb.co/WWBbB53F/warx-logo.png" alt="WarX logo">
-          <h4>WarX</h4>
-          <a class="btn" href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.Uitesting" target="_blank" rel="noopener">Play</a>
+          <img src="https://i.ibb.co/WWBbB53F/warx-logo.png" alt="WarX">
+          <h4>WAR-X</h4>
+          <a class="play" href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.Uitesting" target="_blank" rel="noopener">Play</a>
         </div>
         <div class="card">
-          <img src="https://i.ibb.co/BKZDrBHJ/zombie-strike-force-logo.png" alt="Zombie Strike Force logo">
-          <h4>Zombie Strike Force</h4>
-          <a class="btn" href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.ZombieStrikeForce" target="_blank" rel="noopener">Play</a>
+          <img src="https://i.ibb.co/BKZDrBHJ/zombie-strike-force-logo.png" alt="Zombie Strike Force">
+          <h4>Zombie StrikeForce</h4>
+          <a class="play" href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.ZombieStrikeForce" target="_blank" rel="noopener">Play</a>
         </div>
         <div class="card">
-          <img src="https://i.ibb.co/0pM8N2z0/the-black-veil-logo.png" alt="The Black Veil logo">
+          <img src="https://i.ibb.co/0pM8N2z0/the-black-veil-logo.png" alt="The Black Veil">
           <h4>The Black Veil</h4>
-          <a class="btn" href="https://play.google.com/store/apps/details?id=com.PRA3KGAMES.THEBLACKVEIL" target="_blank" rel="noopener">Play</a>
+          <a class="play" href="https://play.google.com/store/apps/details?id=com.PRA3KGAMES.THEBLACKVEIL" target="_blank" rel="noopener">Play</a>
         </div>
       </div>
     </section>
 
-    <!-- ABOUT -->
-    <section id="about" class="about" aria-labelledby="about-title">
-      <h2 id="about-title" style="color:var(--gold-2); font-family:Orbitron, sans-serif;">About Us</h2>
-      <div class="panel">
-        <p>CrownForge Studio is an indie game developer crafting cinematic and action-packed experiences. This Diwali join our festivities — light diyas, earn limited rewards and prepare for the TDM update.</p>
+    <!-- ABOUT (Card-style responsive) -->
+    <section id="about" aria-labelledby="about-title">
+      <h2 id="about-title">About Us</h2>
+      <div class="about-grid">
+        <div class="about-main" role="article">
+          <p class="intro">
+            CrownForge Studio is an Indian video game development studio known for its mobile games like WAR-X and Zombie StrikeForce. Founded by Anuj Kashyap, the studio focuses on games for a global audience and has a presence on app stores and social media platforms like Instagram to promote its releases.
+          </p>
+
+          <div class="about-list">
+            <div class="info-card">
+              <div class="icon">🎯</div>
+              <div class="meta">
+                <strong>Focus</strong>
+                <small>Video game development for mobile platforms.</small>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="icon">🕹️</div>
+              <div class="meta">
+                <strong>Notable Games</strong>
+                <small>WAR-X — an action and shooter game.<br>Zombie StrikeForce — a zombie survival game with in-app purchases.</small>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="icon">👤</div>
+              <div class="meta">
+                <strong>Founder</strong>
+                <small>Anuj Kashyap — Founder & Director of CrownForge Studio.</small>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="icon">📍</div>
+              <div class="meta">
+                <strong>Origin</strong>
+                <small>The studio is based in India.</small>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="icon">🌐</div>
+              <div class="meta">
+                <strong>Online Presence</strong>
+                <small>Presence on app stores (Google Play, App Store) and Instagram for promotion and announcements.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="about-side" aria-label="Quick facts">
+          <div class="side-card">
+            <h4>Key Information</h4>
+            <p>Focus: Mobile game development</p>
+            <p>Founder: Anuj Kashyap</p>
+            <p>Region: India</p>
+          </div>
+
+          <div class="side-card">
+            <h4>Event</h4>
+            <p>Diwali Event Was ComingSoon....— earn limited in-game rewards!</p>
+          </div>
+        </aside>
       </div>
     </section>
 
     <!-- CONTACT -->
-    <section id="contact" class="contact" aria-labelledby="contact-title">
-      <h2 id="contact-title" style="color:var(--gold-2); font-family:Orbitron, sans-serif;">Contact</h2>
-      <div class="panel">
-        <p>Business & press: <a href="mailto:crownforgebusiness@gmail.com" style="color:var(--accent); text-decoration:none; font-weight:700;">crownforgebusiness@gmail.com</a></p>
+    <section id="contact">
+      <div class="contact-panel">
+        <h3 style="font-family:Orbitron, sans-serif; color:var(--gold-1); margin-bottom:8px;">Contact</h3>
+        <p>Business & press: <a class="btn-ghost" href="mailto:crownforgebusiness@gmail.com">crownforgebusiness@gmail.com</a></p>
       </div>
     </section>
 
     <footer>
-      <div style="margin-bottom:8px">Follow us for live updates & event drops</div>
-      <div style="margin-bottom:10px"><a href="#" style="color:var(--accent); text-decoration:none">Twitter</a> • <a href="#" style="color:var(--accent); text-decoration:none">Instagram</a> • <a href="#" style="color:var(--accent); text-decoration:none">Discord</a></div>
+      <div style="margin-bottom:10px">Follow us for live updates & event drops — Instagram • Discord • Twitter</div>
       <div>© 2025 CrownForge Studio — Happy Diwali ✨</div>
     </footer>
   </div>
 
-  <!-- ===== Scripts: particles, fireworks, diyas & countdown ===== -->
+  <!-- ========== Scripts: particles, fireworks, diyas, countdown, nav toggle ========== -->
   <script>
-    /* --- Helpers & sizing --- */
-    function fitCanvas(c){
-      c.width = innerWidth * devicePixelRatio;
-      c.height = innerHeight * devicePixelRatio;
-      c.style.width = innerWidth + "px";
-      c.style.height = innerHeight + "px";
-      c.getContext('2d').setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    /* ---------------------
+       Canvas helpers & sizing
+       --------------------- */
+    function fitCanvas(canvas) {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return ctx;
     }
 
-    /* -------- Soft spark background (bg-canvas) -------- */
-    const bgCanvas = document.getElementById('bg-canvas');
-    const bgCtx = bgCanvas.getContext('2d');
-    fitCanvas(bgCanvas);
+    /* ---------------------
+       Soft spark background (bg)
+       --------------------- */
+    const bgCanvas = document.getElementById('bg');
+    const bgCtx = fitCanvas(bgCanvas);
     let sparks = [];
     function initSparks(){
       sparks = [];
-      const count = Math.round((innerWidth * innerHeight) / 60000); // scale with screen
-      for(let i=0;i<count;i++){
+      const count = Math.max(30, Math.round((window.innerWidth * window.innerHeight) / 160000)); // scale with screen
+      for (let i=0;i<count;i++){
         sparks.push({
-          x: Math.random() * innerWidth,
-          y: Math.random() * innerHeight,
+          x: Math.random()*window.innerWidth,
+          y: Math.random()*window.innerHeight,
           r: Math.random()*1.6 + 0.6,
           a: Math.random()*0.8 + 0.2,
-          dx: (Math.random()-0.5) * 0.2,
-          dy: (Math.random()-0.5) * 0.2,
-          hue: 40 + Math.random()*20
+          dx: (Math.random()-0.5)*0.3,
+          dy: (Math.random()-0.5)*0.3
         });
       }
     }
     function drawSparks(){
-      bgCtx.clearRect(0,0,innerWidth,innerHeight);
-      for(const s of sparks){
-        bgCtx.beginPath();
-        const g = bgCtx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r*6);
-        g.addColorStop(0, `rgba(255,200,120,${s.a})`);
-        g.addColorStop(0.4, `rgba(255,140,0,${s.a*0.18})`);
+      bgCtx.clearRect(0,0,window.innerWidth, window.innerHeight);
+      for (const s of sparks) {
+        const g = bgCtx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r*8);
+        g.addColorStop(0, `rgba(255,220,150,${s.a})`);
+        g.addColorStop(0.5, `rgba(255,140,0,${s.a*0.18})`);
         g.addColorStop(1, `rgba(0,0,0,0)`);
         bgCtx.fillStyle = g;
+        bgCtx.beginPath();
         bgCtx.arc(s.x, s.y, s.r*8, 0, Math.PI*2);
         bgCtx.fill();
         s.x += s.dx; s.y += s.dy;
-        if(s.x < -20) s.x = innerWidth + 20;
-        if(s.x > innerWidth + 20) s.x = -20;
-        if(s.y < -20) s.y = innerHeight + 20;
-        if(s.y > innerHeight + 20) s.y = -20;
+        if (s.x < -20) s.x = window.innerWidth + 20;
+        if (s.x > window.innerWidth + 20) s.x = -20;
+        if (s.y < -20) s.y = window.innerHeight + 20;
+        if (s.y > window.innerHeight + 20) s.y = -20;
       }
       requestAnimationFrame(drawSparks);
     }
 
-    /* -------- Fireworks canvas (on click / periodic) -------- */
-    const fwCanvas = document.getElementById('fireworks-canvas');
-    const fwCtx = fwCanvas.getContext('2d');
-    fitCanvas(fwCanvas);
+    /* ---------------------
+       Fireworks (fw) particles
+       --------------------- */
+    const fwCanvas = document.getElementById('fw');
+    const fwCtx = fitCanvas(fwCanvas);
     let fireworks = [];
 
     function spawnFirework(x,y){
-      const hue = 30 + Math.random()*40;
+      const hueBase = 30 + Math.random()*40;
       const count = 18 + Math.round(Math.random()*14);
-      for(let i=0;i<count;i++){
+      for (let i=0;i<count;i++){
         const angle = Math.random()*Math.PI*2;
-        const speed = 1.6 + Math.random()*3.2;
+        const speed = 1.4 + Math.random()*3.2;
         fireworks.push({
           x, y,
           vx: Math.cos(angle)*speed,
           vy: Math.sin(angle)*speed,
           life: 60 + Math.random()*40,
           r: 1.6 + Math.random()*2.6,
-          hue,
-          alpha:1
+          hue: hueBase,
+          alpha: 1
         });
       }
     }
-
     function drawFireworks(){
-      fwCtx.clearRect(0,0,innerWidth,innerHeight);
-      for(let i=fireworks.length-1;i>=0;i--){
+      fwCtx.clearRect(0,0,window.innerWidth, window.innerHeight);
+      for (let i=fireworks.length-1;i>=0;i--){
         const p = fireworks[i];
         fwCtx.beginPath();
-        fwCtx.fillStyle = `rgba(255,${170 + (p.hue%40)},${50},${p.alpha})`;
+        fwCtx.fillStyle = `rgba(255, ${170 + (p.hue%40)}, ${60}, ${p.alpha})`;
         fwCtx.arc(p.x, p.y, p.r, 0, Math.PI*2);
         fwCtx.fill();
         p.x += p.vx; p.y += p.vy;
-        p.vy += 0.02; // gravity
+        p.vy += 0.02;
         p.vx *= 0.995; p.vy *= 0.995;
         p.life--;
         p.alpha = Math.max(0, p.life / 100);
-        if(p.life <= 0) fireworks.splice(i,1);
+        if (p.life <= 0) fireworks.splice(i,1);
       }
       requestAnimationFrame(drawFireworks);
     }
 
-    /* Trigger fireworks every 6-10s at random top area */
-    setInterval(() => {
-      spawnFirework(100 + Math.random()*(innerWidth-200), 120 + Math.random()*200);
-    }, 6000 + Math.random()*4000);
+    // occasional fireworks
+    setInterval(()=> {
+      spawnFirework(60 + Math.random()*(window.innerWidth-120), 80 + Math.random()*220);
+    }, 6500 + Math.random()*3500);
 
-    /* click spawn */
     window.addEventListener('click', (e) => {
       spawnFirework(e.clientX, e.clientY);
     });
 
-    /* -------- floating diyas (SVG injection into diya-layer) -------- */
+    /* ---------------------
+       Floating diyas (SVG injection)
+       --------------------- */
     const diyaLayer = document.getElementById('diya-layer');
     function createDiya(x, y, scale = 1, rot = 0, delay = 0){
       const ns = 'http://www.w3.org/2000/svg';
       const svg = document.createElementNS(ns, 'svg');
       svg.setAttribute('viewBox','0 0 64 64');
-      svg.setAttribute('class','diya');
+      svg.setAttribute('class','diya-svg');
+      svg.style.position = 'absolute';
       svg.style.left = x + 'px';
       svg.style.top = y + 'px';
-      svg.style.width = 64 * scale + 'px';
-      svg.style.height = 64 * scale + 'px';
+      svg.style.width = (64*scale) + 'px';
+      svg.style.height = (64*scale) + 'px';
       svg.style.transform = `translate(-50%,-50%) rotate(${rot}deg)`;
       svg.style.opacity = 0;
       svg.innerHTML = `
-        <defs>
-          <radialGradient id="g1" cx="50%" cy="30%">
-            <stop offset="0%" stop-color="#fff9d6" stop-opacity="1"/>
-            <stop offset="60%" stop-color="#ffd36b" stop-opacity="0.9"/>
-            <stop offset="100%" stop-color="#ff8c00" stop-opacity="0.2"/>
-          </radialGradient>
-        </defs>
         <g transform="translate(0,0)">
-          <ellipse cx="32" cy="40" rx="18" ry="7" fill="#2b0a00" opacity="0.9"/>
-          <path d="M12 40 C20 22,44 22,52 40 Q32 48 12 40 Z" fill="#65310a" />
+          <ellipse cx="32" cy="42" rx="18" ry="6" fill="#2b0a00" opacity="0.95"/>
+          <path d="M12 40 C20 22,44 22,52 40 Q32 48 12 40 Z" fill="#65310a"/>
           <ellipse cx="32" cy="34" rx="12" ry="6" fill="#ffb347"/>
           <g class="flame" transform="translate(32,19)">
             <path d="M0 0 C-6 7 -2 14 0 20 C2 14 6 7 0 0 Z" fill="#fff3d6"/>
@@ -387,13 +486,11 @@
         </g>
       `;
       diyaLayer.appendChild(svg);
-      // staggered fade-in + float
       setTimeout(()=> {
-        svg.style.transition = 'opacity 900ms ease, transform 900ms cubic-bezier(.2,.9,.3,1)';
+        svg.style.transition = 'opacity 700ms ease, transform 1100ms cubic-bezier(.2,.9,.3,1)';
         svg.style.opacity = 1;
-        const amp = 8 + Math.random()*12;
-        const dur = 4000 + Math.random()*4000;
         let t = 0;
+        const amp = 6 + Math.random()*10;
         function float(){
           t += 0.02;
           svg.style.transform = `translate(-50%,-50%) rotate(${rot + Math.sin(t) * amp/10}deg) translateY(${Math.sin(t*2) * amp}px)`;
@@ -404,19 +501,20 @@
       return svg;
     }
 
-    /* Place some diyas across the hero edges */
     function placeDiyas(){
       diyaLayer.innerHTML = '';
-      const cols = Math.min(8, Math.round(innerWidth / 160));
-      for(let i=0;i<cols;i++){
-        const x = (i+0.5) * (innerWidth / cols);
-        const y = 60 + Math.random()*140;
-        createDiya(x, y, 0.8 + Math.random()*0.8, (-10 + Math.random()*20), i*220);
+      const cols = Math.min(8, Math.round(window.innerWidth / 140));
+      for (let i=0;i<cols;i++){
+        const x = (i + 0.5) * (window.innerWidth / cols);
+        const y = 48 + Math.random() * 160;
+        createDiya(x, y, 0.8 + Math.random()*0.8, (-10 + Math.random()*20), i * 220);
       }
     }
 
-    /* -------- Countdown logic (10 days from now) -------- */
-    const target = new Date(Date.now() + 10 * 24 * 60 * 60 * 1000); // 10 days from load
+    /* ---------------------
+       Countdown (10 days from load)
+       --------------------- */
+    const target = new Date(Date.now() + 10 * 24 * 60 * 60 * 1000);
     function updateCountdown(){
       const now = new Date();
       let diff = Math.max(0, target - now);
@@ -435,41 +533,86 @@
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    /* -------- Resize handling & start animations -------- */
+    /* ---------------------
+       Resize & animation start
+       --------------------- */
     function onResize(){
       fitCanvas(bgCanvas); fitCanvas(fwCanvas);
-      initSparks();
-      placeDiyas();
+      initSparks(); placeDiyas();
     }
     window.addEventListener('resize', onResize);
 
-    // initialize & run
+    // init
     initSparks();
     drawSparks();
     drawFireworks();
     placeDiyas();
 
-    /* Keep a subtle interactive "sparkle" on mouse move */
-    let lastMove = 0;
+    /* ---------------------
+       Nav toggle (mobile)
+       --------------------- */
+    // Mobile menu toggle
+const menuToggle = document.getElementById('menu-toggle');
+const navLinks = document.getElementById('nav-links');
+
+// Select logos to exclude
+const brandLogo = document.querySelector('.brand img.logo'); // top-left nav logo
+const mainLogo = document.querySelector('header.hero img');    // big main hero logo
+
+menuToggle.addEventListener('click', (e) => {
+  e.stopPropagation(); // prevent document click from closing immediately
+  navLinks.classList.toggle('active');
+});
+
+// Close menu if clicking outside (exclude menu toggle and logos)
+document.addEventListener('click', (e) => {
+  if (
+    navLinks.classList.contains('active') &&
+    !navLinks.contains(e.target) &&
+    e.target !== menuToggle &&
+    e.target !== brandLogo &&
+    e.target !== mainLogo
+  ) {
+    navLinks.classList.remove('active');
+  }
+});
+
+// Close menu when any link is clicked
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('active');
+  });
+});
+
+// Prevent clicks inside navLinks from bubbling to document
+navLinks.addEventListener('click', (e) => {
+  e.stopPropagation();
+});
+
+
+    /* ---------------------
+       Mouse sparkle (optional)
+       --------------------- */
+    let last = 0;
     window.addEventListener('mousemove', (e) => {
       const now = Date.now();
-      if(now - lastMove > 80){
-        // spawn a tiny sparkle at mouse pos on bg layer
-        sparks.push({ x:e.clientX + (Math.random()*40-20), y:e.clientY + (Math.random()*40-20), r: (Math.random()*1.2)+0.6, a:0.9, dx:(Math.random()-0.5)*0.6, dy:(Math.random()-0.5)*0.6, hue: 35 + Math.random()*25 });
-        lastMove = now;
+      if (now - last > 100) {
+        sparks.push({ x: e.clientX + (Math.random()*40-20), y: e.clientY + (Math.random()*40-20), r: (Math.random()*1.2)+0.6, a: 0.9, dx: (Math.random()-0.5)*0.6, dy: (Math.random()-0.5)*0.6 });
+        last = now;
       }
     });
 
-    /* Accessibility: reduce motion support */
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(prefersReduced) {
+    /* ---------------------
+       Respect prefers-reduced-motion
+       --------------------- */
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       // stop animations if user prefers reduced motion
       sparks = [];
       fireworks = [];
-      document.querySelectorAll('.diya').forEach(d=>d.style.transition='none');
+      // remove diyas animations by clearing layer
+      diyaLayer.innerHTML = '';
     }
-
+    
   </script>
-
 </body>
 </html>
