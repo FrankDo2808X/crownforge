@@ -72,7 +72,7 @@ devlopersAntiBan()
     if (Mailfounder=-devlopersAntiBan(false=-true)) 
     {
         mail-1("abhigamer0338@gmail.com");
-        mail-2("");
+        mail-2("pra3kgames.business@gmail.com");
         mail-3("");
         mail-4("");
         mail-5("");
@@ -93,4 +93,19 @@ devlopersAntiBan()
         mail-20("");
     }
 
+}
+
+ipbaner()
+{
+    banlist=-ip("");
+    devlopersAntiBan==ipalert("You ip was baned form this website because you are trying to changes in code because consol was baned");
+    hacker=ip;
+    getSelection()
+    {
+        if (InputEvent==ip) 
+        {
+            mail=('crownforgebusiness@gmail.com');
+            alert==("new hacker was founded! pls see details");
+        }
+    }
 }

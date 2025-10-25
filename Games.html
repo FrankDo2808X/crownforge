@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CrownForge Studio - Games</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-dark:#0f0f1f;
+  --neon-blue:#00f0ff;
+  --neon-pink:#ff00ff;
+  --neon-green:#00ff99;
+  --text-light:#fff;
+}
+
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--bg-dark);color:var(--text-light);overflow-x:hidden;}
+
+/* BACKGROUND CANVAS */
+canvas.bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+/* PAGE HEADER */
+header{
+  text-align:center;padding:100px 20px;position:relative;z-index:1;
+}
+header h1{
+  font-family:'Orbitron';font-size:3rem;background:linear-gradient(90deg,var(--neon-blue),var(--neon-pink),var(--neon-green));
+  -webkit-background-clip:text;color:transparent;text-shadow:0 0 20px var(--neon-blue),0 0 15px var(--neon-pink);
+  margin-bottom:16px;
+}
+header p{
+  font-size:1.1rem;color:var(--neon-green);max-width:700px;margin:0 auto;line-height:1.6;
+}
+
+/* GAME CARDS */
+.games-container{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;max-width:1000px;margin:50px auto;position:relative;z-index:1;
+}
+.game-card{
+  background:rgba(0,0,0,0.3);border-radius:20px;overflow:hidden;
+  border:1px solid rgba(0,255,255,0.15);box-shadow:0 0 20px var(--neon-blue),0 0 25px var(--neon-pink);
+  transition:0.3s;text-align:center;color:var(--text-light);
+}
+.game-card:hover{transform:translateY(-6px);box-shadow:0 0 30px var(--neon-blue),0 0 35px var(--neon-pink),0 0 25px var(--neon-green);}
+.game-card img{width:100%;height:160px;object-fit:contain;padding:16px;}
+.game-card h3{font-family:'Orbitron';color:var(--neon-pink);margin:12px 0;}
+.game-card a{
+  display:inline-block;margin-bottom:16px;padding:10px 24px;border-radius:24px;background:linear-gradient(90deg,var(--neon-blue),var(--neon-green),var(--neon-pink));
+  color:#000;font-weight:700;text-decoration:none;transition:0.3s;
+}
+.game-card a:hover{transform:scale(1.05);box-shadow:0 0 25px var(--neon-blue),0 0 25px var(--neon-pink),0 0 20px var(--neon-green);}
+
+/* FOOTER */
+footer{text-align:center;padding:30px 20px;color:rgba(255,255,255,0.6);border-top:1px solid rgba(0,255,255,0.1);position:relative;z-index:1;font-size:0.95rem;}
+
+/* RESPONSIVE */
+@media(max-width:720px){header h1{font-size:2rem;}header p{font-size:1rem;}}
+</style>
+</head>
+<body>
+
+<canvas id="bg" class="bg"></canvas>
+
+<header>
+  <h1>CrownForge Games</h1>
+  <p>Explore our games! Click below to play or watch trailers for our latest creations.</p>
+</header>
+
+<div class="games-container">
+  <!-- WAR-X -->
+  <div class="game-card">
+    <img src="https://i.ibb.co/WWBbB53F/warx-logo.png" alt="WAR-X">
+    <h3>WAR-X</h3>
+    <a href="#">Play</a>
+  </div>
+
+  <!-- Zombie StrikeForce -->
+  <div class="game-card">
+    <img src="https://i.ibb.co/BKZDrBHJ/zombie-strike-force-logo.png" alt="Zombie StrikeForce">
+    <h3>Zombie StrikeForce</h3>
+    <a href="#">Play</a>
+  </div>
+
+  <!-- The Black Veil -->
+  <div class="game-card">
+    <img src="https://i.ibb.co/0pM8N2z0/the-black-veil-logo.png" alt="The Black Veil">
+    <h3>The Black Veil</h3>
+    <a href="#">Play</a>
+  </div>
+
+  <!-- Event Trailer -->
+  <div class="game-card">
+    <img src="https://img.youtube.com/vi/QJ98fh05ZNs/hqdefault.jpg" alt="Event Trailer">
+    <h3>Event Trailer</h3>
+    <a href="#">Watch</a>
+  </div>
+</div>
+
+<footer>&copy; 2025 CrownForge Studio. All Rights Reserved.</footer>
+
+<script>
+// Animated neon particle background
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+const particles = [];
+const colors = ['#00f0ff','#ff00ff','#00ff99'];
+
+for(let i=0;i<120;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    dx:(Math.random()-0.5)*0.8,
+    dy:(Math.random()-0.5)*0.8,
+    r:Math.random()*2+1,
+    color:colors[Math.floor(Math.random()*colors.length)]
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let i=0;i<particles.length;i++){
+    let p=particles[i];
+    p.x+=p.dx;p.y+=p.dy;
+    if(p.x<0||p.x>canvas.width)p.dx*=-1;
+    if(p.y<0||p.y>canvas.height)p.dy*=-1;
+
+    ctx.fillStyle=p.color;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+
+    for(let j=i+1;j<particles.length;j++){
+      let p2=particles[j];
+      let d=Math.hypot(p.x-p2.x,p.y-p2.y);
+      if(d<120){
+        ctx.strokeStyle='rgba(0,255,255,0.08)';
+        ctx.lineWidth=1;
+        ctx.beginPath();
+        ctx.moveTo(p.x,p.y);
+        ctx.lineTo(p2.x,p2.y);
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(animate);
+}
+animate();
+window.addEventListener('resize',()=>{canvas.width=innerWidth;canvas.height=innerHeight;});
+</script>
+
+</body>
+</html>

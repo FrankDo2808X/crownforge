@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CrownForge Studio - Contact</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-dark:#0f0f1f;
+  --neon-blue:#00f0ff;
+  --neon-pink:#ff00ff;
+  --neon-green:#00ff99;
+  --text-light:#fff;
+}
+
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--bg-dark);color:var(--text-light);overflow-x:hidden;}
+
+/* BACKGROUND CANVAS */
+canvas.bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+/* PAGE HEADER */
+header{
+  text-align:center;padding:100px 20px;position:relative;z-index:1;
+}
+header h1{
+  font-family:'Orbitron';font-size:3rem;background:linear-gradient(90deg,var(--neon-blue),var(--neon-pink),var(--neon-green));
+  -webkit-background-clip:text;color:transparent;text-shadow:0 0 20px var(--neon-blue),0 0 15px var(--neon-pink);
+  margin-bottom:16px;
+}
+header p{
+  font-size:1.1rem;color:var(--neon-green);max-width:700px;margin:0 auto;line-height:1.6;
+}
+
+/* CONTACT CARDS */
+.contact-container{
+  display:flex;flex-direction:column;align-items:center;gap:24px;max-width:600px;margin:50px auto;position:relative;z-index:1;
+}
+.contact-card{
+  display:flex;align-items:center;gap:16px;padding:16px 28px;border-radius:24px;background:rgba(0,0,0,0.3);
+  border:1px solid rgba(0,255,255,0.2);box-shadow:0 0 20px var(--neon-blue),0 0 30px var(--neon-pink);
+  width:100%;transition:0.3s;text-decoration:none;color:var(--text-light);
+}
+.contact-card:hover{
+  transform:translateY(-5px);box-shadow:0 0 28px var(--neon-blue),0 0 35px var(--neon-pink),0 0 25px var(--neon-green);
+}
+.contact-card img{width:40px;height:40px;}
+.contact-card span{font-family:'Inter',sans-serif;font-weight:600;font-size:1rem;color:var(--neon-green);}
+
+/* FOOTER */
+footer{text-align:center;padding:30px 20px;color:rgba(255,255,255,0.6);border-top:1px solid rgba(0,255,255,0.1);position:relative;z-index:1;font-size:0.95rem;}
+
+/* RESPONSIVE */
+@media(max-width:720px){header h1{font-size:2rem;}header p{font-size:1rem;} .contact-card{padding:14px 20px;gap:12px;}}
+</style>
+</head>
+<body>
+
+<canvas id="bg" class="bg"></canvas>
+
+<header>
+  <h1>CrownForge Studio</h1>
+  <p>Get in touch with us! Connect via Email, Instagram, Discord, or YouTube for latest updates and inquiries.</p>
+</header>
+
+<div class="contact-container">
+  <!-- Email -->
+  <a href="mailto:crownforgebusiness@gmail.com" class="contact-card">
+    <img src="https://img.icons8.com/color/48/000000/new-post.png" alt="Email">
+    <span>crownforgebusiness@gmail.com</span>
+  </a>
+  <!-- Instagram -->
+  <a href="https://www.instagram.com/crownforge_official/?igsh=eTJ5cG8wczBiODE%3D" target="_blank" class="contact-card">
+    <img src="https://img.icons8.com/fluency/48/000000/instagram-new.png" alt="Instagram">
+    <span>Instagram</span>
+  </a>
+  <!-- Discord -->
+  <a href="https://discord.gg/C9rtFRtWax" target="_blank" class="contact-card">
+    <img src="https://img.icons8.com/fluency/48/000000/discord-logo.png" alt="Discord">
+    <span>Discord</span>
+  </a>
+  <!-- YouTube -->
+  <a href="https://www.youtube.com/@CrownForgeStudio" target="_blank" class="contact-card">
+    <img src="https://img.icons8.com/color/48/000000/youtube-play.png" alt="YouTube">
+    <span>YouTube</span>
+  </a>
+</div>
+
+<footer>&copy; 2025 CrownForge Studio. All Rights Reserved.</footer>
+
+<script>
+// Animated neon particle background
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+const particles = [];
+const colors = ['#00f0ff','#ff00ff','#00ff99'];
+
+for(let i=0;i<120;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    dx:(Math.random()-0.5)*0.8,
+    dy:(Math.random()-0.5)*0.8,
+    r:Math.random()*2+1,
+    color:colors[Math.floor(Math.random()*colors.length)]
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let i=0;i<particles.length;i++){
+    let p=particles[i];
+    p.x+=p.dx;p.y+=p.dy;
+    if(p.x<0||p.x>canvas.width)p.dx*=-1;
+    if(p.y<0||p.y>canvas.height)p.dy*=-1;
+
+    ctx.fillStyle=p.color;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+
+    for(let j=i+1;j<particles.length;j++){
+      let p2=particles[j];
+      let d=Math.hypot(p.x-p2.x,p.y-p2.y);
+      if(d<120){
+        ctx.strokeStyle='rgba(0,255,255,0.08)';
+        ctx.lineWidth=1;
+        ctx.beginPath();
+        ctx.moveTo(p.x,p.y);
+        ctx.lineTo(p2.x,p2.y);
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(animate);
+}
+animate();
+window.addEventListener('resize',()=>{canvas.width=innerWidth;canvas.height=innerHeight;});
+</script>
+
+</body>
+</html>
