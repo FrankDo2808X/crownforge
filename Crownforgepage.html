@@ -3,89 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CrownForge Studio</title>
+<title>CrownForge Studio - Home</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --dark-bg:#0f0f1f;
-  --neon-primary:#00f0ff;
-  --neon-accent:#ff00ff;
-  --text-light:#ffffff;
+  --bg-dark:#1a0a00;
+  --warm-orange:#ff8c00;
+  --warm-yellow:#ffd700;
+  --text-light:#fff;
 }
 
 /* RESET */
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:"Inter",sans-serif;color:var(--text-light);background:var(--dark-bg);overflow-x:hidden;position:relative;}
+body{font-family:'Inter',sans-serif;background:var(--bg-dark);color:var(--text-light);overflow-x:hidden;}
 
-/* CANVAS BG */
+/* BACKGROUND CANVAS */
 canvas.bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
 
-/* NAVBAR */
+/* NAVIGATION */
 nav{
-  position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;
-  padding:16px 40px;background:rgba(15,15,31,0.6);backdrop-filter:blur(12px);z-index:10;border-bottom:1px solid rgba(0,255,255,0.15);border-radius:0 0 14px 14px;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 28px;background:rgba(0,0,0,0.25);backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,140,0,0.15);position:relative;z-index:2;border-radius:0 0 12px 12px;
 }
-.brand{display:flex;align-items:center;gap:14px;}
-.brand img.logo{width:55px;height:55px;border-radius:14px;filter:drop-shadow(0 0 20px var(--neon-primary));}
-.brand .title .name{font-family:'Orbitron';font-weight:900;font-size:20px;color:var(--neon-accent);}
-.brand .title .sub{font-size:12px;color:rgba(255,255,255,0.6);}
-.nav-links{display:flex;gap:20px;}
-.nav-links a{
-  position: relative;padding:10px 18px;border-radius:16px;font-weight:700;text-decoration:none;color:var(--text-light);overflow:hidden;
-  transition:0.3s;
+nav .brand{display:flex;align-items:center;gap:12px;}
+nav .brand img.logo{width:50px;height:50px;border-radius:12px;}
+nav .brand .title .name{font-family:'Orbitron';font-weight:900;font-size:18px;color:var(--warm-orange);}
+nav .brand .title .sub{font-size:12px;color:rgba(255,255,255,0.6);}
+nav .nav-links{display:flex;gap:18px;}
+nav .nav-links a{
+  position: relative;padding: 8px 16px;border-radius:12px;text-decoration:none;color:var(--text-light);
+  font-weight:700;overflow:hidden;transition:0.4s;
 }
-.nav-links a:hover{
+nav .nav-links a:hover{
   color:#000;
-  background: linear-gradient(90deg,var(--neon-primary),var(--neon-accent));
-  box-shadow:0 0 20px var(--neon-primary),0 0 28px var(--neon-accent);
+  box-shadow:0 0 18px var(--warm-orange),0 0 28px var(--warm-yellow);
   transform:scale(1.05);
 }
-.menu-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;}
-.menu-toggle span{width:28px;height:3px;background:#fff;border-radius:3px;}
-@media(max-width:900px){.nav-links{display:none;position:absolute;top:72px;right:20px;background:rgba(0,0,0,0.95);flex-direction:column;padding:14px;border-radius:14px;width:200px;}.nav-links.active{display:flex;}.menu-toggle{display:flex;}}
+.menu-toggle{display:none;flex-direction:column;gap:4px;cursor:pointer;}
+.menu-toggle span{width:24px;height:3px;background:#fff;border-radius:3px;}
+@media(max-width:900px){
+  .nav-links{display:none;position:absolute;top:68px;right:16px;background:rgba(0,0,0,0.95);flex-direction:column;padding:14px;border-radius:12px;width:220px;}
+  .nav-links.active{display:flex;}
+  .menu-toggle{display:flex;}
+}
 
 /* HERO */
-header.hero{
-  text-align:center;padding:120px 20px;background:transparent;
-  border-radius:0 0 40px 40px;position:relative;overflow:hidden;z-index:1;
-}
-header.hero img{width:130px;margin-bottom:20px;border-radius:16px;box-shadow:0 0 25px var(--neon-primary);}
+header.hero{text-align:center;padding:100px 20px;position:relative;z-index:1;}
 header.hero h1{
-  font-family:'Orbitron';font-size:3rem;background:linear-gradient(90deg,var(--neon-primary),var(--neon-accent));
-  -webkit-background-clip:text;color:transparent;text-shadow:0 0 25px var(--neon-primary);
+  font-family:'Orbitron';font-size:3rem;
+  background:linear-gradient(90deg,var(--warm-orange),var(--warm-yellow));
+  -webkit-background-clip:text;color:transparent;text-shadow:0 0 20px var(--warm-orange),0 0 15px var(--warm-yellow);
   margin-bottom:16px;
 }
-header.hero p.lead{
-  max-width:700px;margin:0 auto;font-size:1.05rem;color:rgba(255,255,255,0.8);line-height:1.6;
-}
-header.hero button{
-  margin-top:28px;padding:14px 32px;font-size:1rem;font-weight:700;border:none;border-radius:30px;
-  color:#000;background:linear-gradient(90deg,var(--neon-primary),var(--neon-accent));
-  cursor:pointer;box-shadow:0 0 25px var(--neon-primary),0 0 18px var(--neon-accent);transition:0.4s;
-}
-header.hero button:hover{
-  transform:translateY(-3px);box-shadow:0 0 35px var(--neon-primary),0 0 25px var(--neon-accent);
-}
+header.hero p{font-size:1.1rem;color:var(--warm-yellow);max-width:700px;margin:0 auto;line-height:1.6;margin-bottom:30px;}
 
-/* ABOUT */
-section#about{padding:60px 20px;}
-#about h2{text-align:center;font-family:'Orbitron';font-size:2rem;color:var(--neon-accent);margin-bottom:24px;}
-.about-main{
-  max-width:900px;margin:0 auto;background:rgba(0,0,0,0.3);padding:22px;border-radius:18px;border:1px solid rgba(0,255,255,0.08);backdrop-filter:blur(6px);
+/* EXPLORE BUTTON */
+header.hero .explore-btn{
+  display:inline-block;
+  padding:16px 40px;
+  font-family:'Orbitron';
+  font-weight:900;
+  font-size:1.1rem;
+  color:#000;
+  background: linear-gradient(90deg,var(--warm-orange),var(--warm-yellow));
+  border-radius:30px;
+  cursor:pointer;
+  text-decoration:none;
+  box-shadow:0 4px 15px rgba(255,140,0,0.5),0 0 25px rgba(255,215,0,0.5);
+  transition:0.4s;
+  position:relative;
+  overflow:hidden;
 }
-.about-main p.intro{font-size:1rem;color:rgba(255,255,255,0.85);line-height:1.6;text-align:center;}
-
-/* CONTACT */
-section#contact{padding:50px 20px;}
-.contact-panel{max-width:600px;margin:0 auto;background:rgba(0,0,0,0.25);padding:20px;border-radius:18px;text-align:center;border:1px solid rgba(0,255,255,0.08);}
-.contact-panel h2{font-family:'Orbitron';color:var(--neon-primary);margin-bottom:14px;}
-.contact-panel a{color:var(--neon-accent);text-decoration:none;font-weight:600;}
+header.hero .explore-btn::before{
+  content:'';
+  position:absolute;
+  top:0; left:-100%;
+  width:100%; height:100%;
+  background:rgba(255,255,255,0.25);
+  transform:skewX(-20deg);
+  transition:0.5s;
+}
+header.hero .explore-btn:hover::before{
+  left:100%;
+}
+header.hero .explore-btn:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 35px var(--warm-orange),0 0 35px var(--warm-yellow),0 0 50px #ffb733;
+}
 
 /* FOOTER */
-footer{padding:20px;text-align:center;color:rgba(255,255,255,0.6);border-top:1px solid rgba(0,255,255,0.05);}
-
-/* RESPONSIVE */
-@media(max-width:720px){header.hero h1{font-size:2rem;}header.hero p.lead{font-size:0.95rem;}header.hero button{padding:12px 26px;}}
+footer{text-align:center;padding:30px 20px;color:rgba(255,255,255,0.6);border-top:1px solid rgba(255,140,0,0.15);position:relative;z-index:1;font-size:0.95rem;}
 </style>
 </head>
 <body>
@@ -94,86 +102,73 @@ footer{padding:20px;text-align:center;color:rgba(255,255,255,0.6);border-top:1px
 
 <nav>
   <div class="brand">
-    <img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" class="logo" alt="CrownForge Logo">
-    <div class="title"><div class="name">CrownForge Studio</div><div class="sub">Innovating Games</div></div>
+    <img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" class="logo">
+    <div class="title">
+      <div class="name">CrownForge Studio</div>
+      <div class="sub">Games & Fun</div>
+    </div>
   </div>
   <div class="nav-links">
-    <a href="#about">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="Newupdates.html">Updates</a>
-    <a href="Games.html">Games</a>
+    <a href="Crownforgepage.html">Home</a>
     <a href="tralers.html">Videos</a>
+    <a href="contact.html">Contact</a>
+    <a href="Games.html">About</a>
+    <a href="Newupdates.html">updates</a>
+    <a href="index.html">Logout</a>
   </div>
   <div class="menu-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active');"><span></span><span></span><span></span></div>
 </nav>
 
 <header class="hero">
-  <img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="CrownForge Logo">
-  <h1>CrownForge Studio</h1>
-  <p class="lead">Creating immersive games and digital experiences with innovation, creativity, and professional excellence.</p>
-  <button>Learn More</button>
+  <h1>Welcome to CrownForge Studio</h1>
+  <p>Explore our latest games, trailers, and updates directly on this professional and immersive platform.</p>
+  <a href="tralers.html" class="explore-btn">Explore Now</a>
 </header>
-
-<section id="about">
-  <h2>About Us</h2>
-  <div class="about-main">
-    <p class="intro">CrownForge Studio is a professional game development studio crafting immersive gameplay, creative projects, and innovative experiences for players worldwide.</p>
-  </div>
-</section>
-
-<section id="contact">
-  <div class="contact-panel">
-    <h2>Contact Us</h2>
-    <p>Email: <a href="mailto:crownforgebusiness@gmail.com">crownforgebusiness@gmail.com</a></p>
-    <p>Follow us on social media for latest updates!</p>
-  </div>
-</section>
 
 <footer>&copy; 2025 CrownForge Studio. All Rights Reserved.</footer>
 
 <script>
-// Neon particle background
+// Warm particle background
 const canvas = document.getElementById('bg');
 const ctx = canvas.getContext('2d');
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
 const particles = [];
-const colors = ['#00f0ff', '#ff00ff', '#00ff99'];
-
-for(let i=0;i<100;i++){
+const colors = ['#ff8c00','#ffd700','#ffb733'];
+for(let i=0;i<150;i++){
   particles.push({
-    x: Math.random()*canvas.width,
-    y: Math.random()*canvas.height,
-    dx: (Math.random()-0.5)*0.7,
-    dy: (Math.random()-0.5)*0.7,
-    r: Math.random()*2+1,
-    color: colors[Math.floor(Math.random()*colors.length)]
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    dx:(Math.random()-0.5)*1.2,
+    dy:(Math.random()-0.5)*1.2,
+    r:Math.random()*3+1,
+    color:colors[Math.floor(Math.random()*colors.length)]
   });
 }
 
 function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "rgba(26,10,0,0.25)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
   for(let i=0;i<particles.length;i++){
     let p = particles[i];
     p.x += p.dx;
     p.y += p.dy;
+    if(p.x<0||p.x>canvas.width)p.dx*=-1;
+    if(p.y<0||p.y>canvas.height)p.dy*=-1;
 
-    if(p.x<0 || p.x>canvas.width) p.dx*=-1;
-    if(p.y<0 || p.y>canvas.height) p.dy*=-1;
-
-    ctx.fillStyle = p.color;
+    ctx.fillStyle=p.color;
     ctx.beginPath();
     ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
     ctx.fill();
 
-    // Lines
     for(let j=i+1;j<particles.length;j++){
-      let p2 = particles[j];
-      let dist = Math.hypot(p.x-p2.x, p.y-p2.y);
-      if(dist<120){
-        ctx.strokeStyle = 'rgba(0,255,255,0.08)';
-        ctx.lineWidth = 1;
+      let p2=particles[j];
+      let d=Math.hypot(p.x-p2.x,p.y-p2.y);
+      if(d<100){
+        ctx.strokeStyle='rgba(255,215,0,0.1)';
+        ctx.lineWidth=1;
         ctx.beginPath();
         ctx.moveTo(p.x,p.y);
         ctx.lineTo(p2.x,p2.y);
@@ -183,13 +178,8 @@ function animate(){
   }
   requestAnimationFrame(animate);
 }
-
 animate();
-
-window.addEventListener('resize',()=>{
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
-});
+window.addEventListener('resize',()=>{canvas.width=innerWidth;canvas.height=innerHeight;});
 </script>
 
 </body>

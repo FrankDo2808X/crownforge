@@ -7,10 +7,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg-dark:#0f0f1f;
-  --neon-blue:#00f0ff;
-  --neon-pink:#ff00ff;
-  --neon-green:#00ff99;
+  --bg-dark:#1a0a00;
+  --warm-orange:#ff8c00;
+  --warm-yellow:#ffd700;
   --text-light:#fff;
 }
 
@@ -26,12 +25,13 @@ header{
   text-align:center;padding:100px 20px;position:relative;z-index:1;
 }
 header h1{
-  font-family:'Orbitron';font-size:3rem;background:linear-gradient(90deg,var(--neon-blue),var(--neon-pink),var(--neon-green));
-  -webkit-background-clip:text;color:transparent;text-shadow:0 0 20px var(--neon-blue),0 0 15px var(--neon-pink);
+  font-family:'Orbitron';font-size:3rem;
+  background:linear-gradient(90deg,var(--warm-orange),var(--warm-yellow));
+  -webkit-background-clip:text;color:transparent;text-shadow:0 0 20px var(--warm-orange),0 0 15px var(--warm-yellow);
   margin-bottom:16px;
 }
 header p{
-  font-size:1.1rem;color:var(--neon-green);max-width:700px;margin:0 auto;line-height:1.6;
+  font-size:1.1rem;color:var(--warm-yellow);max-width:700px;margin:0 auto;line-height:1.6;
 }
 
 /* GAME CARDS */
@@ -40,20 +40,20 @@ header p{
 }
 .game-card{
   background:rgba(0,0,0,0.3);border-radius:20px;overflow:hidden;
-  border:1px solid rgba(0,255,255,0.15);box-shadow:0 0 20px var(--neon-blue),0 0 25px var(--neon-pink);
+  border:1px solid rgba(255,140,0,0.15);box-shadow:0 0 20px var(--warm-orange),0 0 25px var(--warm-yellow);
   transition:0.3s;text-align:center;color:var(--text-light);
 }
-.game-card:hover{transform:translateY(-6px);box-shadow:0 0 30px var(--neon-blue),0 0 35px var(--neon-pink),0 0 25px var(--neon-green);}
+.game-card:hover{transform:translateY(-6px);box-shadow:0 0 35px var(--warm-orange),0 0 35px var(--warm-yellow),0 0 30px #ffb733;}
 .game-card img{width:100%;height:160px;object-fit:contain;padding:16px;}
-.game-card h3{font-family:'Orbitron';color:var(--neon-pink);margin:12px 0;}
+.game-card h3{font-family:'Orbitron';color:var(--warm-yellow);margin:12px 0;}
 .game-card a{
-  display:inline-block;margin-bottom:16px;padding:10px 24px;border-radius:24px;background:linear-gradient(90deg,var(--neon-blue),var(--neon-green),var(--neon-pink));
+  display:inline-block;margin-bottom:16px;padding:10px 24px;border-radius:24px;background:linear-gradient(90deg,var(--warm-orange),var(--warm-yellow));
   color:#000;font-weight:700;text-decoration:none;transition:0.3s;
 }
-.game-card a:hover{transform:scale(1.05);box-shadow:0 0 25px var(--neon-blue),0 0 25px var(--neon-pink),0 0 20px var(--neon-green);}
+.game-card a:hover{transform:scale(1.05);box-shadow:0 0 25px var(--warm-orange),0 0 25px var(--warm-yellow),0 0 20px #ffb733;}
 
 /* FOOTER */
-footer{text-align:center;padding:30px 20px;color:rgba(255,255,255,0.6);border-top:1px solid rgba(0,255,255,0.1);position:relative;z-index:1;font-size:0.95rem;}
+footer{text-align:center;padding:30px 20px;color:rgba(255,255,255,0.6);border-top:1px solid rgba(255,140,0,0.15);position:relative;z-index:1;font-size:0.95rem;}
 
 /* RESPONSIVE */
 @media(max-width:720px){header h1{font-size:2rem;}header p{font-size:1rem;}}
@@ -73,56 +73,53 @@ footer{text-align:center;padding:30px 20px;color:rgba(255,255,255,0.6);border-to
   <div class="game-card">
     <img src="https://i.ibb.co/WWBbB53F/warx-logo.png" alt="WAR-X">
     <h3>WAR-X</h3>
-    <a href="#">Play</a>
+    <a href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.Uitesting" target="_blank">Play</a>
   </div>
 
   <!-- Zombie StrikeForce -->
   <div class="game-card">
     <img src="https://i.ibb.co/BKZDrBHJ/zombie-strike-force-logo.png" alt="Zombie StrikeForce">
     <h3>Zombie StrikeForce</h3>
-    <a href="#">Play</a>
+    <a href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.ZombieStrikeForce" target="_blank">Play</a>
   </div>
 
   <!-- The Black Veil -->
   <div class="game-card">
     <img src="https://i.ibb.co/0pM8N2z0/the-black-veil-logo.png" alt="The Black Veil">
     <h3>The Black Veil</h3>
-    <a href="#">Play</a>
+    <a href="https://play.google.com/store/apps/details?id=com.PRA3KGAMES.THEBLACKVEIL" target="_blank">Play</a>
   </div>
 
   <!-- Event Trailer -->
-  <div class="game-card">
-    <img src="https://img.youtube.com/vi/QJ98fh05ZNs/hqdefault.jpg" alt="Event Trailer">
-    <h3>Event Trailer</h3>
-    <a href="#">Watch</a>
   </div>
 </div>
 
 <footer>&copy; 2025 CrownForge Studio. All Rights Reserved.</footer>
 
 <script>
-// Animated neon particle background
+// Orange-yellow particle background
 const canvas = document.getElementById('bg');
 const ctx = canvas.getContext('2d');
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
 const particles = [];
-const colors = ['#00f0ff','#ff00ff','#00ff99'];
+const colors = ['#ff8c00','#ffd700','#ffb733'];
 
-for(let i=0;i<120;i++){
+for(let i=0;i<150;i++){
   particles.push({
     x:Math.random()*canvas.width,
     y:Math.random()*canvas.height,
-    dx:(Math.random()-0.5)*0.8,
-    dy:(Math.random()-0.5)*0.8,
-    r:Math.random()*2+1,
+    dx:(Math.random()-0.5)*1.2,
+    dy:(Math.random()-0.5)*1.2,
+    r:Math.random()*3+1,
     color:colors[Math.floor(Math.random()*colors.length)]
   });
 }
 
 function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "rgba(26,10,0,0.25)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
   for(let i=0;i<particles.length;i++){
     let p=particles[i];
     p.x+=p.dx;p.y+=p.dy;
@@ -138,7 +135,7 @@ function animate(){
       let p2=particles[j];
       let d=Math.hypot(p.x-p2.x,p.y-p2.y);
       if(d<120){
-        ctx.strokeStyle='rgba(0,255,255,0.08)';
+        ctx.strokeStyle='rgba(255,215,0,0.08)';
         ctx.lineWidth=1;
         ctx.beginPath();
         ctx.moveTo(p.x,p.y);
