@@ -15,48 +15,142 @@
 
 /* RESET */
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Inter',sans-serif;background:var(--bg-dark);color:var(--text-light);overflow-x:hidden;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg-dark);
+  color:var(--text-light);
+  overflow-x:hidden;
+}
 
 /* BACKGROUND CANVAS */
-canvas.bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+canvas.bg{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+  pointer-events:none;
+}
 
 /* NAVIGATION */
 nav{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:14px 28px;background:rgba(0,0,0,0.25);backdrop-filter:blur(10px);
-  border-bottom:1px solid rgba(255,140,0,0.15);position:relative;z-index:2;border-radius:0 0 12px 12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 28px;
+  background:rgba(0,0,0,0.25);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,140,0,0.15);
+  position:relative;
+  z-index:2;
+  border-radius:0 0 12px 12px;
 }
-nav .brand{display:flex;align-items:center;gap:12px;}
-nav .brand img.logo{width:50px;height:50px;border-radius:12px;}
-nav .brand .title .name{font-family:'Orbitron';font-weight:900;font-size:18px;color:var(--warm-orange);}
-nav .brand .title .sub{font-size:12px;color:rgba(255,255,255,0.6);}
-nav .nav-links{display:flex;gap:18px;}
+
+nav .brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+nav .brand img.logo{
+  width:50px;
+  height:50px;
+  border-radius:12px;
+}
+nav .brand .title .name{
+  font-family:'Orbitron';
+  font-weight:900;
+  font-size:18px;
+  color:var(--warm-orange);
+}
+nav .brand .title .sub{
+  font-size:12px;
+  color:rgba(255,255,255,0.6);
+}
+
+/* NAV LINKS */
+nav .nav-links{
+  display:flex;
+  gap:18px;
+  transition:all 0.4s ease;
+}
 nav .nav-links a{
-  position: relative;padding: 8px 16px;border-radius:12px;text-decoration:none;color:var(--text-light);
-  font-weight:700;overflow:hidden;transition:0.4s;
+  position: relative;
+  padding: 8px 16px;
+  border-radius:12px;
+  text-decoration:none;
+  color:var(--text-light);
+  font-weight:700;
+  overflow:hidden;
+  transition:0.4s;
 }
 nav .nav-links a:hover{
-  color:#000;
+  color:#ffffff;
   box-shadow:0 0 18px var(--warm-orange),0 0 28px var(--warm-yellow);
   transform:scale(1.05);
 }
-.menu-toggle{display:none;flex-direction:column;gap:4px;cursor:pointer;}
-.menu-toggle span{width:24px;height:3px;background:#fff;border-radius:3px;}
+
+/* MOBILE MENU TOGGLE */
+.menu-toggle{
+  display:none;
+  flex-direction:column;
+  gap:4px;
+  cursor:pointer;
+}
+.menu-toggle span{
+  width:24px;
+  height:3px;
+  background:#fff;
+  border-radius:3px;
+}
+
+/* MOBILE STYLES */
 @media(max-width:900px){
-  .nav-links{display:none;position:absolute;top:68px;right:16px;background:rgba(0,0,0,0.95);flex-direction:column;padding:14px;border-radius:12px;width:220px;}
-  .nav-links.active{display:flex;}
+  .nav-links{
+    display:flex;
+    flex-direction:column;
+    position:absolute;
+    top:68px;
+    right:16px;
+    background:rgba(0, 0, 0, 0.95);
+    border-radius:12px;
+    width:220px;
+    padding:0;
+    max-height:0;
+    overflow:hidden;
+    opacity:0;
+    transition:all 0.4s ease;
+  }
+  .nav-links.active{
+    padding:14px;
+    opacity:1;
+    max-height:500px;
+  }
   .menu-toggle{display:flex;}
 }
 
 /* HERO */
-header.hero{text-align:center;padding:100px 20px;position:relative;z-index:1;}
+header.hero{
+  text-align:center;
+  padding:100px 20px;
+  position:relative;
+  z-index:1;
+}
 header.hero h1{
-  font-family:'Orbitron';font-size:3rem;
+  font-family:'Orbitron';
+  font-size:3rem;
   background:linear-gradient(90deg,var(--warm-orange),var(--warm-yellow));
-  -webkit-background-clip:text;color:transparent;text-shadow:0 0 20px var(--warm-orange),0 0 15px var(--warm-yellow);
+  -webkit-background-clip:text;
+  color:transparent;
+  text-shadow:0 0 20px var(--warm-orange),0 0 15px var(--warm-yellow);
   margin-bottom:16px;
 }
-header.hero p{font-size:1.1rem;color:var(--warm-yellow);max-width:700px;margin:0 auto;line-height:1.6;margin-bottom:30px;}
+header.hero p{
+  font-size:1.1rem;
+  color:var(--warm-yellow);
+  max-width:700px;
+  margin:0 auto 30px;
+  line-height:1.6;
+}
 
 /* EXPLORE BUTTON */
 header.hero .explore-btn{
@@ -65,7 +159,7 @@ header.hero .explore-btn{
   font-family:'Orbitron';
   font-weight:900;
   font-size:1.1rem;
-  color:#000;
+  color:#ffffff;
   background: linear-gradient(90deg,var(--warm-orange),var(--warm-yellow));
   border-radius:30px;
   cursor:pointer;
@@ -78,22 +172,30 @@ header.hero .explore-btn{
 header.hero .explore-btn::before{
   content:'';
   position:absolute;
-  top:0; left:-100%;
-  width:100%; height:100%;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:100%;
   background:rgba(255,255,255,0.25);
   transform:skewX(-20deg);
   transition:0.5s;
 }
-header.hero .explore-btn:hover::before{
-  left:100%;
-}
+header.hero .explore-btn:hover::before{ left:100%; }
 header.hero .explore-btn:hover{
   transform:scale(1.1);
   box-shadow:0 0 35px var(--warm-orange),0 0 35px var(--warm-yellow),0 0 50px #ffb733;
 }
 
 /* FOOTER */
-footer{text-align:center;padding:30px 20px;color:rgba(255,255,255,0.6);border-top:1px solid rgba(255,140,0,0.15);position:relative;z-index:1;font-size:0.95rem;}
+footer{
+  text-align:center;
+  padding:30px 20px;
+  color:rgba(255,255,255,0.6);
+  border-top:1px solid rgba(255,140,0,0.15);
+  position:relative;
+  z-index:1;
+  font-size:0.95rem;
+}
 </style>
 </head>
 <body>
@@ -112,11 +214,11 @@ footer{text-align:center;padding:30px 20px;color:rgba(255,255,255,0.6);border-to
     <a href="Crownforgepage.html">Home</a>
     <a href="tralers.html">Videos</a>
     <a href="contact.html">Contact</a>
-    <a href="Games.html">About</a>
-    <a href="Newupdates.html">updates</a>
+    <a href="Newupdates.html">Updates</a>
     <a href="index.html">Logout</a>
+    <a href="Games.html">Games</a>
   </div>
-  <div class="menu-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active');"><span></span><span></span><span></span></div>
+  <div class="menu-toggle"><span></span><span></span><span></span></div>
 </nav>
 
 <header class="hero">
@@ -128,7 +230,9 @@ footer{text-align:center;padding:30px 20px;color:rgba(255,255,255,0.6);border-to
 <footer>&copy; 2025 CrownForge Studio. All Rights Reserved.</footer>
 
 <script>
-// Warm particle background
+window.addEventListener("DOMContentLoaded", () => {
+
+// 🌟 Particle Background
 const canvas = document.getElementById('bg');
 const ctx = canvas.getContext('2d');
 canvas.width = innerWidth;
@@ -179,7 +283,34 @@ function animate(){
   requestAnimationFrame(animate);
 }
 animate();
-window.addEventListener('resize',()=>{canvas.width=innerWidth;canvas.height=innerHeight;});
+
+window.addEventListener('resize',()=>{
+  canvas.width=innerWidth;
+  canvas.height=innerHeight;
+});
+
+// ✅ Mobile menu with animation
+const menuToggle = document.querySelector('.menu-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+if(menuToggle && navLinks){
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+  });
+
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+      navLinks.classList.remove('active');
+    }
+  });
+}
+});
 </script>
 
 </body>
