@@ -178,48 +178,49 @@ footer{
 <footer>&copy; 2025 CrownForge Studio. All Rights Reserved.</footer>
 
 <script>
-// Multi-color smooth particle background (optimized for mobile)
+// Smooth yellow-golden particle background (optimized for mobile)
 const canvas = document.getElementById('bg');
 const ctx = canvas.getContext('2d');
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
-const colors = ['#ff8c00','#ffd700','#ff4da6','#00ffff','#ff66ff','#ff0000','#00ff99'];
+// Yellow shades for glowing effect
+const colors = ['#fff700', '#ffd700', '#ffea00', '#fff44f', '#f6ff00', '#ffe135'];
 const particles = [];
 
-for(let i=0;i<130;i++){
+for (let i = 0; i < 130; i++) {
   particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    dx:(Math.random()-0.5)*1.2,
-    dy:(Math.random()-0.5)*1.2,
-    r:Math.random()*2+1,
-    color:colors[Math.floor(Math.random()*colors.length)]
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    dx: (Math.random() - 0.5) * 1.2,
+    dy: (Math.random() - 0.5) * 1.2,
+    r: Math.random() * 2 + 1,
+    color: colors[Math.floor(Math.random() * colors.length)]
   });
 }
 
-function animate(){
+function animate() {
   ctx.fillStyle = "rgba(26,10,0,0.25)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  for(let i=0;i<particles.length;i++){
-    let p=particles[i];
-    p.x+=p.dx;
-    p.y+=p.dy;
-    if(p.x<0||p.x>canvas.width)p.dx*=-1;
-    if(p.y<0||p.y>canvas.height)p.dy*=-1;
-    ctx.fillStyle=p.color;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  for (let i = 0; i < particles.length; i++) {
+    let p = particles[i];
+    p.x += p.dx;
+    p.y += p.dy;
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    ctx.fillStyle = p.color;
     ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
     ctx.fill();
-    for(let j=i+1;j<particles.length;j++){
-      let p2=particles[j];
-      let d=Math.hypot(p.x-p2.x,p.y-p2.y);
-      if(d<100){
-        ctx.strokeStyle=p.color+"20";
-        ctx.lineWidth=0.7;
+    for (let j = i + 1; j < particles.length; j++) {
+      let p2 = particles[j];
+      let d = Math.hypot(p.x - p2.x, p.y - p2.y);
+      if (d < 100) {
+        ctx.strokeStyle = p.color + "20";
+        ctx.lineWidth = 0.7;
         ctx.beginPath();
-        ctx.moveTo(p.x,p.y);
-        ctx.lineTo(p2.x,p2.y);
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p2.x, p2.y);
         ctx.stroke();
       }
     }
@@ -228,9 +229,9 @@ function animate(){
 }
 animate();
 
-window.addEventListener('resize',()=>{
-  canvas.width=innerWidth;
-  canvas.height=innerHeight;
+window.addEventListener('resize', () => {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
 });
 
 // Video Modal Controls
