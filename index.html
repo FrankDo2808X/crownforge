@@ -15,6 +15,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
+    overflow: hidden;
   }
 
   .container {
@@ -45,15 +46,16 @@
   }
 
   button {
-    width: 95%;
-    padding: 10px;
+    width: 90%;
+    padding: 12px;
     border: none;
     border-radius: 8px;
     background: linear-gradient(90deg, #ff8c00, #ffb400);
     color: #000;
     font-weight: bold;
     cursor: pointer;
-    margin-top: 10px;
+    margin: 10px auto;
+    display: block;
     box-shadow: 0 0 10px rgba(255,165,0,0.4);
     transition: 0.3s;
   }
@@ -89,70 +91,120 @@
     100% { background-position: 100% 50%; }
   }
 
-  /* Google Button Style */
+  /* Google Button Centered */
   .google-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    background: linear-gradient(270deg, #ffcc00, #ff6600, #ffcc00);
-    background-size: 300%;
-    color: #fff;
-    border: none;
-    border-radius: 50px;
-    padding: 12px 28px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 15px rgba(255, 165, 0, 0.6);
-    outline: none;
-    animation: glowMove 4s linear infinite;
-    margin-top: 20px;
-  }
-
-  .google-btn img {
-    width: 26px;
-    height: 26px;
     background: #fff;
-    border-radius: 50%;
-    padding: 4px;
-    order: 2; /* ✅ Image on right side */
-  }
-
-  .google-btn span {
-    order: 1;
+    color: #333;
+    font-weight: 600;
+    border-radius: 8px;
+    width: 90%;
+    padding: 12px;
+    margin: 10px auto;
+    cursor: pointer;
+    border: none;
+    gap: 8px;
+    transition: 0.3s;
+    box-shadow: 0 0 8px rgba(255,255,255,0.2);
   }
 
   .google-btn:hover {
+    background: #f1f1f1;
     transform: scale(1.05);
-    box-shadow: 0 0 25px rgba(255, 140, 0, 0.9);
+    box-shadow: 0 0 15px rgba(255,165,0,0.5);
   }
 
+  .google-btn img {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* Keep signed in */
+  .keep-signed {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 90%;
+    margin: 10px auto;
+    color: #ccc;
+    font-size: 14px;
+  }
+
+  .keep-signed input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #ffb400;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .keep-signed input[type="checkbox"]:hover {
+    box-shadow: 0 0 10px #ffb400;
+  }
+
+  /* Loading */
+  .loader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+
+  .loader::after {
+    content: "";
+    width: 70px;
+    height: 70px;
+    border: 6px solid #ffb400;
+    border-top: 6px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite, glow 1.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes glow {
+    from { box-shadow: 0 0 10px #ffb400; }
+    to { box-shadow: 0 0 30px #ff8c00; }
+  }
 </style>
 </head>
 <body>
 
 <div class="glow-line"></div>
+<div class="loader" id="loader"></div>
 
 <div class="container">
   <h2 id="formTitle">Login</h2>
   <input type="email" id="email" placeholder="Email" required>
   <input type="password" id="password" placeholder="Password" required>
-  <input type="password" id="confirmPassword" placeholder="Confirm Password" style="display:none;">
-  <button id="authBtn">Login</button>
-  <p id="toggleText">Don't have an account? <a id="toggleLink">Create one</a></p>
 
-  <!-- ✅ Google Sign-In Button -->
-  <button id="googleLoginBtn" class="google-btn">
+  <div class="keep-signed">
+    <input type="checkbox" id="keepSigned" checked>
+    <label for="keepSigned">Keep me signed in</label>
+  </div>
+
+  <button id="authBtn">Login</button>
+
+  <button id="googleLogin" class="google-btn">
+    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo">
     <span>Sign in with Google</span>
-    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
   </button>
+
+  <p id="toggleText">Don't have an account? <a id="toggleLink">Create one</a></p>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } 
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, setPersistence, browserLocalPersistence, browserSessionPersistence } 
   from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
   const firebaseConfig = {
@@ -168,66 +220,70 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
+  const loader = document.getElementById('loader');
+  const keepSigned = document.getElementById('keepSigned');
 
   let isLogin = true;
   const formTitle = document.getElementById("formTitle");
   const authBtn = document.getElementById("authBtn");
   const toggleText = document.getElementById("toggleText");
   const toggleLink = document.getElementById("toggleLink");
-  const confirmPassword = document.getElementById("confirmPassword");
 
   toggleLink.addEventListener("click", () => {
     isLogin = !isLogin;
     formTitle.textContent = isLogin ? "Login" : "Create Account";
     authBtn.textContent = isLogin ? "Login" : "Sign Up";
-    confirmPassword.style.display = isLogin ? "none" : "block";
     toggleText.innerHTML = isLogin
       ? `Don't have an account? <a id="toggleLink">Create one</a>`
       : `Already have an account? <a id="toggleLink">Login</a>`;
   });
 
+  function showLoader(show) {
+    loader.style.display = show ? "flex" : "none";
+  }
+
   authBtn.addEventListener("click", async () => {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
-    const cPassword = document.getElementById("confirmPassword").value.trim();
+    if (!email || !password) return alert("Please fill all fields!");
 
-    if (!email || !password || (!isLogin && !cPassword)) return alert("Please fill all fields!");
-    if (!isLogin && password !== cPassword) return alert("Passwords do not match!");
-
+    showLoader(true);
     try {
+      await setPersistence(auth, keepSigned.checked ? browserLocalPersistence : browserSessionPersistence);
+
       if (isLogin) {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
+
         if (user.email === "admin@crownforge.com") {
-          alert("Welcome Admin!");
-          window.location.href = "admin.html";
+          window.location.href = "Crownforgepage.html";
         } else {
-          alert("Welcome " + user.email + "!");
           window.location.href = "Crownforgepage.html";
         }
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
         alert("Account created successfully! Please login now.");
         isLogin = true;
-        confirmPassword.style.display = "none";
         formTitle.textContent = "Login";
         authBtn.textContent = "Login";
       }
     } catch (error) {
       alert("Firebase: " + error.message);
+    } finally {
+      showLoader(false);
     }
   });
 
-  // ✅ Google Login Functionality
-  const googleBtn = document.getElementById('googleLoginBtn');
-  googleBtn.addEventListener('click', async () => {
+  document.getElementById("googleLogin").addEventListener("click", async () => {
+    showLoader(true);
     try {
+      await setPersistence(auth, browserLocalPersistence);
       const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      alert("Welcome " + user.displayName + "!");
       window.location.href = "Crownforgepage.html";
     } catch (error) {
       alert("Google Sign-in Failed: " + error.message);
+    } finally {
+      showLoader(false);
     }
   });
 </script>
