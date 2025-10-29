@@ -91,13 +91,11 @@
     100% { background-position: 100% 50%; }
   }
 
-  /* Google Button Centered */
-  .google-btn {
+  /* Google Button */
+  .social-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fff;
-    color: #333;
     font-weight: 600;
     border-radius: 8px;
     width: 90%;
@@ -110,18 +108,21 @@
     box-shadow: 0 0 8px rgba(255,255,255,0.2);
   }
 
-  .google-btn:hover {
-    background: #f1f1f1;
+  .google-btn {
+    background: #fff;
+    color: #333;
+  }
+
+  .social-btn:hover {
     transform: scale(1.05);
     box-shadow: 0 0 15px rgba(255,165,0,0.5);
   }
 
-  .google-btn img {
+  .social-btn img {
     width: 22px;
     height: 22px;
   }
 
-  /* Keep signed in */
   .keep-signed {
     display: flex;
     align-items: center;
@@ -141,11 +142,6 @@
     transition: 0.2s;
   }
 
-  .keep-signed input[type="checkbox"]:hover {
-    box-shadow: 0 0 10px #ffb400;
-  }
-
-  /* Loading */
   .loader {
     position: fixed;
     top: 0; left: 0;
@@ -167,10 +163,7 @@
     animation: spin 1s linear infinite, glow 1.5s ease-in-out infinite alternate;
   }
 
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
+  @keyframes spin { to { transform: rotate(360deg); } }
   @keyframes glow {
     from { box-shadow: 0 0 10px #ffb400; }
     to { box-shadow: 0 0 30px #ff8c00; }
@@ -194,7 +187,7 @@
 
   <button id="authBtn">Login</button>
 
-  <button id="googleLogin" class="google-btn">
+  <button id="googleLogin" class="social-btn google-btn">
     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo">
     <span>Sign in with Google</span>
   </button>
@@ -203,9 +196,14 @@
 </div>
 
 <script type="module">
+  import { getMessaging, getToken, onMessage } 
+  from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, setPersistence, browserLocalPersistence, browserSessionPersistence } 
-  from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { 
+    getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, 
+    GoogleAuthProvider, signInWithPopup, 
+    setPersistence, browserLocalPersistence, browserSessionPersistence 
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
@@ -219,11 +217,13 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
+  const messaging = getMessaging(app);
+  const googleProvider = new GoogleAuthProvider();
+
   const loader = document.getElementById('loader');
   const keepSigned = document.getElementById('keepSigned');
-
   let isLogin = true;
+
   const formTitle = document.getElementById("formTitle");
   const authBtn = document.getElementById("authBtn");
   const toggleText = document.getElementById("toggleText");
@@ -242,6 +242,18 @@
     loader.style.display = show ? "flex" : "none";
   }
 
+  // 🔔 Request permission for notifications
+  async function requestPermission() {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      const token = await getToken(messaging, { vapidKey: "YOUR_VAPID_KEY_HERE" });
+      console.log("FCM Token:", token);
+      alert("🔔 Notifications enabled!");
+    } else {
+      console.warn("Notification permission denied");
+    }
+  }
+
   authBtn.addEventListener("click", async () => {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
@@ -253,13 +265,8 @@
 
       if (isLogin) {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        if (user.email === "admin@crownforge.com") {
-          window.location.href = "Crownforgepage.html";
-        } else {
-          window.location.href = "Crownforgepage.html";
-        }
+        window.location.href = "Crownforgepage.html";
+        requestPermission(); // ask for push notification permission
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
         alert("Account created successfully! Please login now.");
@@ -274,17 +281,24 @@
     }
   });
 
+  // Google Login
   document.getElementById("googleLogin").addEventListener("click", async () => {
     showLoader(true);
     try {
       await setPersistence(auth, browserLocalPersistence);
-      const result = await signInWithPopup(auth, provider);
+      await signInWithPopup(auth, googleProvider);
       window.location.href = "Crownforgepage.html";
+      requestPermission();
     } catch (error) {
       alert("Google Sign-in Failed: " + error.message);
     } finally {
       showLoader(false);
     }
+  });
+
+  // Foreground message listener
+  onMessage(messaging, (payload) => {
+    alert("🔔 " + payload.notification.title + " - " + payload.notification.body);
   });
 </script>
 </body>

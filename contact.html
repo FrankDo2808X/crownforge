@@ -15,45 +15,104 @@
 
 /* RESET */
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Inter',sans-serif;background:var(--bg-dark);color:var(--text-light);overflow-x:hidden;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg-dark);
+  color:var(--text-light);
+  overflow-x:hidden;
+}
 
 /* BACKGROUND CANVAS */
-canvas.bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+canvas.bg{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+  pointer-events:none;
+}
 
-/* PAGE HEADER */
+/* HEADER */
 header{
-  text-align:center;padding:100px 20px;position:relative;z-index:1;
+  text-align:center;
+  padding:100px 20px;
+  position:relative;
+  z-index:1;
 }
 header h1{
-  font-family:'Orbitron';font-size:3rem;
+  font-family:'Orbitron';
+  font-size:3rem;
   background:linear-gradient(90deg,var(--warm-orange),var(--warm-yellow));
-  -webkit-background-clip:text;color:transparent;text-shadow:0 0 20px var(--warm-orange),0 0 15px var(--warm-yellow);
+  -webkit-background-clip:text;
+  color:transparent;
+  text-shadow:0 0 20px var(--warm-orange),0 0 15px var(--warm-yellow);
   margin-bottom:16px;
 }
 header p{
-  font-size:1.1rem;color:var(--warm-yellow);max-width:700px;margin:0 auto;line-height:1.6;
+  font-size:1.1rem;
+  color:var(--warm-yellow);
+  max-width:700px;
+  margin:0 auto;
+  line-height:1.6;
 }
 
 /* CONTACT CARDS */
 .contact-container{
-  display:flex;flex-direction:column;align-items:center;gap:24px;max-width:600px;margin:50px auto;position:relative;z-index:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:24px;
+  max-width:600px;
+  margin:50px auto;
+  position:relative;
+  z-index:1;
 }
 .contact-card{
-  display:flex;align-items:center;gap:16px;padding:16px 28px;border-radius:24px;background:rgba(0,0,0,0.3);
-  border:1px solid rgba(255,140,0,0.2);box-shadow:0 0 20px var(--warm-orange),0 0 30px var(--warm-yellow);
-  width:100%;transition:0.3s;text-decoration:none;color:var(--text-light);
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:16px 28px;
+  border-radius:20px;
+  background:rgba(0,0,0,0.3);
+  border:1px solid rgba(255,140,0,0.2);
+  box-shadow:0 0 20px var(--warm-orange),0 0 25px var(--warm-yellow);
+  width:100%;
+  transition:0.3s;
+  text-decoration:none;
+  color:var(--text-light);
 }
 .contact-card:hover{
-  transform:translateY(-5px);box-shadow:0 0 28px var(--warm-orange),0 0 35px var(--warm-yellow),0 0 25px #ffb733;
+  transform:translateY(-6px);
+  box-shadow:0 0 35px var(--warm-orange),0 0 35px var(--warm-yellow),0 0 30px #ffb733;
 }
-.contact-card img{width:40px;height:40px;}
-.contact-card span{font-family:'Inter',sans-serif;font-weight:600;font-size:1rem;color:var(--warm-yellow);}
+.contact-card img{
+  width:42px;
+  height:42px;
+}
+.contact-card span{
+  font-family:'Inter',sans-serif;
+  font-weight:600;
+  font-size:1rem;
+  color:var(--warm-yellow);
+}
 
 /* FOOTER */
-footer{text-align:center;padding:30px 20px;color:rgba(255,255,255,0.6);border-top:1px solid rgba(255,140,0,0.15);position:relative;z-index:1;font-size:0.95rem;}
+footer{
+  text-align:center;
+  padding:30px 20px;
+  color:rgba(255,255,255,0.6);
+  border-top:1px solid rgba(255,140,0,0.15);
+  position:relative;
+  z-index:1;
+  font-size:0.95rem;
+}
 
 /* RESPONSIVE */
-@media(max-width:720px){header h1{font-size:2rem;}header p{font-size:1rem;} .contact-card{padding:14px 20px;gap:12px;}}
+@media(max-width:720px){
+  header h1{font-size:2rem;}
+  header p{font-size:1rem;}
+  .contact-card{padding:14px 20px;gap:12px;}
+}
 </style>
 </head>
 <body>
@@ -71,16 +130,19 @@ footer{text-align:center;padding:30px 20px;color:rgba(255,255,255,0.6);border-to
     <img src="https://img.icons8.com/color/48/000000/new-post.png" alt="Email">
     <span>crownforgebusiness@gmail.com</span>
   </a>
+
   <!-- Instagram -->
   <a href="https://www.instagram.com/crownforge_official/?igsh=eTJ5cG8wczBiODE%3D" target="_blank" class="contact-card">
     <img src="https://img.icons8.com/fluency/48/000000/instagram-new.png" alt="Instagram">
     <span>Instagram</span>
   </a>
+
   <!-- Discord -->
   <a href="https://discord.gg/C9rtFRtWax" target="_blank" class="contact-card">
     <img src="https://img.icons8.com/fluency/48/000000/discord-logo.png" alt="Discord">
     <span>Discord</span>
   </a>
+
   <!-- YouTube -->
   <a href="https://www.youtube.com/@CrownForgeStudio" target="_blank" class="contact-card">
     <img src="https://img.icons8.com/color/48/000000/youtube-play.png" alt="YouTube">
@@ -91,22 +153,27 @@ footer{text-align:center;padding:30px 20px;color:rgba(255,255,255,0.6);border-to
 <footer>&copy; 2025 CrownForge Studio. All Rights Reserved.</footer>
 
 <script>
-// Orange-yellow particle background
+// 🔥 Optimized orange-yellow particle background (mobile-friendly)
 const canvas = document.getElementById('bg');
 const ctx = canvas.getContext('2d');
-canvas.width = innerWidth;
-canvas.height = innerHeight;
 
-const particles = [];
+function resizeCanvas(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+
+let particleCount = window.innerWidth < 720 ? 70 : 150; // lower count on mobile
 const colors = ['#ff8c00','#ffd700','#ffb733'];
+const particles = [];
 
-for(let i=0;i<150;i++){
+for(let i=0;i<particleCount;i++){
   particles.push({
     x:Math.random()*canvas.width,
     y:Math.random()*canvas.height,
-    dx:(Math.random()-0.5)*1.2,
-    dy:(Math.random()-0.5)*1.2,
-    r:Math.random()*3+1,
+    dx:(Math.random()-0.5)*1.1,
+    dy:(Math.random()-0.5)*1.1,
+    r:Math.random()*2+1.2,
     color:colors[Math.floor(Math.random()*colors.length)]
   });
 }
@@ -115,20 +182,21 @@ function animate(){
   ctx.fillStyle = "rgba(26,10,0,0.25)";
   ctx.fillRect(0,0,canvas.width,canvas.height);
   for(let i=0;i<particles.length;i++){
-    let p=particles[i];
-    p.x+=p.dx;p.y+=p.dy;
+    const p = particles[i];
+    p.x += p.dx;
+    p.y += p.dy;
     if(p.x<0||p.x>canvas.width)p.dx*=-1;
     if(p.y<0||p.y>canvas.height)p.dy*=-1;
 
-    ctx.fillStyle=p.color;
     ctx.beginPath();
     ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=p.color;
     ctx.fill();
 
     for(let j=i+1;j<particles.length;j++){
-      let p2=particles[j];
-      let d=Math.hypot(p.x-p2.x,p.y-p2.y);
-      if(d<120){
+      const p2 = particles[j];
+      const d = (p.x-p2.x)**2 + (p.y-p2.y)**2;
+      if(d < 120*120){
         ctx.strokeStyle='rgba(255,215,0,0.08)';
         ctx.lineWidth=1;
         ctx.beginPath();
@@ -141,7 +209,11 @@ function animate(){
   requestAnimationFrame(animate);
 }
 animate();
-window.addEventListener('resize',()=>{canvas.width=innerWidth;canvas.height=innerHeight;});
+
+window.addEventListener('resize',()=>{
+  resizeCanvas();
+  particleCount = window.innerWidth < 720 ? 70 : 150;
+});
 </script>
 
 </body>

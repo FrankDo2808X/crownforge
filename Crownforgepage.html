@@ -224,9 +224,8 @@ footer{
 <header class="hero">
   <h1>Welcome to CrownForge Studio</h1>
   <p>Explore our latest games, trailers, and updates directly on this professional and immersive platform.</p> <br>
-  <p>Welcome Warriors in Our offical Crownforgepage our game updates , new game , infomation and giveways infomation <br> 
-  beta testion , and more things are updateing first in website so please make sure you daily check our web for more <br>
-infomation , and id bans also there his name annons!</p>
+  <p>Welcome Warriors in Our official CrownForge page — get game updates, new releases, information, giveaways,
+  beta testing, and more. Please check our site daily for new info and announcements!</p>
   <a href="tralers.html" class="explore-btn">Explore Now</a>
 </header>
 
@@ -241,9 +240,15 @@ const ctx = canvas.getContext('2d');
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
+// Detect if device is mobile
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+const PARTICLE_COUNT = isMobile ? 60 : 150; // fewer on mobile
+const LINE_DISTANCE = isMobile ? 60 : 100;  // shorter line distance
+
 const particles = [];
 const colors = ['#ff8c00','#ffd700','#ffb733'];
-for(let i=0;i<150;i++){
+
+for(let i=0;i<PARTICLE_COUNT;i++){
   particles.push({
     x:Math.random()*canvas.width,
     y:Math.random()*canvas.height,
@@ -273,7 +278,7 @@ function animate(){
     for(let j=i+1;j<particles.length;j++){
       let p2=particles[j];
       let d=Math.hypot(p.x-p2.x,p.y-p2.y);
-      if(d<100){
+      if(d<LINE_DISTANCE){
         ctx.strokeStyle='rgba(255,215,0,0.1)';
         ctx.lineWidth=1;
         ctx.beginPath();
