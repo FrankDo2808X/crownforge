@@ -68,7 +68,8 @@ h1 {
 
 .email-small {
   font-size: 0.8em;
-  opacity: 0.8;
+  opacity: 0.7;
+  font-family: monospace;
 }
 
 .time {
@@ -88,8 +89,9 @@ button {
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
-  margin: 20px;
+  margin: 10px;
   box-shadow: 0 0 10px #000000;
+  transition: 0.2s;
 }
 
 button:hover {
@@ -118,7 +120,7 @@ Never share OTP or private info!</p>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc, onSnapshot, collection, query, orderBy } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+  import { getFirestore, doc, setDoc, onSnapshot, collection, query, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
   // 🔥 Firebase config
   const firebaseConfig = {
@@ -134,23 +136,27 @@ Never share OTP or private info!</p>
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
 
   const loginBtn = document.getElementById("login");
   const logoutBtn = document.getElementById("logout");
   const userInfo = document.getElementById("userInfo");
   const leaderboardDiv = document.getElementById("leaderboard");
-  const provider = new GoogleAuthProvider();
 
+  const adminEmail = "abhigamer0338@gmail.com";
   let user = null;
   let timer = 0;
   let interval;
-  const adminEmail = "abhigamer0338@gmail.com";
 
   function getUserName(email) {
     return email.split("@")[0];
   }
 
-  // 🕒 Format time (seconds → min → hour)
+  function hideEmail(email) {
+    const [name, domain] = email.split("@");
+    return name.slice(0, 3) + "***@" + domain;
+  }
+
   function formatTime(seconds) {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
@@ -160,28 +166,30 @@ Never share OTP or private info!</p>
     return `${s}s`;
   }
 
-  // Login
   loginBtn.onclick = async () => {
     await signInWithPopup(auth, provider);
   };
 
-  // Logout
   logoutBtn.onclick = async () => {
     clearInterval(interval);
     await signOut(auth);
   };
 
-  // Auth listener
   onAuthStateChanged(auth, async (u) => {
     if (u) {
       user = u;
       loginBtn.style.display = "none";
       logoutBtn.style.display = "inline-block";
+      userInfo.innerHTML = `<p>Logged in as: <strong>${u.email}</strong></p>`;
 
-      const username = getUserName(u.email);
-      userInfo.innerHTML = `<p>Logged in as: <strong>${username}</strong> (${u.email})</p>`;
+      // Get saved time
+      const docRef = doc(db, "leaderboard", u.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        timer = docSnap.data().time || 0;
+      }
 
-      // Timer start
+      // Timer update (stable)
       interval = setInterval(async () => {
         timer++;
         await setDoc(doc(db, "leaderboard", u.uid), {
@@ -195,21 +203,18 @@ Never share OTP or private info!</p>
       onSnapshot(q, (snapshot) => {
         leaderboardDiv.innerHTML = "";
         let rank = 1;
-
         snapshot.forEach((docSnap) => {
           const data = docSnap.data();
           const username = getUserName(data.email);
-          let rankClass = "";
-          if (rank === 1) rankClass = "gold";
-          else if (rank === 2) rankClass = "silver";
-          else if (rank === 3) rankClass = "bronze";
+          let emailDisplay = u.email === adminEmail ? data.email : hideEmail(data.email);
+          let rankClass = rank === 1 ? "gold" : rank === 2 ? "silver" : rank === 3 ? "bronze" : "";
 
           leaderboardDiv.innerHTML += `
             <div class="player">
               <div>
                 <div class="rank ${rankClass}">#${rank}</div>
                 <div class="name">${username}</div>
-                <div class="email-small">${data.email}</div>
+                <div class="email-small">${emailDisplay}</div>
               </div>
               <div class="time">${formatTime(data.time)}</div>
             </div>
