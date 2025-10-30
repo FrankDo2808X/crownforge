@@ -36,14 +36,15 @@ h1 {
 }
 
 .player {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   background: rgba(255,255,255,0.1);
   border-radius: 10px;
   padding: 10px 15px;
   margin: 8px 0;
+  text-align: left;
   transition: 0.3s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .player:hover {
@@ -53,29 +54,30 @@ h1 {
 
 .rank {
   font-weight: 700;
-  width: 25px;
+  font-size: 1.2em;
 }
 
 .gold { color: gold; }
 .silver { color: silver; }
 .bronze { color: #cd7f32; }
 
-.email {
-  flex: 1;
-  text-align: left;
-  font-size: 0.9em;
-  opacity: 0.9;
+.name {
+  font-size: 1.1em;
+  font-weight: 600;
 }
 
-.eye-btn {
-  cursor: pointer;
-  margin-left: 5px;
-  color: #ffcc33;
+.email-small {
+  font-size: 0.8em;
+  opacity: 0.8;
 }
 
 .time {
   font-weight: bold;
   color: #000000;
+  text-align: right;
+  background: rgba(255,255,255,0.8);
+  padding: 5px 10px;
+  border-radius: 8px;
 }
 
 button {
@@ -144,9 +146,18 @@ Never share OTP or private info!</p>
   let interval;
   const adminEmail = "abhigamer0338@gmail.com";
 
-  // Function to mask email
-  function maskEmail(email) {
-    return email.replace(/(.{3})(.*)(@.*)/, "$1***$3");
+  function getUserName(email) {
+    return email.split("@")[0];
+  }
+
+  // 🕒 Format time (seconds → min → hour)
+  function formatTime(seconds) {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    if (h > 0) return `${h}h ${m}m ${s}s`;
+    if (m > 0) return `${m}m ${s}s`;
+    return `${s}s`;
   }
 
   // Login
@@ -167,10 +178,10 @@ Never share OTP or private info!</p>
       loginBtn.style.display = "none";
       logoutBtn.style.display = "inline-block";
 
-      const shortEmail = maskEmail(u.email);
-      userInfo.innerHTML = `<p>Logged in as: <strong>${shortEmail}</strong></p>`;
+      const username = getUserName(u.email);
+      userInfo.innerHTML = `<p>Logged in as: <strong>${username}</strong> (${u.email})</p>`;
 
-      // Start time counter
+      // Timer start
       interval = setInterval(async () => {
         timer++;
         await setDoc(doc(db, "leaderboard", u.uid), {
@@ -187,45 +198,23 @@ Never share OTP or private info!</p>
 
         snapshot.forEach((docSnap) => {
           const data = docSnap.data();
+          const username = getUserName(data.email);
           let rankClass = "";
           if (rank === 1) rankClass = "gold";
           else if (rank === 2) rankClass = "silver";
           else if (rank === 3) rankClass = "bronze";
 
-          const isSelf = (data.email === user.email);
-          const isAdmin = (user.email === adminEmail);
-
-          const displayEmail = isAdmin || isSelf ? data.email : maskEmail(data.email);
-
           leaderboardDiv.innerHTML += `
             <div class="player">
-              <div class="rank ${rankClass}">#${rank}</div>
-              <div class="email">
-                ${displayEmail}
-                ${isSelf && !isAdmin ? '<span class="eye-btn" data-email="' + data.email + '">👁️</span>' : ''}
+              <div>
+                <div class="rank ${rankClass}">#${rank}</div>
+                <div class="name">${username}</div>
+                <div class="email-small">${data.email}</div>
               </div>
-              <div class="time">${data.time}s</div>
+              <div class="time">${formatTime(data.time)}</div>
             </div>
           `;
-
           rank++;
-          if (rank > 10) return;
-        });
-
-        // 👁️ Toggle for user
-        document.querySelectorAll(".eye-btn").forEach(btn => {
-          btn.addEventListener("click", (e) => {
-            const parent = e.target.parentElement;
-            const email = e.target.dataset.email;
-            if (parent.innerText.includes("***")) {
-              parent.innerHTML = email + ' <span class="eye-btn" data-email="' + email + '">🙈</span>';
-            } else {
-              parent.innerHTML = maskEmail(email) + ' <span class="eye-btn" data-email="' + email + '">👁️</span>';
-            }
-            document.querySelectorAll(".eye-btn").forEach(innerBtn => {
-              innerBtn.addEventListener("click", (ev) => ev.target.click());
-            });
-          });
         });
       });
 
