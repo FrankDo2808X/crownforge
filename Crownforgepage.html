@@ -1,326 +1,382 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CrownForge Studio - Home</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CrownForge Studio — Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<meta name="description" content="CrownForge Studio — games, trailers, updates and downloads. A neon-glass, professional game hub."/>
 <style>
-:root{
-  --bg-dark:#1a0a00;
-  --warm-orange:#ff8c00;
-  --warm-yellow:#ffd700;
-  --text-light:#fff;
-}
-
-/* RESET */
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
-  font-family:'Inter',sans-serif;
-  background:var(--bg-dark);
-  color:var(--text-light);
-  overflow-x:hidden;
-}
-
-/* BACKGROUND CANVAS */
-canvas.bg{
-  position:fixed;
-  inset:0;
-  width:100%;
-  height:100%;
-  z-index:0;
-  pointer-events:none;
-}
-
-/* NAVIGATION */
-nav{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:14px 28px;
-  background:rgba(0,0,0,0.25);
-  backdrop-filter:blur(10px);
-  border-bottom:1px solid rgba(255,140,0,0.15);
-  position:relative;
-  z-index:2;
-  border-radius:0 0 12px 12px;
-}
-
-nav .brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-nav .brand img.logo{
-  width:50px;
-  height:50px;
-  border-radius:12px;
-}
-nav .brand .title .name{
-  font-family:'Orbitron';
-  font-weight:900;
-  font-size:18px;
-  color:var(--warm-orange);
-}
-nav .brand .title .sub{
-  font-size:12px;
-  color:rgba(255,255,255,0.6);
-}
-
-/* NAV LINKS */
-nav .nav-links{
-  display:flex;
-  gap:18px;
-  transition:all 0.4s ease;
-}
-nav .nav-links a{
-  position: relative;
-  padding: 8px 16px;
-  border-radius:12px;
-  text-decoration:none;
-  color:var(--text-light);
-  font-weight:700;
-  overflow:hidden;
-  transition:0.4s;
-}
-nav .nav-links a:hover{
-  color:#ffffff;
-  box-shadow:0 0 18px var(--warm-orange),0 0 28px var(--warm-yellow);
-  transform:scale(1.05);
-}
-
-/* MOBILE MENU TOGGLE */
-.menu-toggle{
-  display:none;
-  flex-direction:column;
-  gap:4px;
-  cursor:pointer;
-}
-.menu-toggle span{
-  width:24px;
-  height:3px;
-  background:#fff;
-  border-radius:3px;
-}
-
-/* MOBILE STYLES */
-@media(max-width:900px){
-  .nav-links{
-    display:flex;
-    flex-direction:column;
-    position:absolute;
-    top:68px;
-    right:16px;
-    background:rgba(0, 0, 0, 0.95);
-    border-radius:12px;
-    width:220px;
-    padding:0;
-    max-height:0;
-    overflow:hidden;
-    opacity:0;
-    transition:all 0.4s ease;
+  :root{
+    --bg:#071015;
+    --glass: rgba(255,255,255,0.04);
+    --glass-strong: rgba(255,255,255,0.06);
+    --neon:#00f1df;
+    --accent:#00f1df;
+    --muted:rgba(255,255,255,0.6);
+    --card-radius:14px;
+    --max-width:1200px;
   }
-  .nav-links.active{
-    padding:14px;
-    opacity:1;
-    max-height:500px;
+
+  /* reset */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:Inter,system-ui,Segoe UI,Arial;
+    background:linear-gradient(180deg,#041015 0%, #07161a 60%);
+    color:#eafcff;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    overflow-x:hidden;
   }
-  .menu-toggle{display:flex;}
-}
 
-/* HERO */
-header.hero{
-  text-align:center;
-  padding:100px 20px;
-  position:relative;
-  z-index:1;
-}
-header.hero h1{
-  font-family:'Orbitron';
-  font-size:3rem;
-  background:linear-gradient(90deg,var(--warm-orange),var(--warm-yellow));
-  -webkit-background-clip:text;
-  color:transparent;
-  text-shadow:0 0 20px var(--warm-orange),0 0 15px var(--warm-yellow);
-  margin-bottom:16px;
-}
-header.hero p{
-  font-size:1.1rem;
-  color:var(--warm-yellow);
-  max-width:700px;
-  margin:0 auto 30px;
-  line-height:1.6;
-}
+  /* Loader (full-screen) */
+  #loader {
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(180deg,rgba(2,6,8,0.98),rgba(2,10,12,0.95));
+    z-index:9999;transition:opacity .5s ease,visibility .5s;
+  }
+  #loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+  .loader-box{
+    text-align:center;
+  }
+  .loader-logo{
+    display:inline-block;
+    margin-bottom:12px;
+  }
+  .loader-logo img{width:140px;height:auto;display:block;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+  .loader-bar{
+    width:260px;height:8px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden;
+    box-shadow:0 4px 18px rgba(0,241,223,0.06);
+  }
+  .loader-progress{
+    height:100%;width:0;background:linear-gradient(90deg,var(--neon),#7ff4ee);
+    box-shadow:0 0 20px var(--neon),0 0 40px rgba(0,241,223,0.12);
+    transition:width .6s ease;
+  }
+  .loader-text{margin-top:10px;color:var(--muted);font-size:13px}
 
-/* EXPLORE BUTTON */
-header.hero .explore-btn{
-  display:inline-block;
-  padding:16px 40px;
-  font-family:'Orbitron';
-  font-weight:900;
-  font-size:1.1rem;
-  color:#ffffff;
-  background: linear-gradient(90deg,var(--warm-orange),var(--warm-yellow));
-  border-radius:30px;
-  cursor:pointer;
-  text-decoration:none;
-  box-shadow:0 4px 15px rgba(255,140,0,0.5),0 0 25px rgba(255,215,0,0.5);
-  transition:0.4s;
-  position:relative;
-  overflow:hidden;
-}
-header.hero .explore-btn::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:-100%;
-  width:100%;
-  height:100%;
-  background:rgba(255,255,255,0.25);
-  transform:skewX(-20deg);
-  transition:0.5s;
-}
-header.hero .explore-btn:hover::before{ left:100%; }
-header.hero .explore-btn:hover{
-  transform:scale(1.1);
-  box-shadow:0 0 35px var(--warm-orange),0 0 35px var(--warm-yellow),0 0 50px #ffb733;
-}
+  /* Custom cursor (subtle) */
+  .cursor{
+    position:fixed;left:0;top:0;width:14px;height:14px;border-radius:50%;
+    background:transparent;border:2px solid rgba(0,241,223,0.9);transform:translate(-50%,-50%);
+    pointer-events:none;z-index:9998;mix-blend-mode:screen;
+    transition:transform .12s linear, width .12s, height .12s, background .12s;
+  }
 
-/* FOOTER */
-footer{
-  text-align:center;
-  padding:30px 20px;
-  color:rgba(255,255,255,0.6);
-  border-top:1px solid rgba(255,140,0,0.15);
-  position:relative;
-  z-index:1;
-  font-size:0.95rem;
-}
+  /* Main wrapper */
+  .wrap{max-width:var(--max-width);margin:0 auto;padding:28px;position:relative;z-index:2}
+
+  /* NAV */
+  nav{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 16px;
+    background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+    border-radius:12px;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.03);
+    box-shadow:0 6px 30px rgba(0,0,0,0.4);
+  }
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{
+    width:56px;height:56px;border-radius:12px;overflow:hidden;flex-shrink:0;
+    background:linear-gradient(135deg,var(--neon),#1fd1ff);display:grid;place-items:center;
+  }
+  .logo img{width:100%;height:100%;object-fit:cover;display:block}
+  .brand .title{line-height:1}
+  .brand .title .name{font-family:Orbitron;font-weight:900;letter-spacing:1px;color:var(--neon)}
+  .brand .title .sub{font-size:12px;color:var(--muted)}
+
+  .nav-links{display:flex;gap:10px;align-items:center}
+  .nav-links a{
+    color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:10px;font-weight:600;
+    transition:transform .18s ease,box-shadow .18s;
+  }
+  .nav-links a:hover{color:#fff;transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,241,223,0.06)}
+
+  /* Mobile menu toggle */
+  .menu-btn{display:none;background:transparent;border:0;color:var(--muted);font-weight:700}
+
+  /* HERO */
+  .hero{
+    margin:44px 0 28px;position:relative;padding:48px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.03);backdrop-filter:blur(8px);overflow:hidden;
+  }
+  .hero .bg-large{
+    pointer-events:none;position:absolute;inset:10% 0 auto 0;left:50%;transform:translateX(-50%);z-index:0;
+    font-family:Orbitron;font-size:160px;color:rgba(0,241,223,0.03);filter:blur(12px);letter-spacing:12px;white-space:nowrap;
+  }
+  .hero-inner{position:relative;z-index:2;display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+  .hero-copy{flex:1;min-width:260px}
+  .hero h1{
+    font-family:Orbitron;font-size:44px;letter-spacing:2px;color:var(--neon);
+    margin-bottom:12px;text-shadow:0 0 18px rgba(0,241,223,0.08);
+  }
+  .hero p{color:var(--muted);max-width:720px;margin-bottom:18px;line-height:1.5}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+
+  /* Neon button */
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;padding:12px 20px;border-radius:999px;
+    border:2px solid rgba(255,255,255,0.04);background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+    color:var(--neon);font-weight:800;text-decoration:none;letter-spacing:1px;cursor:pointer;position:relative;overflow:hidden;
+    transition:transform .18s ease,box-shadow .18s,background .18s;
+  }
+  .btn:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,241,223,0.06)}
+  .btn[data-neon]{border-color:rgba(0,241,223,0.18);box-shadow:0 0 32px rgba(0,241,223,0.04)}
+  /* ripple effect */
+  .rip{position:absolute;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;opacity:.9;mix-blend-mode:screen}
+
+  /* GRID SECTIONS */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+  .card{
+    background:var(--glass);
+    border:1px solid rgba(255,255,255,0.03);
+    border-radius:var(--card-radius);
+    padding:18px;min-height:160px;position:relative;overflow:hidden;
+    transition:transform .28s cubic-bezier(.2,.9,.3,1),box-shadow .28s;
+  }
+  .card:hover{transform:translateY(-10px) rotateX(4deg);box-shadow:0 30px 70px rgba(0,0,0,0.6)}
+  .card .title{font-weight:700;margin-bottom:8px;color:#e6ffff}
+  .card .meta{font-size:13px;color:var(--muted)}
+  .card .badge{
+    display:inline-block;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,#012 20%,rgba(255,255,255,0.03));
+    color:var(--neon);font-weight:800;margin-top:12px;border:1px solid rgba(0,241,223,0.06)
+  }
+
+  /* Achievements / badges */
+  .achievements{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .ach{
+    background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.03);padding:10px 12px;border-radius:10px;font-weight:700;
+    display:flex;gap:10px;align-items:center;
+  }
+  .ach svg{width:28px;height:28px;filter:drop-shadow(0 4px 18px rgba(0,241,223,0.06))}
+  .muted{color:var(--muted)}
+
+  /* Downloads list */
+  .downloads{display:flex;flex-direction:column;gap:10px}
+  .download-item{display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;background:linear-gradient(90deg,rgba(255,255,255,0.01),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.02)}
+  .download-item .icon{width:46px;height:46px;border-radius:8px;display:grid;place-items:center;background:linear-gradient(135deg,var(--neon),#67f2ea);color:#021;font-weight:900}
+  .download-item .meta{font-weight:700}
+
+  /* FOOTER */
+  footer{margin-top:48px;padding:24px;text-align:center;color:var(--muted);font-size:14px}
+
+  /* Reveal animation */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.9,.3,1)}
+  .reveal.show{opacity:1;transform:none}
+
+  /* responsive */
+  @media(max-width:980px){
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .hero h1{font-size:34px}
+    .hero .bg-large{font-size:100px}
+  }
+  @media(max-width:640px){
+    .grid{grid-template-columns:1fr}
+    nav{flex-direction:column;gap:10px;align-items:flex-start}
+    .nav-links{display:flex;flex-wrap:wrap}
+    .brand .title .name{font-size:16px}
+    .menu-btn{display:block}
+    .hero{padding:24px}
+    .hero-inner{flex-direction:column;align-items:flex-start}
+    .hero p{font-size:14px}
+  }
 </style>
 </head>
 <body>
 
-<canvas id="bg" class="bg"></canvas>
-
-<nav>
-  <div class="brand">
-    <img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" class="logo">
-    <div class="title">
-      <div class="name">CrownForge Studio</div>
-      <div class="sub">Making A Games in India</div>
+<!-- LOADER -->
+<div id="loader" aria-hidden="false">
+  <div class="loader-box" role="status" aria-live="polite">
+    <div class="loader-logo">
+      <!-- your logo image inserted here -->
+      <img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="CrownForge Studio Logo">
     </div>
+    <div class="loader-bar"><div id="prog" class="loader-progress"></div></div>
+    <div class="loader-text">Loading studio assets…</div>
   </div>
-  <div class="nav-links">
-    <a href="Crownforgepage.html">Home</a>
-    <a href="tralers.html">Videos</a>
-    <a href="contact.html">Contact</a>
-    <a href="Newupdates.html">Updates</a>
-    <a href="index.html">Logout</a>
-    <a href="Games.html">Games</a>
-    <a href="leaderborad.html">board</a>
-  </div>
-  <div class="menu-toggle"><span></span><span></span><span></span></div>
-</nav>
+</div>
 
-<header class="hero">
-  <h1>Welcome to CrownForge Studio</h1>
-  <p>Explore our latest games, trailers, and updates directly on this professional and immersive platform.</p> <br>
-  <p>Welcome Warriors in Our official CrownForge page — get game updates, new releases, information, giveaways,
-  beta testing, and more. Please check our site daily for new info and announcements!</p>
-  <a href="tralers.html" class="explore-btn">Explore Now</a>
-</header>
+<!-- custom cursor -->
+<div class="cursor" id="cursor" aria-hidden="true"></div>
 
-<footer>&copy; 2025 CrownForge Studio. All Rights Reserved.</footer>
+<main class="wrap" id="app">
+  <nav role="navigation" aria-label="Main navigation">
+    <div class="brand" aria-hidden="false">
+      <div class="logo" aria-hidden="false">
+        <!-- logo in nav (same source) -->
+        <img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="CrownForge Studio Logo">
+      </div>
+      <div class="title">
+        <div class="name">CrownForge Studio</div>
+        <div class="sub">Making Games in India</div>
+      </div>
+    </div>
+
+    <div class="nav-links" id="navLinks">
+      <a href="Crownforgepage.html">Home</a>
+      <a href="tralers.html">Videos</a>
+      <a href="Games.html">Games</a>
+      <a href="Newupdates.html">Updates</a>
+      <a href="contact.html">Contact</a>
+      <a href="index.html">Logout</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="homeTitle">
+    <div class="bg-large" aria-hidden="true">CROWNFORGE STUDIO</div>
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <h1 id="homeTitle">CrownForge Studio</h1>
+        <p>Welcome to CrownForge — your game hub for launches, trailers, updates and developer downloads. Professional. Neon-glass. Game-centric.</p>
+        <div class="hero-actions">
+          <a class="btn" data-neon href="tralers.html" id="enterBtn">Enter Studio</a>
+          <a class="btn" href="Newupdates.html">Latest Updates</a>
+        </div>
+      </div>
+
+      <!-- showcase / quick cards -->
+      <div style="flex:0 0 360px">
+        <div class="card reveal">
+          <div class="title">Showcase</div>
+          <div class="meta muted">Featured game: Neon Forge</div>
+          <div class="badge">Featured</div>
+        </div>
+
+        <div class="card reveal" style="margin-top:14px">
+          <div class="title">Downloads</div>
+          <div class="meta muted">Unity, SDKs, Tools</div>
+          <div class="badge">Dev Center</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- grid row under hero -->
+    <div class="grid" style="margin-top:28px">
+      <article class="card reveal" aria-labelledby="g1">
+        <div id="g1" class="title">Studio News</div>
+        <p class="meta">Announcements, patch notes and events.</p>
+        <div style="margin-top:12px" class="muted">Updated daily</div>
+      </article>
+
+      <article class="card reveal" aria-labelledby="g2">
+        <div id="g2" class="title">Download Center</div>
+        <div class="downloads" style="margin-top:10px">
+          <div class="download-item">
+            <div class="icon">U</div>
+            <div class="meta">Unity Installer <div class="muted" style="font-size:12px">v2024.3 LTS</div></div>
+          </div>
+          <div class="download-item">
+            <div class="icon">G</div>
+            <div class="meta">Game Tools Pack <div class="muted" style="font-size:12px">Assets & utilities</div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card reveal" aria-labelledby="g3">
+        <div id="g3" class="title">Community</div>
+        <div class="muted">Forum / Discord / Streams</div>
+        <div style="margin-top:12px">
+          <div class="achievements">
+            <div class="ach"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l2.6 5.3L20 8.1l-4 3.6L17.2 19 12 15.9 6.8 19 8 11.7 4 8.1l5.4-.8L12 2z" fill="currentColor"/></svg> Founder</div>
+            <div class="ach"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 5.1L20 8.5l-4 3.5L17 19 12 16.2 7 19l1-7.1-4-3.5 5.6-.4L12 2z" fill="currentColor"/></svg> Beta Tester</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    &copy; <span id="yr"></span> CrownForge Studio — All rights reserved. &middot; <span class="muted">Privacy</span> &middot; <span class="muted">Terms</span>
+  </footer>
+</main>
 
 <script>
-window.addEventListener("DOMContentLoaded", () => {
-
-// 🌟 Particle Background
-const canvas = document.getElementById('bg');
-const ctx = canvas.getContext('2d');
-canvas.width = innerWidth;
-canvas.height = innerHeight;
-
-// Detect if device is mobile
-const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-const PARTICLE_COUNT = isMobile ? 60 : 150; // fewer on mobile
-const LINE_DISTANCE = isMobile ? 60 : 100;  // shorter line distance
-
-const particles = [];
-const colors = ['#ff8c00','#ffd700','#ffb733'];
-
-for(let i=0;i<PARTICLE_COUNT;i++){
-  particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    dx:(Math.random()-0.5)*1.2,
-    dy:(Math.random()-0.5)*1.2,
-    r:Math.random()*3+1,
-    color:colors[Math.floor(Math.random()*colors.length)]
-  });
-}
-
-function animate(){
-  ctx.fillStyle = "rgba(26,10,0,0.25)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-
-  for(let i=0;i<particles.length;i++){
-    let p = particles[i];
-    p.x += p.dx;
-    p.y += p.dy;
-    if(p.x<0||p.x>canvas.width)p.dx*=-1;
-    if(p.y<0||p.y>canvas.height)p.dy*=-1;
-
-    ctx.fillStyle=p.color;
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fill();
-
-    for(let j=i+1;j<particles.length;j++){
-      let p2=particles[j];
-      let d=Math.hypot(p.x-p2.x,p.y-p2.y);
-      if(d<LINE_DISTANCE){
-        ctx.strokeStyle='rgba(255,215,0,0.1)';
-        ctx.lineWidth=1;
-        ctx.beginPath();
-        ctx.moveTo(p.x,p.y);
-        ctx.lineTo(p2.x,p2.y);
-        ctx.stroke();
-      }
-    }
+/* ---------------- Loader simulation ---------------- */
+const loader = document.getElementById('loader');
+const prog = document.getElementById('prog');
+let p=0;
+const interval = setInterval(()=> {
+  p += Math.random()*12; if(p>100) p=100;
+  prog.style.width = p + '%';
+  if(p>=100){
+    clearInterval(interval);
+    setTimeout(()=> loader.classList.add('hidden'), 450);
+    loader.setAttribute('aria-hidden','true');
   }
-  requestAnimationFrame(animate);
-}
-animate();
+}, 180);
 
-window.addEventListener('resize',()=>{
-  canvas.width=innerWidth;
-  canvas.height=innerHeight;
+/* ---------------- custom cursor ---------------- */
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+document.addEventListener('mousedown', ()=> {
+  cursor.style.transform = 'translate(-50%,-50%) scale(1.8)';
+  cursor.style.opacity = '0.95';
+});
+document.addEventListener('mouseup', ()=> {
+  cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+  cursor.style.opacity = '1';
+});
+document.querySelectorAll('a,button,.btn').forEach(el=>{
+  el.addEventListener('mouseenter', ()=> {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2.6)';
+    cursor.style.background = 'rgba(0,241,223,0.06)';
+  });
+  el.addEventListener('mouseleave', ()=> {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    cursor.style.background = 'transparent';
+  });
 });
 
-// ✅ Mobile menu with animation
-const menuToggle = document.querySelector('.menu-toggle');
-const navLinks = document.querySelector('.nav-links');
-
-if(menuToggle && navLinks){
-  menuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
+/* ---------------- button ripple ---------------- */
+document.querySelectorAll('.btn').forEach(btn=>{
+  btn.addEventListener('click', e=>{
+    // create ripple
+    const r = document.createElement('span');
+    r.className = 'rip';
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 1.2;
+    r.style.width = r.style.height = size + 'px';
+    r.style.left = (e.clientX - rect.left) + 'px';
+    r.style.top = (e.clientY - rect.top) + 'px';
+    r.style.background = 'radial-gradient(circle, rgba(255,255,255,0.12), rgba(255,255,255,0.02))';
+    r.style.transition = 'opacity .7s ease, transform .7s cubic-bezier(.2,.9,.3,1)';
+    btn.appendChild(r);
+    requestAnimationFrame(()=> { r.style.transform = 'scale(1.2)'; r.style.opacity='0'; });
+    setTimeout(()=> r.remove(), 800);
   });
+});
 
-  document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('active');
-    });
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
-      navLinks.classList.remove('active');
+/* --------------- reveal on scroll (no libs) --------------- */
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){
+      en.target.classList.add('show');
+      obs.unobserve(en.target);
     }
   });
+},{threshold:0.18});
+reveals.forEach(r=>obs.observe(r));
+
+/* ---------------- small niceties ---------------- */
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* mobile menu toggle (simple) */
+const navLinks = document.getElementById('navLinks');
+if(window.innerWidth <= 640){
+  // convert to stacked links for small screens (minimal)
+  navLinks.style.flexDirection = 'column';
+  navLinks.style.gap = '8px';
 }
+
+/* Accessibility: allow keyboard focus outline */
+document.addEventListener('keyup', e => {
+  if(e.key === 'Tab') document.body.classList.add('show-focus');
 });
 </script>
-
 </body>
 </html>

@@ -1,161 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CrownForge Studio - Games</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg-dark:#1a0a00;
-  --warm-orange:#ff8c00;
-  --warm-yellow:#ffd700;
-  --text-light:#fff;
+  --bg-dark:#07161a;
+  --card-bg: rgba(255,255,255,0.02);
+  --glass-border: rgba(255,255,255,0.03);
+  --neon:#00f1df;
+  --muted: rgba(255,255,255,0.6);
+  --card-radius:14px;
+  --max-width:1200px;
 }
 
-/* RESET */
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Inter',sans-serif;background:var(--bg-dark);color:var(--text-light);overflow-x:hidden;}
-
-/* BACKGROUND CANVAS */
-canvas.bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
-
-/* PAGE HEADER */
-header{
-  text-align:center;padding:100px 20px;position:relative;z-index:1;
-}
-header h1{
-  font-family:'Orbitron';font-size:3rem;
-  background:linear-gradient(90deg,var(--warm-orange),var(--warm-yellow));
-  -webkit-background-clip:text;color:transparent;text-shadow:0 0 20px var(--warm-orange),0 0 15px var(--warm-yellow);
-  margin-bottom:16px;
-}
-header p{
-  font-size:1.1rem;color:var(--warm-yellow);max-width:700px;margin:0 auto;line-height:1.6;
+/* Reset */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:Inter, system-ui, Arial, sans-serif;
+  background:linear-gradient(180deg,#041015 0%, #07161a 60%);
+  color:#eafcff;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
 }
 
-/* GAME CARDS */
-.games-container{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;max-width:1000px;margin:50px auto;position:relative;z-index:1;
+/* Wrapper */
+.wrap{max-width:var(--max-width);margin:28px auto;padding:18px;}
+
+/* NAV */
+nav{
+  display:flex;align-items:center;justify-content:space-between;padding:12px 18px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+  border-radius:12px;backdrop-filter:blur(6px);border:1px solid var(--glass-border);
 }
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:56px;height:56px;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,var(--neon),#67f2ea);display:grid;place-items:center}
+.logo img{width:100%;height:100%;object-fit:cover}
+.brand .title .name{font-family:Orbitron;font-weight:900;letter-spacing:1px;color:var(--neon)}
+.brand .title .sub{font-size:12px;color:var(--muted)}
+.nav-links{display:flex;gap:14px;align-items:center}
+.nav-links a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:10px;font-weight:600;transition:.3s}
+.nav-links a:hover{color:#fff;transform:translateY(-3px)}
+
+/* HERO */
+header.hero{
+  text-align:left;padding:34px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.02));
+  border:1px solid var(--glass-border);backdrop-filter:blur(6px);margin-top:18px;
+}
+.hero-title{font-family:Orbitron;font-size:44px;color:var(--neon);margin-bottom:8px}
+.hero-desc{color:var(--muted);max-width:720px;line-height:1.5;margin-bottom:14px}
+
+/* GAMES GRID */
+.games-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;padding:18px;border-radius:12px;background:var(--card-bg);border:1px solid var(--glass-border);margin-top:20px}
 .game-card{
-  background:rgba(0,0,0,0.3);border-radius:20px;overflow:hidden;
-  border:1px solid rgba(255,140,0,0.15);box-shadow:0 0 20px var(--warm-orange),0 0 25px var(--warm-yellow);
-  transition:0.3s;text-align:center;color:var(--text-light);
+  background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.015));
+  border-radius:16px;padding:14px;text-align:center;transition:transform .28s,box-shadow .28s;border:1px solid rgba(0,0,0,0.25);
 }
-.game-card:hover{transform:translateY(-6px);box-shadow:0 0 35px var(--warm-orange),0 0 35px var(--warm-yellow),0 0 30px #ffb733;}
-.game-card img{width:100%;height:160px;object-fit:contain;padding:16px;}
-.game-card h3{font-family:'Orbitron';color:var(--warm-yellow);margin:12px 0;}
-.game-card a{
-  display:inline-block;margin-bottom:16px;padding:10px 24px;border-radius:24px;background:linear-gradient(90deg,var(--warm-orange),var(--warm-yellow));
-  color:#000;font-weight:700;text-decoration:none;transition:0.3s;
-}
-.game-card a:hover{transform:scale(1.05);box-shadow:0 0 25px var(--warm-orange),0 0 25px var(--warm-yellow),0 0 20px #ffb733;}
+.game-card img{width:100%;height:150px;object-fit:contain;padding:12px}
+.game-card h3{font-family:Orbitron;color:var(--neon);margin:10px 0}
+.game-card a{display:inline-block;padding:9px 18px;border-radius:24px;background:linear-gradient(90deg,var(--neon),#67f2ea);color:#021;font-weight:800;text-decoration:none}
+.game-card:hover{transform:translateY(-8px);box-shadow:0 30px 60px rgba(0,0,0,0.6)}
 
 /* FOOTER */
-footer{text-align:center;padding:30px 20px;color:rgba(255,255,255,0.6);border-top:1px solid rgba(255,140,0,0.15);position:relative;z-index:1;font-size:0.95rem;}
+footer{text-align:center;padding:28px;color:var(--muted);margin-top:18px;border-top:1px solid rgba(255,255,255,0.02)}
 
-/* RESPONSIVE */
-@media(max-width:720px){header h1{font-size:2rem;}header p{font-size:1rem;}}
+/* Responsive */
+@media(max-width:720px){.hero-title{font-size:32px}}
 </style>
 </head>
 <body>
 
-<canvas id="bg" class="bg"></canvas>
+<div class="wrap">
+  <nav>
+    <div class="brand">
+      <div class="logo"><img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="CrownForge Logo"></div>
+      <div class="title">
+        <div class="name">CrownForge Studio</div>
+        <div class="sub">Making Games in India</div>
+      </div>
+    </div>
+    <div class="nav-links">
+      <a href="Crownforgepage.html">Home</a>
+      <a href="tralers.html">Videos</a>
+      <a href="Games.html">Games</a>
+      <a href="Newupdates.html">Updates</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
 
-<header>
-  <h1>CrownForge Games</h1>
-  <p>Explore our games! Click below to play or watch trailers for our latest creations.</p>
-</header>
+  <header class="hero">
+    <div class="hero-title">CrownForge Games</div>
+    <div class="hero-desc">Explore our games! Click below to play or watch trailers for our latest creations.</div>
+  </header>
 
-<div class="games-container">
-  <!-- WAR-X -->
-  <div class="game-card">
-    <img src="https://i.ibb.co/WWBbB53F/warx-logo.png" alt="WAR-X">
-    <h3>WAR-X</h3>
-    <a href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.Uitesting" target="_blank">Play</a>
-  </div>
+  <section class="games-container">
+    <div class="game-card">
+      <img src="https://i.ibb.co/WWBbB53F/warx-logo.png" alt="WAR-X">
+      <h3>WAR-X</h3>
+      <a href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.Uitesting" target="_blank">Play</a>
+    </div>
 
-  <!-- Zombie StrikeForce -->
-  <div class="game-card">
-    <img src="https://i.ibb.co/BKZDrBHJ/zombie-strike-force-logo.png" alt="Zombie StrikeForce">
-    <h3>Zombie StrikeForce</h3>
-    <a href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.ZombieStrikeForce" target="_blank">Play</a>
-  </div>
+    <div class="game-card">
+      <img src="https://i.ibb.co/BKZDrBHJ/zombie-strike-force-logo.png" alt="Zombie StrikeForce">
+      <h3>Zombie StrikeForce</h3>
+      <a href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.ZombieStrikeForce" target="_blank">Play</a>
+    </div>
 
-  <!-- The Black Veil -->
-  <div class="game-card">
-    <img src="https://i.ibb.co/0pM8N2z0/the-black-veil-logo.png" alt="The Black Veil">
-    <h3>The Black Veil</h3>
-    <a href="https://play.google.com/store/apps/details?id=com.PRA3KGAMES.THEBLACKVEIL" target="_blank">Play</a>
-  </div>
+    <div class="game-card">
+      <img src="https://i.ibb.co/0pM8N2z0/the-black-veil-logo.png" alt="The Black Veil">
+      <h3>The Black Veil</h3>
+      <a href="https://play.google.com/store/apps/details?id=com.PRA3KGAMES.THEBLACKVEIL" target="_blank">Play</a>
+    </div>
+  </section>
+
+  <footer>&copy; 2025 CrownForge Studio. All Rights Reserved.</footer>
 </div>
-
-<footer>&copy; 2025 CrownForge Studio. All Rights Reserved.</footer>
-
-<script>
-// 🌟 Optimized Particle Background for PC & Mobile
-const canvas = document.getElementById('bg');
-const ctx = canvas.getContext('2d');
-canvas.width = innerWidth;
-canvas.height = innerHeight;
-
-// Detect if device is mobile
-const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-const PARTICLE_COUNT = isMobile ? 60 : 150; // fewer for phones
-const LINE_DISTANCE = isMobile ? 60 : 120;  // shorter lines on phones
-
-const particles = [];
-const colors = ['#ff8c00','#ffd700','#ffb733'];
-
-for(let i=0;i<PARTICLE_COUNT;i++){
-  particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    dx:(Math.random()-0.5)*(isMobile?0.8:1.2), // slightly slower on mobile
-    dy:(Math.random()-0.5)*(isMobile?0.8:1.2),
-    r:Math.random()*3+1,
-    color:colors[Math.floor(Math.random()*colors.length)]
-  });
-}
-
-function animate(){
-  ctx.fillStyle = "rgba(26,10,0,0.25)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-
-  for(let i=0;i<particles.length;i++){
-    let p=particles[i];
-    p.x+=p.dx;p.y+=p.dy;
-    if(p.x<0||p.x>canvas.width)p.dx*=-1;
-    if(p.y<0||p.y>canvas.height)p.dy*=-1;
-
-    ctx.fillStyle=p.color;
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fill();
-
-    for(let j=i+1;j<particles.length;j++){
-      let p2=particles[j];
-      let d=Math.hypot(p.x-p2.x,p.y-p2.y);
-      if(d<LINE_DISTANCE){
-        ctx.strokeStyle='rgba(255,215,0,0.08)';
-        ctx.lineWidth=1;
-        ctx.beginPath();
-        ctx.moveTo(p.x,p.y);
-        ctx.lineTo(p2.x,p2.y);
-        ctx.stroke();
-      }
-    }
-  }
-  requestAnimationFrame(animate);
-}
-animate();
-
-window.addEventListener('resize',()=>{
-  canvas.width=innerWidth;
-  canvas.height=innerHeight;
-});
-</script>
 
 </body>
 </html>

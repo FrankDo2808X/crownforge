@@ -8,136 +8,229 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-  :root {
-    --neon: #00ffd5;
-    --dark-bg: #0d0d0d;
-    --text-color: #fff;
-  }
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
 
-  * {
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-  }
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at 25% 25%, #ff007f, transparent 40%),
+              radial-gradient(circle at 75% 75%, #7f00ff, transparent 40%),
+              #060606;
+  overflow: hidden;
+}
 
-  body {
-    margin: 0;
-    height: 100vh;
-    background: radial-gradient(circle at center, #000 60%, #001a1a);
-    color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-  }
+/* Animated glowing gradient background layer */
+.bg-glow {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, #ff007f66, transparent 60%),
+              radial-gradient(circle at 70% 70%, #00ffff55, transparent 60%);
+  filter: blur(100px);
+  animation: pulse 8s ease-in-out infinite alternate;
+  z-index: 0;
+}
+@keyframes pulse {
+  0% {opacity: 0.5; transform: scale(1);}
+  100% {opacity: 1; transform: scale(1.2);}
+}
 
-  .container {
-    width: 340px;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(20px);
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 0 20px var(--neon);
-    text-align: center;
-  }
+/* Floating particle glow dots */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.6;
+  filter: blur(5px);
+  animation: floaty 10s linear infinite;
+  z-index: 0;
+}
+@keyframes floaty {
+  0% {transform: translateY(0) translateX(0);}
+  50% {transform: translateY(-40px) translateX(30px);}
+  100% {transform: translateY(0) translateX(0);}
+}
 
-  h2 {
-    color: var(--neon);
-    margin-bottom: 20px;
-  }
+.auth-card {
+  position: relative;
+  width: 360px;
+  padding: 40px 30px;
+  border-radius: 20px;
+  backdrop-filter: blur(25px);
+  background: rgba(255,255,255,0.05);
+  box-shadow: 0 0 50px rgba(255,0,128,0.4), inset 0 0 30px rgba(255,255,255,0.1);
+  color: white;
+  text-align: center;
+  overflow: hidden;
+  transition: 0.6s;
+  z-index: 2;
+}
 
-  input {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 10px;
-    outline: none;
-    background: rgba(255,255,255,0.1);
-    color: white;
-  }
+.auth-card h2 {
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 25px;
+  background: linear-gradient(90deg, #ff7b00, #ff00c8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 15px #ff00c8;
+}
 
-  button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 12px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-    background: var(--neon);
-    color: #000;
-    transition: 0.3s;
-  }
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 14px;
+  transition: 0.3s;
+  box-shadow: inset 0 0 10px rgba(255,255,255,0.1);
+}
+input:focus {
+  background: rgba(255,255,255,0.2);
+  box-shadow: 0 0 15px #ff00c8;
+}
+input::placeholder {color: #bbb;}
 
-  button:hover {
-    background: #00bfa5;
-  }
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #000;
+  background: linear-gradient(90deg, #ff7b00, #ff00c8);
+  transition: 0.3s;
+}
+button:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 20px #ff00c8, 0 0 40px #ff7b00;
+}
 
-  .google-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background: white;
-    color: black;
-  }
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: white;
+  color: #000;
+}
+.google-btn img {width: 20px;}
 
-  .google-btn img {
-    width: 22px;
-  }
+.switch-link {
+  color: #ff7b00;
+  cursor: pointer;
+  font-size: 13px;
+  margin-top: 10px;
+  display: inline-block;
+  text-decoration: underline;
+}
 
-  #loader {
-    display: none;
-    margin-top: 15px;
-  }
+.form {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 0.6s ease;
+  display: none;
+}
+.form.active {
+  opacity: 1;
+  transform: translateX(0);
+  display: block;
+}
 
-  .loader {
-    width: 30px;
-    height: 30px;
-    border: 4px solid transparent;
-    border-top: 4px solid var(--neon);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: auto;
-  }
+.loader {
+  width: 30px;
+  height: 30px;
+  border: 4px solid transparent;
+  border-top: 4px solid #ff00c8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 15px auto;
+  display: none;
+}
+@keyframes spin {to {transform: rotate(360deg);}}
 
-  @keyframes spin {
-    0% {transform: rotate(0);}
-    100% {transform: rotate(360deg);}
-  }
+/* Floating glow balls around card */
+.glow-ball {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: 1;
+  animation: float 6s ease-in-out infinite alternate;
+}
+.ball1 {background: #ff0066; width: 200px; height: 200px; top: -60px; left: -60px;}
+.ball2 {background: #7b00ff; width: 250px; height: 250px; bottom: -80px; right: -80px;}
+@keyframes float {0%{transform:translateY(0);}100%{transform:translateY(20px);}}
 </style>
 </head>
 <body>
 
-<div class="container">
-  <h2>Welcome to CrownForge</h2>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
-  <button id="loginBtn">Login</button>
+<div class="bg-glow"></div>
 
-  <button id="googleLogin" class="google-btn">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google Logo">
-    Sign in with Google
-  </button>
+<!-- Random floating neon dots -->
+<script>
+for(let i=0;i<20;i++){
+  const dot=document.createElement('div');
+  dot.className='particle';
+  dot.style.width=dot.style.height=Math.random()*6+3+'px';
+  dot.style.background=['#ff00c8','#ff7b00','#00ffff'][Math.floor(Math.random()*3)];
+  dot.style.top=Math.random()*100+'%';
+  dot.style.left=Math.random()*100+'%';
+  dot.style.animationDuration=(8+Math.random()*5)+'s';
+  document.body.appendChild(dot);
+}
+</script>
 
-  <div id="loader">
-    <div class="loader"></div>
+<div class="auth-card">
+  <div class="glow-ball ball1"></div>
+  <div class="glow-ball ball2"></div>
+
+  <!-- Login Form -->
+  <div id="loginForm" class="form active">
+    <h2>Welcome to CrownForge</h2>
+    <input type="email" id="loginEmail" placeholder="Email">
+    <input type="password" id="loginPass" placeholder="Password">
+    <button id="loginBtn">Login</button>
+    <button id="googleLogin" class="google-btn">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google">
+      Sign in with Google
+    </button>
+    <p class="switch-link" onclick="switchForm('signup')">Create an Account</p>
   </div>
+
+  <!-- Signup Form -->
+  <div id="signupForm" class="form">
+    <h2>Create Your Account</h2>
+    <input type="email" id="signupEmail" placeholder="Email">
+    <input type="password" id="signupPass" placeholder="Password">
+    <input type="password" id="signupConfirm" placeholder="Confirm Password">
+    <button id="signupBtn">Create Account</button>
+    <button id="googleSignup" class="google-btn">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google">
+      Sign up with Google
+    </button>
+    <p class="switch-link" onclick="switchForm('login')">Already have an account? Login</p>
+  </div>
+
+  <div id="loader" class="loader"></div>
 </div>
 
 <script type="module">
-  // ✅ Firebase v10 imports
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import {
-    getAuth,
-    signInWithEmailAndPassword,
-    signInWithPopup,
-    GoogleAuthProvider,
-    setPersistence,
-    browserLocalPersistence
-  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  // ✅ Your Firebase Config (replace with yours if different)
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
@@ -145,59 +238,72 @@ const firebaseConfig = {
   projectId: "crownforgestudio-2581a",
   storageBucket: "crownforgestudio-2581a.firebasestorage.app",
   messagingSenderId: "223324386293",
-  appId: "1:223324386293:web:783a3e64f0d10b1ab026bc",
-  measurementId: "G-EYRLR2CH35"
+  appId: "1:223324386293:web:9d7919c6b2e93781b026bc",
+  measurementId: "G-FC52FSYPGV"
 };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const googleProvider = new GoogleAuthProvider();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+const loader = document.getElementById("loader");
 
-  const loader = document.getElementById("loader");
-  const showLoader = (show) => loader.style.display = show ? "block" : "none";
+function showLoader(show) {
+  loader.style.display = show ? "block" : "none";
+}
 
-  // ✅ Email Login
-  document.getElementById("loginBtn").addEventListener("click", async () => {
-    const email = document.getElementById("email").value.trim();
-    const pass = document.getElementById("password").value.trim();
-    if (!email || !pass) return alert("Please enter email and password.");
+window.switchForm = (form) => {
+  document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+  document.getElementById(form + 'Form').classList.add('active');
+};
 
-    showLoader(true);
-    try {
-      await setPersistence(auth, browserLocalPersistence);
-      await signInWithEmailAndPassword(auth, email, pass);
-      alert("Login Successful!");
-      window.location.href = "Crownforgepage.html";
-    } catch (error) {
-      alert("Login Failed: " + error.message);
-      console.error(error);
-    } finally {
-      showLoader(false);
-    }
-  });
+// LOGIN
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  const email = loginEmail.value.trim();
+  const pass = loginPass.value.trim();
+  if (!email || !pass) return alert("Enter email and password");
+  showLoader(true);
+  try {
+    await setPersistence(auth, browserLocalPersistence);
+    await signInWithEmailAndPassword(auth, email, pass);
+    alert("Login Successful!");
+    window.location.href = "Crownforgepage.html";
+  } catch (e) {
+    alert("Login Failed: " + e.message);
+  } finally {showLoader(false);}
+});
 
-  // ✅ Google Login (Full Working)
-  document.getElementById("googleLogin").addEventListener("click", async () => {
-    console.log("🟢 Google button clicked");
+// SIGNUP
+document.getElementById("signupBtn").addEventListener("click", async () => {
+  const email = signupEmail.value.trim();
+  const pass = signupPass.value.trim();
+  const confirm = signupConfirm.value.trim();
+  if (!email || !pass || !confirm) return alert("Fill all fields");
+  if (pass !== confirm) return alert("Passwords do not match!");
+  showLoader(true);
+  try {
+    await createUserWithEmailAndPassword(auth, email, pass);
+    alert("Account Created!");
+    window.location.href = "Crownforgepage.html";
+  } catch (e) {
+    alert("Signup Failed: " + e.message);
+  } finally {showLoader(false);}
+});
+
+// GOOGLE LOGIN & SIGNUP
+const googleButtons = [document.getElementById("googleLogin"), document.getElementById("googleSignup")];
+googleButtons.forEach(btn => {
+  btn.addEventListener("click", async () => {
     showLoader(true);
     try {
       await setPersistence(auth, browserLocalPersistence);
       const result = await signInWithPopup(auth, googleProvider);
-      console.log("✅ Google login success:", result.user.email);
       alert("Welcome " + result.user.displayName + "!");
       window.location.href = "Crownforgepage.html";
-    } catch (error) {
-      console.error("❌ Google Sign-in Failed:", error);
-      if (error.code === "auth/unauthorized-domain") {
-        alert("❗ Add your domain in Firebase Auth → Authorized domains");
-      } else {
-        alert("Google Sign-in Failed: " + error.message);
-      }
-    } finally {
-      showLoader(false);
-    }
+    } catch (e) {
+      alert("Google Sign-in Failed: " + e.message);
+    } finally {showLoader(false);}
   });
+});
 </script>
-
 </body>
 </html>
