@@ -4,120 +4,314 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CrownForge Studio - Games</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
 :root{
-  --bg-dark:#07161a;
-  --card-bg: rgba(255,255,255,0.02);
-  --glass-border: rgba(255,255,255,0.03);
+  --bg-dark:#041015;
+  --card-bg:rgba(255,255,255,0.02);
+  --glass-border:rgba(255,255,255,0.04);
   --neon:#00f1df;
-  --muted: rgba(255,255,255,0.6);
-  --card-radius:14px;
-  --max-width:1200px;
+  --muted:rgba(255,255,255,0.7);
+  --radius:14px;
 }
 
 /* Reset */
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
+*{margin:0;padding:0;box-sizing:border-box;}
 body{
-  font-family:Inter, system-ui, Arial, sans-serif;
-  background:linear-gradient(180deg,#041015 0%, #07161a 60%);
+  font-family:'Inter',sans-serif;
+  background:linear-gradient(180deg,#031015 0%,#06171b 100%);
   color:#eafcff;
-  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
   overflow-x:hidden;
 }
 
-/* Wrapper */
-.wrap{max-width:var(--max-width);margin:28px auto;padding:18px;}
-
-/* NAV */
+/* NAVIGATION */
 nav{
-  display:flex;align-items:center;justify-content:space-between;padding:12px 18px;
-  background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
-  border-radius:12px;backdrop-filter:blur(6px);border:1px solid var(--glass-border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 20px;
+  margin:10px auto;
+  max-width:1100px;
+  border-radius:12px;
+  backdrop-filter:blur(8px);
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--glass-border);
+  box-shadow:0 0 25px rgba(0,241,223,0.15);
+  position:sticky;
+  top:0;
+  z-index:1000;
+  transition:box-shadow .3s ease;
 }
-.brand{display:flex;gap:12px;align-items:center}
-.logo{width:56px;height:56px;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,var(--neon),#67f2ea);display:grid;place-items:center}
-.logo img{width:100%;height:100%;object-fit:cover}
-.brand .title .name{font-family:Orbitron;font-weight:900;letter-spacing:1px;color:var(--neon)}
-.brand .title .sub{font-size:12px;color:var(--muted)}
-.nav-links{display:flex;gap:14px;align-items:center}
-.nav-links a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:10px;font-weight:600;transition:.3s}
-.nav-links a:hover{color:#fff;transform:translateY(-3px)}
+nav.scrolled {
+  box-shadow:0 0 30px var(--neon);
+}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand img{width:48px;height:48px;border-radius:12px;}
+.brand .title{display:flex;flex-direction:column;}
+.brand .name{font-family:'Orbitron';font-weight:900;color:var(--neon);font-size:18px;}
+.brand .sub{color:var(--muted);font-size:12px;}
+
+.nav-links{
+  display:flex;
+  gap:14px;
+  align-items:center;
+}
+.nav-links a{
+  color:var(--muted);
+  text-decoration:none;
+  font-weight:600;
+  font-size:15px;
+  padding:8px 12px;
+  border-radius:10px;
+  transition:.3s;
+}
+.nav-links a:hover{
+  color:#fff;
+  background:rgba(255,255,255,0.03);
+  box-shadow:0 0 10px rgba(0,241,223,0.2);
+}
+
+/* Mobile Menu Button */
+.menu-btn{
+  display:none;
+  font-size:28px;
+  color:var(--neon);
+  background:none;
+  border:none;
+  cursor:pointer;
+}
+
+/* OVERLAY for mobile */
+.overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(3px);
+  z-index:998;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .3s ease;
+}
+.overlay.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* SIDE MENU */
+@media(max-width:768px){
+  .menu-btn{display:block;}
+
+  .nav-links{
+    flex-direction:column;
+    position:fixed;
+    top:0;
+    right:-100%;
+    width:65%;
+    height:100vh;
+    background:rgba(0,0,0,0.95);
+    backdrop-filter:blur(10px);
+    border-left:1px solid var(--glass-border);
+    box-shadow:-5px 0 20px rgba(0,241,223,0.15);
+    transition:right .4s ease;
+    padding-top:80px;
+    z-index:999;
+  }
+
+  .nav-links.open{right:0;}
+
+  .nav-links a{
+    display:block;
+    text-align:center;
+    padding:14px 0;
+    font-size:16px;
+  }
+}
 
 /* HERO */
-header.hero{
-  text-align:left;padding:34px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.02));
-  border:1px solid var(--glass-border);backdrop-filter:blur(6px);margin-top:18px;
+.hero{
+  max-width:1100px;
+  margin:20px auto;
+  padding:30px 20px;
+  border-radius:16px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(6px);
 }
-.hero-title{font-family:Orbitron;font-size:44px;color:var(--neon);margin-bottom:8px}
-.hero-desc{color:var(--muted);max-width:720px;line-height:1.5;margin-bottom:14px}
+.hero-title{
+  font-family:'Orbitron';
+  color:var(--neon);
+  font-size:38px;
+  margin-bottom:10px;
+  text-shadow:0 0 15px var(--neon);
+}
+.hero-desc{
+  color:var(--muted);
+  max-width:700px;
+  line-height:1.5;
+  font-size:16px;
+}
 
-/* GAMES GRID */
-.games-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;padding:18px;border-radius:12px;background:var(--card-bg);border:1px solid var(--glass-border);margin-top:20px}
-.game-card{
-  background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.015));
-  border-radius:16px;padding:14px;text-align:center;transition:transform .28s,box-shadow .28s;border:1px solid rgba(0,0,0,0.25);
+/* GAME GRID */
+.games-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
+  max-width:1100px;
+  margin:25px auto;
+  padding:20px;
 }
-.game-card img{width:100%;height:150px;object-fit:contain;padding:12px}
-.game-card h3{font-family:Orbitron;color:var(--neon);margin:10px 0}
-.game-card a{display:inline-block;padding:9px 18px;border-radius:24px;background:linear-gradient(90deg,var(--neon),#67f2ea);color:#021;font-weight:800;text-decoration:none}
-.game-card:hover{transform:translateY(-8px);box-shadow:0 30px 60px rgba(0,0,0,0.6)}
+.game-card{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--glass-border);
+  border-radius:16px;
+  text-align:center;
+  padding:16px;
+  transition:transform .25s,box-shadow .25s;
+}
+.game-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 0 30px rgba(0,241,223,0.2);
+}
+.game-card img{
+  width:100%;
+  height:160px;
+  object-fit:contain;
+  border-radius:12px;
+  background:rgba(255,255,255,0.02);
+  margin-bottom:10px;
+}
+.game-card h3{
+  font-family:'Orbitron';
+  color:var(--neon);
+  margin-bottom:10px;
+  font-size:18px;
+}
+.game-card a{
+  display:inline-block;
+  background:linear-gradient(90deg,var(--neon),#67f2ea);
+  color:#021;
+  font-weight:700;
+  padding:10px 18px;
+  border-radius:24px;
+  text-decoration:none;
+  font-size:15px;
+  transition:.3s;
+}
+.game-card a:hover{
+  box-shadow:0 0 20px var(--neon);
+}
 
 /* FOOTER */
-footer{text-align:center;padding:28px;color:var(--muted);margin-top:18px;border-top:1px solid rgba(255,255,255,0.02)}
+footer{
+  text-align:center;
+  padding:25px 10px;
+  color:var(--muted);
+  font-size:14px;
+  border-top:1px solid rgba(255,255,255,0.05);
+  margin-top:40px;
+}
 
-/* Responsive */
-@media(max-width:720px){.hero-title{font-size:32px}}
+/* Smaller screens */
+@media(max-width:480px){
+  .hero{padding:20px;}
+  .hero-title{font-size:26px;}
+  .hero-desc{font-size:14px;}
+  .game-card img{height:130px;}
+  .game-card h3{font-size:16px;}
+  .game-card a{font-size:14px;padding:8px 16px;}
+}
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <nav>
-    <div class="brand">
-      <div class="logo"><img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="CrownForge Logo"></div>
-      <div class="title">
-        <div class="name">CrownForge Studio</div>
-        <div class="sub">Making Games in India</div>
-      </div>
+<!-- NAV -->
+<nav id="navbar">
+  <div class="brand">
+    <img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="CrownForge Logo">
+    <div class="title">
+      <div class="name">CrownForge Studio</div>
+      <div class="sub">Making Games in India</div>
     </div>
-    <div class="nav-links">
-      <a href="Crownforgepage.html">Home</a>
-      <a href="tralers.html">Videos</a>
-      <a href="Games.html">Games</a>
-      <a href="Newupdates.html">Updates</a>
-      <a href="contact.html">Contact</a>
-    </div>
-  </nav>
+  </div>
 
-  <header class="hero">
-    <div class="hero-title">CrownForge Games</div>
-    <div class="hero-desc">Explore our games! Click below to play or watch trailers for our latest creations.</div>
-  </header>
+  <button class="menu-btn" id="menuBtn">☰</button>
 
-  <section class="games-container">
-    <div class="game-card">
-      <img src="https://i.ibb.co/WWBbB53F/warx-logo.png" alt="WAR-X">
-      <h3>WAR-X</h3>
-      <a href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.Uitesting" target="_blank">Play</a>
-    </div>
+  <div class="nav-links" id="navLinks">
+    <a href="Crownforgepage.html">Home</a>
+    <a href="tralers.html">Videos</a>
+    <a href="Games.html">Games</a>
+    <a href="Newupdates.html">Updates</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
 
-    <div class="game-card">
-      <img src="https://i.ibb.co/BKZDrBHJ/zombie-strike-force-logo.png" alt="Zombie StrikeForce">
-      <h3>Zombie StrikeForce</h3>
-      <a href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.ZombieStrikeForce" target="_blank">Play</a>
-    </div>
+<!-- OVERLAY -->
+<div class="overlay" id="overlay"></div>
 
-    <div class="game-card">
-      <img src="https://i.ibb.co/0pM8N2z0/the-black-veil-logo.png" alt="The Black Veil">
-      <h3>The Black Veil</h3>
-      <a href="https://play.google.com/store/apps/details?id=com.PRA3KGAMES.THEBLACKVEIL" target="_blank">Play</a>
-    </div>
-  </section>
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-title">CrownForge Games</div>
+  <div class="hero-desc">
+    Explore our games! Click below to play or watch trailers for our latest creations.
+  </div>
+</header>
 
-  <footer>&copy; 2025 CrownForge Studio. All Rights Reserved.</footer>
-</div>
+<!-- GAMES GRID -->
+<section class="games-container">
+  <div class="game-card">
+    <img src="https://i.ibb.co/WWBbB53F/warx-logo.png" alt="WAR-X">
+    <h3>WAR-X</h3>
+    <a href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.Uitesting" target="_blank">Play</a>
+  </div>
+
+  <div class="game-card">
+    <img src="https://i.ibb.co/BKZDrBHJ/zombie-strike-force-logo.png" alt="Zombie StrikeForce">
+    <h3>Zombie StrikeForce</h3>
+    <a href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.ZombieStrikeForce" target="_blank">Play</a>
+  </div>
+
+  <div class="game-card">
+    <img src="https://i.ibb.co/0pM8N2z0/the-black-veil-logo.png" alt="The Black Veil">
+    <h3>The Black Veil</h3>
+    <a href="https://play.google.com/store/apps/details?id=com.PRA3KGAMES.THEBLACKVEIL" target="_blank">Play</a>
+  </div>
+</section>
+
+<footer>
+  &copy; <span id="year"></span> CrownForge Studio. All Rights Reserved.
+</footer>
+
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
+
+const menuBtn=document.getElementById("menuBtn");
+const navLinks=document.getElementById("navLinks");
+const overlay=document.getElementById("overlay");
+const navbar=document.getElementById("navbar");
+
+// Toggle menu
+menuBtn.addEventListener("click",()=>{
+  navLinks.classList.toggle("open");
+  overlay.classList.toggle("show");
+});
+
+// Hide menu when clicking outside
+overlay.addEventListener("click",()=>{
+  navLinks.classList.remove("open");
+  overlay.classList.remove("show");
+});
+
+// Navbar glow on scroll
+window.addEventListener("scroll",()=>{
+  if(window.scrollY>10){navbar.classList.add("scrolled");}
+  else{navbar.classList.remove("scrolled");}
+});
+</script>
 
 </body>
 </html>

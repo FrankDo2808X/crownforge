@@ -22,7 +22,7 @@ body{
   overflow-x:hidden;
 }
 
-/* HEADER NAVBAR */
+/* NAVIGATION */
 nav{
   width:100%;
   position:fixed;
@@ -37,7 +37,9 @@ nav{
   padding:14px 40px;
   border-bottom:1px solid rgba(0,224,255,0.2);
   box-shadow:0 0 15px rgba(0,183,255,0.3);
+  transition:box-shadow .3s ease;
 }
+nav.scrolled{box-shadow:0 0 30px var(--neon-blue);}
 nav img{
   height:55px;
   filter:drop-shadow(0 0 12px var(--neon-blue));
@@ -58,6 +60,62 @@ nav ul li a{
 nav ul li a:hover{
   color:var(--neon-blue);
   text-shadow:0 0 10px var(--neon-cyan),0 0 20px var(--neon-blue);
+}
+
+/* MENU BUTTON */
+.menu-btn{
+  display:none;
+  font-size:30px;
+  color:var(--neon-blue);
+  background:none;
+  border:none;
+  cursor:pointer;
+}
+
+/* OVERLAY */
+.overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(3px);
+  z-index:998;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .3s ease;
+}
+.overlay.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* SIDE MENU */
+@media(max-width:800px){
+  .menu-btn{display:block;}
+  nav ul{
+    flex-direction:column;
+    position:fixed;
+    top:0;
+    right:-100%;
+    width:65%;
+    height:100vh;
+    background:rgba(0,0,0,0.95);
+    backdrop-filter:blur(10px);
+    border-left:1px solid rgba(0,224,255,0.2);
+    box-shadow:-5px 0 20px rgba(0,224,255,0.2);
+    transition:right .4s ease;
+    padding-top:80px;
+    z-index:999;
+  }
+  nav ul.open{right:0;}
+  nav ul li a{
+    display:block;
+    text-align:center;
+    padding:14px 0;
+    font-size:17px;
+  }
 }
 
 /* HEADER SECTION */
@@ -170,9 +228,10 @@ footer{
 <body>
 
 <!-- NAVIGATION -->
-<nav>
-   <img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="CrownForge Studio Logo">
-  <ul>
+<nav id="navbar">
+  <img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="CrownForge Studio Logo">
+  <button class="menu-btn" id="menuBtn">☰</button>
+  <ul id="navLinks">
     <li><a href="index.html">Home</a></li>
     <li><a href="games.html">Games</a></li>
     <li><a href="videos.html">Videos</a></li>
@@ -180,6 +239,9 @@ footer{
     <li><a href="contact.html">Contact</a></li>
   </ul>
 </nav>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay"></div>
 
 <!-- HEADER -->
 <header>
@@ -223,6 +285,27 @@ function closeVideo(){
   document.getElementById('videoFrame').src='';
   document.getElementById('videoModal').style.display='none';
 }
+
+// Mobile menu logic
+const menuBtn=document.getElementById('menuBtn');
+const navLinks=document.getElementById('navLinks');
+const overlay=document.getElementById('overlay');
+const navbar=document.getElementById('navbar');
+
+menuBtn.addEventListener('click',()=>{
+  navLinks.classList.toggle('open');
+  overlay.classList.toggle('show');
+});
+
+overlay.addEventListener('click',()=>{
+  navLinks.classList.remove('open');
+  overlay.classList.remove('show');
+});
+
+window.addEventListener('scroll',()=>{
+  if(window.scrollY>10){navbar.classList.add('scrolled');}
+  else{navbar.classList.remove('scrolled');}
+});
 </script>
 
 </body>

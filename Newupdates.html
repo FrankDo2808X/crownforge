@@ -27,17 +27,20 @@ nav{
   position:sticky;
   top:0;
   backdrop-filter:blur(8px);
-  z-index:100;
+  z-index:1000;
 }
 nav img{
   height:50px;
   border-radius:50%;
   box-shadow:0 0 15px #00ffff;
 }
+
+/* NAV LINKS */
 nav ul{
   list-style:none;
   display:flex;
   gap:25px;
+  transition:0.4s ease;
 }
 nav ul li a{
   text-decoration:none;
@@ -50,6 +53,21 @@ nav ul li a{
 nav ul li a:hover{
   color:#00ffff;
   text-shadow:0 0 10px #00ffff,0 0 20px #0099ff;
+}
+
+/* HAMBURGER MENU */
+.menu-btn{
+  display:none;
+  flex-direction:column;
+  cursor:pointer;
+  gap:5px;
+}
+.menu-btn div{
+  width:26px;
+  height:3px;
+  background:#00ffff;
+  box-shadow:0 0 10px #00ffff;
+  transition:0.3s;
 }
 
 /* HEADER */
@@ -150,10 +168,29 @@ footer{
   100%{opacity:0.75;}
 }
 
-/* RESPONSIVE */
+/* RESPONSIVE MENU */
+@media(max-width:820px){
+  .menu-btn{display:flex;}
+  nav ul{
+    position:fixed;
+    top:0;
+    right:-100%;
+    flex-direction:column;
+    background:rgba(0,0,20,0.95);
+    backdrop-filter:blur(10px);
+    height:100vh;
+    width:70%;
+    justify-content:center;
+    align-items:center;
+    gap:40px;
+    transition:0.4s ease;
+    box-shadow:0 0 40px rgba(0,255,255,0.3);
+  }
+  nav ul.show{right:0;}
+}
+
+/* OTHER RESPONSIVE FIXES */
 @media(max-width:768px){
-  nav{flex-direction:column;gap:10px;}
-  nav ul{flex-wrap:wrap;justify-content:center;}
   header h1{font-size:2rem;}
   .slideshow-container{height:250px;}
   .slide-container img{height:250px;border-radius:20px;}
@@ -167,7 +204,14 @@ footer{
 <!-- NAVBAR -->
 <nav>
   <img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="CrownForge Studio Logo">
-  <ul>
+
+  <div class="menu-btn" id="menuBtn">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <ul id="menuList">
     <li><a href="Crownforgepage.html">Home</a></li>
     <li><a href="games.html">Games</a></li>
     <li><a href="tralers.html">Videos</a></li>
@@ -224,6 +268,21 @@ function showNextSlide(){
   slidesContainer.style.transform=`translateX(-${current*100}%)`;
 }
 setInterval(showNextSlide,8000);
+
+// ---------- Responsive Menu ----------
+const menuBtn=document.getElementById('menuBtn');
+const menuList=document.getElementById('menuList');
+
+menuBtn.addEventListener('click',()=>{
+  menuList.classList.toggle('show');
+});
+
+// Hide when clicking outside
+document.addEventListener('click',e=>{
+  if(!menuBtn.contains(e.target) && !menuList.contains(e.target)){
+    menuList.classList.remove('show');
+  }
+});
 </script>
 
 </body>
