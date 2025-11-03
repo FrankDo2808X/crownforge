@@ -45,15 +45,15 @@ nav{
   background:rgba(255,255,255,0.03);border-radius:12px;backdrop-filter:blur(6px);
   border:1px solid rgba(255,255,255,0.04);
   box-shadow:0 0 25px rgba(0,241,223,0.06);
-  position:relative;z-index:10;
+  position:relative;z-index:1000;
 }
 .brand{display:flex;align-items:center;gap:10px}
-.brand img{width:44px;height:44px;border-radius:10px}
-.brand .name{font-family:Orbitron;color:var(--neon);font-weight:900}
+.brand img{width:44px;height:44px;border-radius:10px;box-shadow:0 0 12px var(--neon)}
+.brand .name{font-family:Orbitron;color:var(--neon);font-weight:900;font-size:17px}
 .brand .sub{font-size:12px;color:var(--muted)}
 
 .nav-links{
-  display:flex;gap:12px;transition:max-height .4s ease;
+  display:flex;gap:12px;transition:right .4s ease;
 }
 .nav-links a{
   text-decoration:none;color:var(--muted);font-weight:600;
@@ -66,20 +66,52 @@ nav{
   display:none;font-size:26px;color:var(--neon);background:none;border:0;cursor:pointer;
 }
 
+/* SIDEBAR MENU (mobile) */
+@media(max-width:768px){
+  .menu-btn{display:block;}
+  .nav-links{
+    flex-direction:column;
+    position:fixed;top:0;right:-100%;
+    background:rgba(0,0,0,0.92);
+    height:100vh;width:70%;
+    padding-top:90px;
+    border-left:1px solid rgba(0,255,255,0.1);
+    backdrop-filter:blur(10px);
+    box-shadow:-4px 0 30px rgba(0,255,255,0.15);
+    align-items:center;
+    transition:right .4s ease;
+  }
+  .nav-links.open{right:0;}
+  .nav-links a{
+    display:block;text-align:center;
+    padding:12px 0;
+    font-size:16px;
+    width:80%;
+    border-radius:8px;
+  }
+}
+
 /* HERO */
 .hero{
   margin:20px auto;padding:30px 20px;border-radius:16px;
   background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);
   max-width:1100px;backdrop-filter:blur(8px);position:relative;overflow:hidden;
 }
+.hero::before{
+  content:"";position:absolute;top:-100px;left:-100px;width:250px;height:250px;
+  background:radial-gradient(circle,var(--neon) 0%,transparent 70%);
+  opacity:.1;filter:blur(40px);animation:floatLight 8s infinite alternate ease-in-out;
+}
+@keyframes floatLight{from{transform:translate(0,0);}to{transform:translate(40px,60px);}}
+
 .hero h1{font-family:Orbitron;color:var(--neon);font-size:38px;margin-bottom:10px;text-shadow:0 0 10px var(--neon)}
-.hero p{color:var(--muted);line-height:1.5;margin-bottom:16px}
+.hero p{color:var(--muted);line-height:1.6;margin-bottom:18px;font-size:16px}
 .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
 .btn{
   padding:10px 20px;border-radius:999px;border:2px solid rgba(0,241,223,0.2);
   color:var(--neon);text-decoration:none;font-weight:700;transition:all .2s;position:relative;
 }
-.btn:hover{background:rgba(0,241,223,0.06);transform:translateY(-3px)}
+.btn:hover{background:rgba(0,241,223,0.06);transform:translateY(-3px);box-shadow:0 0 15px rgba(0,241,223,0.2)}
 
 /* GRID */
 .grid{
@@ -90,32 +122,20 @@ nav{
   background:rgba(255,255,255,0.03);border-radius:var(--radius);
   padding:16px;border:1px solid rgba(255,255,255,0.04);
   transition:transform .25s,box-shadow .25s;
+  backdrop-filter:blur(6px);
 }
-.card:hover{transform:translateY(-5px);box-shadow:0 0 25px rgba(0,241,223,0.08)}
-.card .title{color:#e6ffff;font-weight:700;margin-bottom:6px}
+.card:hover{transform:translateY(-5px);box-shadow:0 0 25px rgba(0,241,223,0.1)}
+.card .title{color:#e6ffff;font-weight:700;margin-bottom:6px;font-size:17px}
 .card .meta{color:var(--muted);font-size:14px}
 
 /* FOOTER */
-footer{text-align:center;padding:20px;color:var(--muted);font-size:14px;margin-top:40px}
+footer{text-align:center;padding:25px;color:var(--muted);font-size:14px;margin-top:50px;border-top:1px solid rgba(255,255,255,0.05)}
 
-/* RESPONSIVE */
+/* RESPONSIVE HERO */
 @media(max-width:768px){
   .hero h1{font-size:28px}
   .hero p{font-size:15px}
-  .menu-btn{display:block}
-  .nav-links{
-    flex-direction:column;
-    position:absolute;top:60px;left:0;right:0;
-    background:rgba(0,0,0,0.9);
-    border-radius:10px;
-    max-height:0;overflow:hidden;
-    border:1px solid rgba(255,255,255,0.05);
-    backdrop-filter:blur(8px);
-  }
-  .nav-links.open{max-height:300px;padding:10px 0;}
-  .nav-links a{display:block;text-align:center;padding:10px 0;font-size:15px}
 }
-
 @media(max-width:480px){
   .hero{padding:20px}
   .hero h1{font-size:24px}
@@ -159,7 +179,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:14px;margin-t
 
 <!-- HERO -->
 <section class="hero">
-  <h1>CrownForge Studio</h1>
+  <h1>🌌 CrownForge Studio</h1>
   <p>Welcome to CrownForge — your neon-glass hub for trailers, updates, and new game launches. Built for creators and players alike.</p>
   <div class="hero-actions">
     <a href="tralers.html" class="btn">🎮 Enter Studio</a>
@@ -204,6 +224,13 @@ document.getElementById('year').textContent=new Date().getFullYear();
 const menuBtn=document.getElementById('menuBtn');
 const navLinks=document.getElementById('navLinks');
 menuBtn.addEventListener('click',()=>navLinks.classList.toggle('open'));
+
+// close menu when clicking outside
+document.addEventListener('click',e=>{
+  if(!navLinks.contains(e.target)&&!menuBtn.contains(e.target)){
+    navLinks.classList.remove('open');
+  }
+});
 </script>
 
 </body>
