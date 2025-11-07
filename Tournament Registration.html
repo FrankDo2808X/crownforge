@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tournament Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Orbitron',sans-serif;
+  background:radial-gradient(circle at top,#001018,#000);
+  color:#fff;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+.container{
+  width:100%;
+  max-width:800px;
+  background:rgba(0,255,255,0.07);
+  box-shadow:0 0 30px rgba(0,255,255,0.6);
+  backdrop-filter:blur(15px);
+  border-radius:20px;
+  padding:30px 25px;
+  overflow-y:auto;
+}
+h2{
+  text-align:center;
+  margin-bottom:25px;
+  color:#00fff2;
+  font-size:1.8em;
+}
+form{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:15px;
+}
+input,select{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:rgba(255,255,255,0.15);
+  color:white;
+  font-size:14px;
+  outline:none;
+}
+input::placeholder{color:#ccc;}
+button{
+  grid-column:1/-1;
+  padding:14px;
+  background:linear-gradient(90deg,#00fff2,#0077ff);
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+  color:#000;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.2s ease;
+}
+button:hover{transform:scale(1.05);}
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>🏆 Tournament Registration</h2>
+    <form id="regForm">
+      <input id="fullName" placeholder="Full Name" required>
+      <input id="ign" placeholder="In-Game Name (IGN)" required>
+      <input id="playerId" placeholder="Player ID / UID" required>
+      <input id="teamName" placeholder="Team Name" required>
+      <input id="email" placeholder="Email Address" type="email" required>
+      <input id="phone" placeholder="Phone Number" required>
+      <input id="tournamentName" placeholder="Tournament Name" required>
+      <select id="matchType" required>
+        <option disabled selected>Match Type</option>
+        <option>Solo</option><option>Duo</option><option>Squad</option>
+      </select>
+      <select id="region">
+        <option disabled selected>Region / Server</option>
+        <option>India</option><option>Asia</option><option>Europe</option>
+      </select>
+      <input id="platform" placeholder="Where did you find us?">
+      <button type="button" id="payBtn">Pay ₹50 & Register</button>
+    </form>
+  </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const payBtn = document.getElementById("payBtn");
+  const form = document.getElementById("regForm");
+
+  payBtn.addEventListener("click", async () => {
+    if (!form.reportValidity()) return;
+
+    const data = Object.fromEntries(new FormData(form));
+
+    try {
+      payBtn.disabled = true;
+      payBtn.textContent = "Processing Payment...";
+
+      // 🔹 Simulate Payment (2 sec)
+      await new Promise(res => setTimeout(res, 2000));
+
+      // 🔹 Discord Webhook
+      const webhook = "https://discord.com/api/webhooks/1436267732827115660/myV-BKwgFu9bd2BY_SNz88dD93LYhwsizXilXi8aHw66eSXq6KX0VAyR1yGlVmHMJ9dw";
+      const response = await fetch(webhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: "Tournament Bot",
+          content: `🏆 **New Tournament Registration!**
+👤 **Full Name:** ${data.fullName}
+🎮 **IGN:** ${data.ign}
+🆔 **Player ID:** ${data.playerId}
+👥 **Team:** ${data.teamName}
+📧 **Email:** ${data.email}
+📱 **Phone:** ${data.phone}
+🎯 **Tournament:** ${data.tournamentName}
+⚔️ **Match Type:** ${data.matchType}
+🌍 **Region:** ${data.region}
+📢 **Platform:** ${data.platform}
+💰 **Payment:** ₹50 (Simulated)`
+        })
+      });
+
+      if (!response.ok) throw new Error("Discord webhook failed");
+
+      alert("✅ Payment successful and registration sent to Discord!");
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      alert("❌ Payment or Discord error: " + err.message);
+    } finally {
+      payBtn.disabled = false;
+      payBtn.textContent = "Pay ₹50 & Register";
+    }
+  });
+});
+</script>
+</body>
+</html>
