@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secure Payment | ₹50</title>
+<script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+<style>
+  body {
+    background: radial-gradient(circle at center, #0f2027, #203a43, #2c5364);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  form {
+    background: rgba(255,255,255,0.1);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,255,200,0.4);
+    width: 90%;
+    max-width: 400px;
+  }
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+  }
+  button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #00ffc6;
+    color: #000;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  button:hover {
+    background: #00b88a;
+  }
+</style>
+</head>
+<body>
+  <form id="paymentForm">
+    <h2>Pay ₹50 to Join</h2>
+    <input type="text" id="name" placeholder="Your Name" required>
+    <input type="number" id="age" placeholder="Your Age" required>
+    <input type="email" id="email" placeholder="Your Email" required>
+    <button type="submit">Pay ₹50</button>
+  </form>
+
+<script>
+  const cashfree = Cashfree({ mode: "sandbox" }); // live = production
+
+  document.getElementById("paymentForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const age = document.getElementById("age").value;
+    const email = document.getElementById("email").value;
+
+    try {
+      // ⚠️ Change URL to your hosted PHP link when uploaded
+      const res = await fetch("https://yourwebsite.com/payment/create-order.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, age, email })
+      });
+
+      const data = await res.json();
+      console.log("Server response:", data);
+
+      if (data.order_token) {
+        await cashfree.checkout({
+          paymentSessionId: data.order_token,
+          redirectTarget: "_self"
+        });
+      } else {
+        alert("❌ Error creating order: " + (data.message || "Check console"));
+      }
+    } catch (err) {
+      console.error(err);
+      alert("⚠️ Error while processing payment: " + err.message);
+    }
+  });
+</script>
+</body>
+</html>
