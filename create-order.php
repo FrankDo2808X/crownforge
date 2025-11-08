@@ -1,23 +1,24 @@
 <?php
-// Allow CORS for frontend
+// ✅ Allow from all origins
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-// Get JSON input
+// ✅ Get input JSON
 $data = json_decode(file_get_contents("php://input"), true);
 $name = htmlspecialchars($data['name']);
 $age = htmlspecialchars($data['age']);
 $email = htmlspecialchars($data['email']);
 
-// 🔐 Cashfree credentials (Sandbox for test)
+// ✅ Cashfree Sandbox credentials (replace with your sandbox keys)
 $client_id = "996661719cf9c3f3d1cb384a6d166699";
 $client_secret = "cfsk_ma_prod_b40b148020d70dbe2a50b8a8f16071df_4fdb5cc6";
 
-// Create order payload
+// ✅ Order details
 $orderId = "order_" . uniqid();
-$amount = 50; // ₹50
+$amount = 50;
 
+// ✅ Payload for Cashfree
 $payload = [
   "order_id" => $orderId,
   "order_amount" => $amount,
@@ -30,7 +31,7 @@ $payload = [
   ]
 ];
 
-// Initialize cURL
+// ✅ Curl setup for Cashfree
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, "https://sandbox.cashfree.com/pg/orders");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -41,17 +42,16 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
   "x-client-id: $client_id",
   "x-client-secret: $client_secret"
 ]);
-
 $response = curl_exec($ch);
 curl_close($ch);
 
 $result = json_decode($response, true);
 
-// If payment session created, send details to Discord webhook
+// ✅ Discord Webhook on success
 if (isset($result['payment_session_id'])) {
     $discordWebhook = "YOUR_DISCORD_WEBHOOK_URL";
     $msg = [
-        "content" => "**New Payment Request** 💸\nName: $name\nAge: $age\nEmail: $email\nOrder ID: $orderId\nAmount: ₹$amount"
+        "content" => "**💳 New Payment Request**\nName: $name\nAge: $age\nEmail: $email\nOrder ID: $orderId\nAmount: ₹$amount"
     ];
 
     $ch = curl_init($discordWebhook);

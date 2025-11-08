@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Secure Payment | ₹50</title>
+<title>CrownForge Payment - ₹50</title>
 <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
 <style>
   body {
-    background: radial-gradient(circle at center, #0f2027, #203a43, #2c5364);
+    background: radial-gradient(circle at top, #001f29, #000);
     color: white;
     font-family: 'Poppins', sans-serif;
     display: flex;
@@ -43,9 +43,7 @@
     cursor: pointer;
     transition: 0.3s;
   }
-  button:hover {
-    background: #00b88a;
-  }
+  button:hover { background: #00b88a; }
 </style>
 </head>
 <body>
@@ -54,29 +52,31 @@
     <input type="text" id="name" placeholder="Your Name" required>
     <input type="number" id="age" placeholder="Your Age" required>
     <input type="email" id="email" placeholder="Your Email" required>
-    <button type="submit">Pay ₹50</button>
+    <button type="submit" id="payBtn">Pay ₹50</button>
   </form>
 
 <script>
-  const cashfree = Cashfree({ mode: "sandbox" }); // live = production
+  const cashfree = Cashfree({ mode: "sandbox" }); // change to "production" later for real payments
 
   document.getElementById("paymentForm").addEventListener("submit", async (e) => {
     e.preventDefault();
+    const btn = document.getElementById("payBtn");
+    btn.innerText = "Processing...";
+    btn.disabled = true;
 
     const name = document.getElementById("name").value;
     const age = document.getElementById("age").value;
     const email = document.getElementById("email").value;
 
     try {
-      // ⚠️ Change URL to your hosted PHP link when uploaded
-      const res = await fetch("https://yourwebsite.com/payment/create-order.php", {
+      const res = await fetch("https://crownforge.in/payment/create-order.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, age, email })
       });
 
       const data = await res.json();
-      console.log("Server response:", data);
+      console.log("Response:", data);
 
       if (data.order_token) {
         await cashfree.checkout({
@@ -88,8 +88,11 @@
       }
     } catch (err) {
       console.error(err);
-      alert("⚠️ Error while processing payment: " + err.message);
+      alert("⚠️ Error connecting to payment server!");
     }
+
+    btn.innerText = "Pay ₹50";
+    btn.disabled = false;
   });
 </script>
 </body>
