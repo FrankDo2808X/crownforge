@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CrownForge - Friends</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CrownForge - User Profile & Chat</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
 <style>
 * {margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif;}
 body {
@@ -14,74 +13,45 @@ body {
   min-height: 100vh;
   padding: 20px;
 }
-h1 {
-  text-align: center;
-  font-weight: 600;
-  margin-bottom: 10px;
-  text-shadow: 0 0 10px #0ff;
-}
-.search-bar {
-  width: 100%;
-  padding: 10px 15px;
-  border-radius: 30px;
-  border: 1px solid #00ffff;
-  background: rgba(255,255,255,0.05);
-  color: white;
-  outline: none;
-  margin-bottom: 20px;
-}
-.friend-grid {
-  display: grid;
-  gap: 15px;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-}
-.friend-card {
-  background: rgba(255,255,255,0.05);
-  border-radius: 15px;
-  padding: 15px;
-  text-align: center;
-  transition: 0.3s;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.1);
-}
-.friend-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(0,255,255,0.4);
-}
-.friend-pic {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  border: 2px solid #0ff;
-  object-fit: cover;
-}
-.name {
-  margin-top: 8px;
-  font-weight: 600;
-}
-.top-btns {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-}
-.top-btn {
-  background: linear-gradient(90deg, #00ffff, #00aaff);
-  border: none;
-  color: black;
-  font-weight: 600;
-  border-radius: 30px;
-  padding: 10px 18px;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(0,255,255,0.5);
-}
+h1 {text-align:center; margin-bottom:20px; font-weight:600; text-shadow: 0 0 10px #0ff;}
+.search-container {display:flex; justify-content:center; margin-bottom:20px; flex-wrap:wrap;}
+.search-container input {width:300px; padding:10px 15px; border-radius:30px; border:1px solid #00ffff; background:rgba(255,255,255,0.05); color:white; outline:none; margin-right:10px;}
+.search-container button {padding:10px 20px; border-radius:30px; border:none; background:linear-gradient(90deg, #00ffff, #00aaff); color:black; font-weight:600; cursor:pointer; box-shadow:0 0 10px rgba(0,255,255,0.5); transition:0.3s;}
+.search-container button:hover {transform: scale(1.05); box-shadow:0 0 20px #0ff;}
+.profile-card {max-width:450px; margin:0 auto; background:rgba(255,255,255,0.05); padding:25px; border-radius:25px; text-align:center; backdrop-filter:blur(12px); border:1px solid rgba(0,255,255,0.2); transition:0.3s;}
+.profile-card:hover {transform: scale(1.03); box-shadow:0 0 25px rgba(0,255,255,0.5);}
+.profile-pic {width:130px; height:130px; border-radius:50%; border:3px solid #0ff; object-fit:cover;}
+.profile-name {font-size:1.6rem; font-weight:600; margin:10px 0; text-shadow:0 0 5px #0ff;}
+.profile-email {font-size:0.95rem; color:#0ff; margin-bottom:10px;}
+.profile-extra {margin-bottom:15px; font-size:0.9rem;}
+.status-indicator {display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:6px;}
+.online {background-color:#4caf50;}
+.offline {background-color:#f44336;}
+.profile-buttons {display:flex; justify-content:center; gap:12px; flex-wrap:wrap;}
+.profile-buttons button {padding:10px 18px; border-radius:25px; border:none; font-weight:600; cursor:pointer; transition:0.3s;}
+.add-btn {background:linear-gradient(90deg, #4caf50, #2e7d32); color:white;}
+.add-btn:hover {box-shadow:0 0 15px #4caf50; transform:scale(1.05);}
+.email-btn {background:linear-gradient(90deg, #2196f3, #0d47a1); color:white;}
+.email-btn:hover {box-shadow:0 0 15px #2196f3; transform:scale(1.05);}
+.chat-btn {background:#ff9800; color:black; border:none; padding:10px 12px; border-radius:25px; cursor:pointer; font-weight:600;}
+.chat-btn:hover {box-shadow:0 0 15px #ff9800; transform:scale(1.05);}
+.mutual-friends {font-size:0.85rem; margin-top:8px; color:#0ff;}
+/* Chat box */
+#chatBox {position:fixed; bottom:20px; right:20px; width:300px; max-width:90%; background:rgba(255,255,255,0.05); backdrop-filter:blur(12px); border-radius:15px; border:1px solid rgba(0,255,255,0.2); display:none; flex-direction:column; overflow:hidden;}
+#chatHeader {background:linear-gradient(90deg,#00ffff,#00aaff); padding:10px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-weight:600; color:black;}
+#chatMessages {flex:1; padding:10px; overflow-y:auto; max-height:300px;}
+.message {margin-bottom:10px; padding:8px 12px; border-radius:12px; max-width:80%; word-wrap:break-word;}
+.message.self {background:#00ffff; color:black; align-self:flex-end;}
+.message.other {background:#555; color:white; align-self:flex-start;}
+#chatInputContainer {display:flex; border-top:1px solid rgba(0,255,255,0.2);}
+#chatInput {flex:1; padding:10px; border:none; outline:none; background:rgba(255,255,255,0.05); color:white;}
+#sendBtn {padding:10px; border:none; background:#4caf50; color:white; cursor:pointer;}
 </style>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
-import { getFirestore, collection, doc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+import { getFirestore, collection, doc, getDoc, getDocs, query, where, addDoc, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
   authDomain: "crownforgestudio-2581a.firebaseapp.com",
@@ -91,57 +61,131 @@ const firebaseConfig = {
   appId: "1:223324386293:web:9d7919c6b2e93781b026bc",
   measurementId: "G-FC52FSYPGV"
 };
-
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
-const friendGrid = document.getElementById("friendGrid");
-const search = document.getElementById("search");
-const requestBtn = document.getElementById("reqBtn");
-const addBtn = document.getElementById("addBtn");
+const searchBtn = document.getElementById("searchBtn");
+const searchInput = document.getElementById("searchInput");
+const profileCard = document.getElementById("profileCard");
 
-onAuthStateChanged(auth, async (user) => {
-  if (!user) return (window.location.href = "index.html");
-  const uid = user.uid;
-  const friendsRef = collection(db, "users", uid, "friends");
-  const snapshot = await getDocs(friendsRef);
-  friendGrid.innerHTML = "";
+let currentUser, chatWithId;
 
-  snapshot.forEach(async (docSnap) => {
-    const friendId = docSnap.id;
-    const friendDoc = await getDoc(doc(db, "users", friendId));
-    const data = friendDoc.data();
+// Chat box
+const chatBox = document.createElement("div");
+chatBox.id = "chatBox";
+chatBox.innerHTML = `
+  <div id="chatHeader">Chat <span id="closeChat" style="cursor:pointer;">✖</span></div>
+  <div id="chatMessages"></div>
+  <div id="chatInputContainer">
+    <input type="text" id="chatInput" placeholder="Type a message..." />
+    <button id="sendBtn">Send</button>
+  </div>
+`;
+document.body.appendChild(chatBox);
 
-    const card = document.createElement("div");
-    card.className = "friend-card";
-    card.innerHTML = `
-      <img src="${data.photoURL || 'https://i.imgur.com/GYUx3Um.png'}" class="friend-pic">
-      <p class="name">${data.name || 'Unnamed'}</p>
-    `;
-    friendGrid.appendChild(card);
-  });
-
-  addBtn.onclick = () => (window.location.href = "add-friend.html");
-  requestBtn.onclick = () => (window.location.href = "friend-requests.html");
-
-  search.addEventListener("input", () => {
-    const value = search.value.toLowerCase();
-    document.querySelectorAll(".friend-card").forEach(card => {
-      const name = card.querySelector(".name").textContent.toLowerCase();
-      card.style.display = name.includes(value) ? "block" : "none";
-    });
-  });
+onAuthStateChanged(auth, async user=>{
+  if(!user) return alert("Login required");
+  currentUser = user;
 });
+
+searchBtn.onclick = async ()=>{
+  const searchValue = searchInput.value.trim();
+  if(!searchValue) return alert("Enter UID or Name!");
+
+  let userData = null;
+  let userId = "";
+
+  const docRef = doc(db,"users",searchValue);
+  const docSnap = await getDoc(docRef);
+  if(docSnap.exists()){ userData = docSnap.data(); userId = searchValue; }
+  else{
+    const usersRef = collection(db,"users");
+    const q = query(usersRef,where("name","==",searchValue));
+    const querySnap = await getDocs(q);
+    if(!querySnap.empty){ userData = querySnap.docs[0].data(); userId = querySnap.docs[0].id; }
+  }
+
+  if(!userData) return alert("User not found!");
+
+  // Check friendship in Firestore
+  let areFriends=false;
+  const friendsSnap = await getDocs(collection(db,"users",currentUser.uid,"friends"));
+  friendsSnap.forEach(f=>{
+    if(f.id===userId) areFriends=true;
+  });
+
+  profileCard.innerHTML = `
+    <img src="${userData.photoURL||'https://i.imgur.com/GYUx3Um.png'}" class="profile-pic">
+    <p class="profile-name">${userData.name||'Unnamed'}</p>
+    <p class="profile-email">${userData.email||'Email not available'}</p>
+    <p class="profile-extra"><span class="status-indicator ${userData.online?'online':'offline'}"></span>${userData.online?'Online':'Offline'}</p>
+    <p class="mutual-friends">Mutual Friends: ${areFriends?1:0}</p>
+    <div class="profile-buttons">
+      <button class="add-btn" id="addFriendBtn">➕ Add Friend</button>
+      <button class="email-btn" id="sendEmailBtn">📧 Email</button>
+      ${areFriends?'<button class="chat-btn" id="chatBtn">💬 Chat</button>':''}
+    </div>
+  `;
+
+  document.getElementById("addFriendBtn").onclick = ()=>alert(`Friend request sent to ${userData.name||'user'}`);
+  document.getElementById("sendEmailBtn").onclick = ()=>{
+    if(!userData.email) return alert("Email not available!");
+    const subject = encodeURIComponent("Friend Request from CrownForge");
+    const body = encodeURIComponent(`Hi ${userData.name||''},\n\nI want to connect with you on CrownForge!`);
+    window.location.href=`mailto:${userData.email}?subject=${subject}&body=${body}`;
+  };
+
+  if(areFriends){
+    document.getElementById("chatBtn").onclick = ()=>openChat(userId,userData.name);
+  }
+};
+
+// Chat functions
+function generateChatId(uid1,uid2){ return uid1<uid2 ? uid1+"_"+uid2 : uid2+"_"+uid1; }
+
+function openChat(friendId, friendName){
+  chatWithId = friendId;
+  chatBox.style.display="flex";
+  document.getElementById("chatHeader").innerHTML=`Chat with ${friendName} <span id="closeChat" style="cursor:pointer;">✖</span>`;
+  document.getElementById("closeChat").onclick=()=>{chatBox.style.display="none"; chatWithId=null;};
+
+  const messagesRef = collection(db,"chats",generateChatId(currentUser.uid,friendId),"messages");
+  const messagesQuery = query(messagesRef, orderBy("timestamp"));
+  const chatMessagesDiv = document.getElementById("chatMessages");
+  chatMessagesDiv.innerHTML="";
+
+  onSnapshot(messagesQuery, snapshot=>{
+    chatMessagesDiv.innerHTML="";
+    snapshot.forEach(msg=>{
+      const m = msg.data();
+      const div = document.createElement("div");
+      div.className="message "+(m.sender===currentUser.uid?"self":"other");
+      div.textContent = m.text;
+      chatMessagesDiv.appendChild(div);
+    });
+    chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+  });
+}
+
+document.getElementById("sendBtn").onclick = async ()=>{
+  const input = document.getElementById("chatInput");
+  const text = input.value.trim();
+  if(!text || !chatWithId) return;
+  const messagesRef = collection(db,"chats",generateChatId(currentUser.uid,chatWithId),"messages");
+  await addDoc(messagesRef,{text, sender:currentUser.uid, timestamp:new Date()});
+  input.value="";
+};
 </script>
 </head>
 <body>
-  <h1>FORGE FRIENDS LIST</h1>
-  <div class="top-btns">
-    <button id="addBtn" class="top-btn">➕ Add</button>
-    <button id="reqBtn" class="top-btn">📩 Requests</button>
-  </div>
-  <input type="text" id="search" placeholder="Search friends..." class="search-bar" />
-  <div id="friendGrid" class="friend-grid"></div>
+<h1>VIEW USER PROFILE</h1>
+<div class="search-container">
+  <input type="text" id="searchInput" placeholder="Enter UID or Name..." />
+  <button id="searchBtn">🔍 Search</button>
+</div>
+<div id="profileCard" class="profile-card">
+  <p style="color:#0ff;">Enter UID or Name to view profile</p>
+</div>
 </body>
 </html>
