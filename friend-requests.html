@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CrownForge - Friend Requests</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body {
+  background: radial-gradient(circle at top, #0f0f1a, #000);
+  color: white;
+  font-family: "Poppins", sans-serif;
+  padding: 20px;
+  text-align: center;
+}
+h1 {
+  text-shadow: 0 0 10px #0ff;
+}
+.request-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 15px;
+  padding: 15px;
+  margin: 15px auto;
+  max-width: 400px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0,255,255,0.2);
+}
+.request-card img {
+  width: 60px; height: 60px; border-radius: 50%;
+  border: 2px solid #0ff;
+  object-fit: cover;
+}
+.req-info {
+  margin: 10px 0;
+}
+.btns {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+button {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.accept {background: #00ffff; color: black;}
+.decline {background: #ff0055; color: white;}
+</style>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
+  authDomain: "crownforgestudio-2581a.firebaseapp.com",
+  projectId: "crownforgestudio-2581a",
+  storageBucket: "crownforgestudio-2581a.firebasestorage.app",
+  messagingSenderId: "223324386293",
+  appId: "1:223324386293:web:9d7919c6b2e93781b026bc",
+  measurementId: "G-FC52FSYPGV"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const reqContainer = document.getElementById("reqContainer");
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return (window.location.href = "index.html");
+  const uid = user.uid;
+  const reqRef = collection(db, "users", uid, "requests");
+  const snapshot = await getDocs(reqRef);
+  reqContainer.innerHTML = "";
+
+  if (snapshot.empty) {
+    reqContainer.innerHTML = "<p>No friend requests 😌</p>";
+    return;
+  }
+
+  snapshot.forEach(async (reqSnap) => {
+    const fromUID = reqSnap.id;
+    const fromData = await getDoc(doc(db, "users", fromUID));
+    const data = fromData.data();
+
+    const card = document.createElement("div");
+    card.className = "request-card";
+    card.innerHTML = `
+      <img src="${data.photoURL || 'https://i.imgur.com/GYUx3Um.png'}" />
+      <div class="req-info">
+        <h3>${data.name || 'Unknown User'}</h3>
+        <p>wants to be your friend 💌</p>
+      </div>
+      <div class="btns">
+        <button class="accept" onclick="acceptReq('${fromUID}')">Accept</button>
+        <button class="decline" onclick="declineReq('${fromUID}')">Decline</button>
+      </div>
+    `;
+    reqContainer.appendChild(card);
+  });
+});
+
+window.acceptReq = async function(fromUID) {
+  const user = auth.currentUser;
+  const userUID = user.uid;
+  await setDoc(doc(db, "users", userUID, "friends", fromUID), { accepted: true });
+  await setDoc(doc(db, "users", fromUID, "friends", userUID), { accepted: true });
+  await deleteDoc(doc(db, "users", userUID, "requests", fromUID));
+  alert("✅ Friend accepted!");
+  location.reload();
+};
+
+window.declineReq = async function(fromUID) {
+  const user = auth.currentUser;
+  await deleteDoc(doc(db, "users", user.uid, "requests", fromUID));
+  alert("❌ Request declined!");
+  location.reload();
+};
+</script>
+</head>
+<body>
+  <h1>📬 Friend Requests</h1>
+  <div id="reqContainer"></div>
+</body>
+</html>
