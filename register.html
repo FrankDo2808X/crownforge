@@ -3,96 +3,238 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CrownForge Payment - ₹50</title>
-<script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+<title>Tournament Registration Form</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
-  body {
-    background: radial-gradient(circle at top, #001f29, #000);
-    color: white;
+  * {
+    box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: radial-gradient(circle at top left, #001f3f, #000);
     display: flex;
-    align-items: center;
     justify-content: center;
-    height: 100vh;
+    align-items: center;
+    overflow-x: hidden;
   }
-  form {
-    background: rgba(255,255,255,0.1);
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0,255,200,0.4);
-    width: 90%;
-    max-width: 400px;
+
+  .container {
+    width: 95%;
+    max-width: 450px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2), inset 0 0 20px rgba(0, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    padding: 25px 30px;
+    color: #fff;
+    text-align: center;
+    animation: glowBorder 3s infinite alternate;
   }
-  input {
+
+  @keyframes glowBorder {
+    from { box-shadow: 0 0 10px cyan, inset 0 0 15px rgba(0, 255, 255, 0.2); }
+    to { box-shadow: 0 0 25px cyan, inset 0 0 25px rgba(0, 255, 255, 0.4); }
+  }
+
+  h2 {
+    font-size: 1.8em;
+    color: cyan;
+    text-shadow: 0 0 10px cyan;
+    margin-bottom: 20px;
+  }
+
+  input, select {
     width: 100%;
-    padding: 10px;
-    margin-top: 10px;
+    padding: 12px;
+    margin: 8px 0;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 15px;
     outline: none;
+    transition: 0.3s;
   }
+
+  input:focus, select:focus {
+    box-shadow: 0 0 12px cyan;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  option { color: black; }
+
+  input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
   button {
     width: 100%;
     padding: 12px;
     margin-top: 15px;
     border: none;
-    border-radius: 10px;
-    background: #00ffc6;
-    color: #000;
+    border-radius: 12px;
+    background: linear-gradient(90deg, cyan, #00ffffc0);
+    color: black;
     font-weight: 600;
+    font-size: 16px;
     cursor: pointer;
     transition: 0.3s;
   }
-  button:hover { background: #00b88a; }
+
+  button:hover {
+    background: linear-gradient(90deg, #00ffff, #00ffe0);
+    box-shadow: 0 0 20px cyan;
+  }
+
+  #message {
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .success { color: #00ffcc; }
+  .error { color: #ff7b7b; }
+
+  /* Responsive tweaks */
+  @media (max-width: 600px) {
+    body {
+      padding: 15px;
+      background: radial-gradient(circle at bottom, #001f3f, #000);
+    }
+    .container {
+      padding: 20px;
+      border-radius: 18px;
+    }
+    h2 {
+      font-size: 1.6em;
+    }
+    input, select, button {
+      font-size: 14px;
+    }
+  }
 </style>
 </head>
 <body>
-  <form id="paymentForm">
-    <h2>Pay ₹50 to Join</h2>
-    <input type="text" id="name" placeholder="Your Name" required>
-    <input type="number" id="age" placeholder="Your Age" required>
-    <input type="email" id="email" placeholder="Your Email" required>
-    <button type="submit" id="payBtn">Pay ₹50</button>
+
+<div class="container">
+  <h2>Tournament Registration</h2>
+  <form id="registerForm">
+    <input type="text" id="fullName" placeholder="Full Name" required>
+    <input type="text" id="ign" placeholder="In-Game Name (IGN)" required>
+    <input type="text" id="playerId" placeholder="Player ID / UID" required>
+    <input type="text" id="teamName" placeholder="Team Name" required>
+    <input type="email" id="email" placeholder="Email Address" required>
+    <input type="tel" id="phone" placeholder="Phone Number" required>
+    <input type="text" id="discord" placeholder="Discord ID" required>
+    <input type="text" id="tournamentName" placeholder="Tournament Name" required>
+
+    <select id="matchType" required>
+      <option value="">Select Match Type</option>
+      <option value="Solo">Solo</option>
+      <option value="Duo">Duo</option>
+      <option value="Squad">Squad</option>
+    </select>
+
+    <select id="region">
+      <option value="India">India</option>
+      <option value="Asia">Asia</option>
+      <option value="Europe">Europe</option>
+    </select>
+
+    <select id="language">
+      <option value="Hindi">Hindi</option>
+      <option value="English">English</option>
+    </select>
+
+    <button type="submit">Submit Registration</button>
+    <div id="message"></div>
   </form>
+</div>
 
-<script>
-  const cashfree = Cashfree({ mode: "sandbox" }); // change to "production" later for real payments
+<!-- Firebase + Discord Script -->
+<script type="module">
+  // Import Firebase SDK
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  document.getElementById("paymentForm").addEventListener("submit", async (e) => {
+  // Firebase Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
+    authDomain: "crownforgestudio-2581a.firebaseapp.com",
+    projectId: "crownforgestudio-2581a",
+    storageBucket: "crownforgestudio-2581a.firebasestorage.app",
+    messagingSenderId: "223324386293",
+    appId: "1:223324386293:web:9d7919c6b2e93781b026bc",
+    measurementId: "G-FC52FSYPGV"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Discord Webhook URL
+  const webhookURL = "https://discord.com/api/webhooks/1436267732827115660/myV-BKwgFu9bd2BY_SNz88dD93LYhwsizXilXi8aHw66eSXq6KX0VAyR1yGlVmHMJ9dw";
+
+  const form = document.getElementById("registerForm");
+  const messageDiv = document.getElementById("message");
+
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const btn = document.getElementById("payBtn");
-    btn.innerText = "Processing...";
-    btn.disabled = true;
-
-    const name = document.getElementById("name").value;
-    const age = document.getElementById("age").value;
-    const email = document.getElementById("email").value;
+    const formData = {
+      fullName: fullName.value.trim(),
+      ign: ign.value.trim(),
+      playerId: playerId.value.trim(),
+      teamName: teamName.value.trim(),
+      email: email.value.trim(),
+      phone: phone.value.trim(),
+      discord: discord.value.trim(),
+      tournamentName: tournamentName.value.trim(),
+      matchType: matchType.value,
+      region: region.value,
+      language: language.value,
+      date: new Date().toLocaleString()
+    };
 
     try {
-      const res = await fetch("https://crownforge.in/payment/create-order.php", {
+      // Save in Firebase
+      await addDoc(collection(db, "tournament_registrations"), formData);
+
+      // Send to Discord
+      const discordMessage = {
+        content: `🏆 **New Tournament Registration**
+👤 **Name:** ${formData.fullName}
+🎮 **IGN:** ${formData.ign}
+🆔 **Player ID:** ${formData.playerId}
+👥 **Team Name:** ${formData.teamName}
+📧 **Email:** ${formData.email}
+📱 **Phone:** ${formData.phone}
+💬 **Discord ID:** ${formData.discord}
+🎯 **Tournament:** ${formData.tournamentName}
+⚔️ **Match Type:** ${formData.matchType}
+🌍 **Region:** ${formData.region}
+🗣️ **Language:** ${formData.language}
+🕓 **Date:** ${formData.date}`
+      };
+
+      await fetch(webhookURL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, age, email })
+        body: JSON.stringify(discordMessage)
       });
 
-      const data = await res.json();
-      console.log("Response:", data);
-
-      if (data.order_token) {
-        await cashfree.checkout({
-          paymentSessionId: data.order_token,
-          redirectTarget: "_self"
-        });
-      } else {
-        alert("❌ Error creating order: " + (data.message || "Check console"));
-      }
-    } catch (err) {
-      console.error(err);
-      alert("⚠️ Error connecting to payment server!");
+      messageDiv.innerHTML = `<div class="success">✅ Registration Successful! Data sent to Discord & Firebase.</div>`;
+      form.reset();
+    } catch (error) {
+      console.error(error);
+      messageDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
     }
-
-    btn.innerText = "Pay ₹50";
-    btn.disabled = false;
   });
 </script>
 </body>
