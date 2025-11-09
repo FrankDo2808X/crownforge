@@ -3,54 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CrownForge - User Profile & Chat</title>
+<title>CrownForge - Friends & Chat</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
-* {margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif;}
-body {
-  background: radial-gradient(circle at top, #0f0f1a, #000);
-  color: white;
-  min-height: 100vh;
-  padding: 20px;
-}
-h1 {text-align:center; margin-bottom:20px; font-weight:600; text-shadow: 0 0 10px #0ff;}
-.search-container {display:flex; justify-content:center; margin-bottom:20px; flex-wrap:wrap;}
-.search-container input {width:300px; padding:10px 15px; border-radius:30px; border:1px solid #00ffff; background:rgba(255,255,255,0.05); color:white; outline:none; margin-right:10px;}
-.search-container button {padding:10px 20px; border-radius:30px; border:none; background:linear-gradient(90deg, #00ffff, #00aaff); color:black; font-weight:600; cursor:pointer; box-shadow:0 0 10px rgba(0,255,255,0.5); transition:0.3s;}
-.search-container button:hover {transform: scale(1.05); box-shadow:0 0 20px #0ff;}
-.profile-card {max-width:450px; margin:0 auto; background:rgba(255,255,255,0.05); padding:25px; border-radius:25px; text-align:center; backdrop-filter:blur(12px); border:1px solid rgba(0,255,255,0.2); transition:0.3s;}
-.profile-card:hover {transform: scale(1.03); box-shadow:0 0 25px rgba(0,255,255,0.5);}
-.profile-pic {width:130px; height:130px; border-radius:50%; border:3px solid #0ff; object-fit:cover;}
-.profile-name {font-size:1.6rem; font-weight:600; margin:10px 0; text-shadow:0 0 5px #0ff;}
-.profile-email {font-size:0.95rem; color:#0ff; margin-bottom:10px;}
-.profile-extra {margin-bottom:15px; font-size:0.9rem;}
-.status-indicator {display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:6px;}
-.online {background-color:#4caf50;}
-.offline {background-color:#f44336;}
-.profile-buttons {display:flex; justify-content:center; gap:12px; flex-wrap:wrap;}
-.profile-buttons button {padding:10px 18px; border-radius:25px; border:none; font-weight:600; cursor:pointer; transition:0.3s;}
-.add-btn {background:linear-gradient(90deg, #4caf50, #2e7d32); color:white;}
-.add-btn:hover {box-shadow:0 0 15px #4caf50; transform:scale(1.05);}
-.email-btn {background:linear-gradient(90deg, #2196f3, #0d47a1); color:white;}
-.email-btn:hover {box-shadow:0 0 15px #2196f3; transform:scale(1.05);}
-.chat-btn {background:#ff9800; color:black; border:none; padding:10px 12px; border-radius:25px; cursor:pointer; font-weight:600;}
-.chat-btn:hover {box-shadow:0 0 15px #ff9800; transform:scale(1.05);}
-.mutual-friends {font-size:0.85rem; margin-top:8px; color:#0ff;}
-/* Chat box */
-#chatBox {position:fixed; bottom:20px; right:20px; width:300px; max-width:90%; background:rgba(255,255,255,0.05); backdrop-filter:blur(12px); border-radius:15px; border:1px solid rgba(0,255,255,0.2); display:none; flex-direction:column; overflow:hidden;}
-#chatHeader {background:linear-gradient(90deg,#00ffff,#00aaff); padding:10px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-weight:600; color:black;}
-#chatMessages {flex:1; padding:10px; overflow-y:auto; max-height:300px;}
-.message {margin-bottom:10px; padding:8px 12px; border-radius:12px; max-width:80%; word-wrap:break-word;}
-.message.self {background:#00ffff; color:black; align-self:flex-end;}
-.message.other {background:#555; color:white; align-self:flex-start;}
-#chatInputContainer {display:flex; border-top:1px solid rgba(0,255,255,0.2);}
-#chatInput {flex:1; padding:10px; border:none; outline:none; background:rgba(255,255,255,0.05); color:white;}
-#sendBtn {padding:10px; border:none; background:#4caf50; color:white; cursor:pointer;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif;}
+body{background: radial-gradient(circle at top,#0f0f1a,#000);color:white;min-height:100vh;padding:20px;}
+h1{text-align:center;margin-bottom:20px;font-weight:600;text-shadow:0 0 10px #0ff;}
+.panel{max-width:600px;margin:10px auto;background:rgba(255,255,255,0.05);border-radius:15px;padding:20px;backdrop-filter:blur(12px);border:1px solid rgba(0,255,255,0.2);}
+.panel h2{text-align:center;margin-bottom:15px;text-shadow:0 0 5px #0ff;}
+.search-container{display:flex;justify-content:center;margin-bottom:20px;flex-wrap:wrap;}
+.search-container input{width:250px;padding:10px 15px;border-radius:30px;border:1px solid #00ffff;background:rgba(255,255,255,0.05);color:white;outline:none;margin-right:10px;}
+.search-container button{padding:10px 20px;border-radius:30px;border:none;background:linear-gradient(90deg,#00ffff,#00aaff);color:black;font-weight:600;cursor:pointer;box-shadow:0 0 10px rgba(0,255,255,0.5);transition:0.3s;}
+.search-container button:hover{transform: scale(1.05);box-shadow:0 0 20px #0ff;}
+.profile-card{display:flex;flex-direction:column;align-items:center;text-align:center;margin-top:10px;}
+.profile-pic{width:100px;height:100px;border-radius:50%;border:2px solid #0ff;object-fit:cover;margin-bottom:10px;}
+.profile-name{font-weight:600;font-size:1.2rem;margin-bottom:5px;}
+.profile-email{color:#0ff;font-size:0.9rem;margin-bottom:10px;}
+.btn{padding:8px 15px;border:none;border-radius:25px;font-weight:600;cursor:pointer;transition:0.3s;margin:5px;}
+.add-btn{background:linear-gradient(90deg,#4caf50,#2e7d32);color:white;}
+.add-btn:hover{box-shadow:0 0 15px #4caf50;transform:scale(1.05);}
+.chat-btn{background:#ff9800;color:black;}
+.chat-btn:hover{box-shadow:0 0 15px #ff9800;transform:scale(1.05);}
+#reqContainer,.friend-list{display:flex;flex-direction:column;gap:10px;}
+.request-card,.friend-card{display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:15px;background:rgba(255,255,255,0.05);border:1px solid rgba(0,255,255,0.1);backdrop-filter:blur(8px);}
+.request-card img,.friend-card img{width:50px;height:50px;border-radius:50%;border:2px solid #0ff;object-fit:cover;}
+.req-info,.friend-info{flex:1;margin-left:10px;}
+.req-btns,.friend-btns{display:flex;gap:5px;}
+#chatPanel{position:fixed;bottom:0;right:0;width:300px;max-width:90%;height:400px;background:rgba(0,0,0,0.9);border-radius:15px;display:none;flex-direction:column;overflow:hidden;}
+#chatHeader{background:linear-gradient(90deg,#00ffff,#00aaff);padding:10px;color:black;font-weight:600;display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+#chatMessages{flex:1;padding:10px;overflow-y:auto;background:rgba(255,255,255,0.05);}
+.message{margin-bottom:5px;padding:8px 12px;border-radius:12px;max-width:80%;word-wrap:break-word;}
+.message.self{background:#00ffff;color:black;align-self:flex-end;}
+.message.other{background:#555;color:white;align-self:flex-start;}
+#chatInputContainer{display:flex;border-top:1px solid rgba(0,255,255,0.2);}
+#chatInput{flex:1;padding:10px;border:none;outline:none;background:rgba(255,255,255,0.05);color:white;}
+#sendBtn{padding:10px;border:none;background:#4caf50;color:white;cursor:pointer;}
+@media(max-width:500px){.search-container input{width:70%;margin-bottom:10px;}}
 </style>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, getDocs, query, where, addDoc, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, query, where, addDoc, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
@@ -61,131 +54,164 @@ const firebaseConfig = {
   appId: "1:223324386293:web:9d7919c6b2e93781b026bc",
   measurementId: "G-FC52FSYPGV"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
+let currentUser, chatWithId;
+
+// Elements
 const searchBtn = document.getElementById("searchBtn");
 const searchInput = document.getElementById("searchInput");
 const profileCard = document.getElementById("profileCard");
+const reqContainer = document.getElementById("reqContainer");
+const friendListDiv = document.getElementById("friendList");
 
-let currentUser, chatWithId;
+// Chat Panel
+const chatPanel = document.getElementById("chatPanel");
+const chatMessages = document.getElementById("chatMessages");
+const chatInput = document.getElementById("chatInput");
+const sendBtn = document.getElementById("sendBtn");
+const chatHeader = document.getElementById("chatHeader");
 
-// Chat box
-const chatBox = document.createElement("div");
-chatBox.id = "chatBox";
-chatBox.innerHTML = `
-  <div id="chatHeader">Chat <span id="closeChat" style="cursor:pointer;">✖</span></div>
-  <div id="chatMessages"></div>
-  <div id="chatInputContainer">
-    <input type="text" id="chatInput" placeholder="Type a message..." />
-    <button id="sendBtn">Send</button>
-  </div>
-`;
-document.body.appendChild(chatBox);
-
-onAuthStateChanged(auth, async user=>{
+onAuthStateChanged(auth,user=>{
   if(!user) return alert("Login required");
-  currentUser = user;
+  currentUser=user;
+  loadFriendRequests();
+  loadFriends();
 });
 
-searchBtn.onclick = async ()=>{
-  const searchValue = searchInput.value.trim();
-  if(!searchValue) return alert("Enter UID or Name!");
-
-  let userData = null;
-  let userId = "";
-
-  const docRef = doc(db,"users",searchValue);
-  const docSnap = await getDoc(docRef);
-  if(docSnap.exists()){ userData = docSnap.data(); userId = searchValue; }
+// SEARCH USERS
+searchBtn.onclick=async()=>{
+  const val=searchInput.value.trim();
+  if(!val) return alert("Enter UID or Name!");
+  let userData=null, userId="";
+  const docSnap = await getDoc(doc(db,"users",val));
+  if(docSnap.exists()){userData=docSnap.data(); userId=val;}
   else{
-    const usersRef = collection(db,"users");
-    const q = query(usersRef,where("name","==",searchValue));
-    const querySnap = await getDocs(q);
-    if(!querySnap.empty){ userData = querySnap.docs[0].data(); userId = querySnap.docs[0].id; }
+    const q=query(collection(db,"users"),where("name","==",val));
+    const snap=await getDocs(q);
+    if(!snap.empty){userData=snap.docs[0].data(); userId=snap.docs[0].id;}
   }
-
   if(!userData) return alert("User not found!");
-
-  // Check friendship in Firestore
-  let areFriends=false;
-  const friendsSnap = await getDocs(collection(db,"users",currentUser.uid,"friends"));
-  friendsSnap.forEach(f=>{
-    if(f.id===userId) areFriends=true;
-  });
-
-  profileCard.innerHTML = `
+  profileCard.innerHTML=`
     <img src="${userData.photoURL||'https://i.imgur.com/GYUx3Um.png'}" class="profile-pic">
-    <p class="profile-name">${userData.name||'Unnamed'}</p>
-    <p class="profile-email">${userData.email||'Email not available'}</p>
-    <p class="profile-extra"><span class="status-indicator ${userData.online?'online':'offline'}"></span>${userData.online?'Online':'Offline'}</p>
-    <p class="mutual-friends">Mutual Friends: ${areFriends?1:0}</p>
-    <div class="profile-buttons">
-      <button class="add-btn" id="addFriendBtn">➕ Add Friend</button>
-      <button class="email-btn" id="sendEmailBtn">📧 Email</button>
-      ${areFriends?'<button class="chat-btn" id="chatBtn">💬 Chat</button>':''}
-    </div>
-  `;
-
-  document.getElementById("addFriendBtn").onclick = ()=>alert(`Friend request sent to ${userData.name||'user'}`);
-  document.getElementById("sendEmailBtn").onclick = ()=>{
-    if(!userData.email) return alert("Email not available!");
-    const subject = encodeURIComponent("Friend Request from CrownForge");
-    const body = encodeURIComponent(`Hi ${userData.name||''},\n\nI want to connect with you on CrownForge!`);
-    window.location.href=`mailto:${userData.email}?subject=${subject}&body=${body}`;
+    <div class="profile-name">${userData.name||'Unnamed'}</div>
+    <div class="profile-email">${userData.email||'No Email'}</div>
+    <button class="btn add-btn" id="addFriendBtn">Add Friend</button>`;
+  document.getElementById("addFriendBtn").onclick=async()=>{
+    await setDoc(doc(db,"users",userId,"requests",currentUser.uid),{from:currentUser.uid,timestamp:new Date()});
+    alert("✅ Friend Request Sent!");
   };
-
-  if(areFriends){
-    document.getElementById("chatBtn").onclick = ()=>openChat(userId,userData.name);
-  }
 };
 
-// Chat functions
-function generateChatId(uid1,uid2){ return uid1<uid2 ? uid1+"_"+uid2 : uid2+"_"+uid1; }
+// FRIEND REQUESTS
+async function loadFriendRequests(){
+  reqContainer.innerHTML="";
+  const reqSnap = await getDocs(collection(db,"users",currentUser.uid,"requests"));
+  if(reqSnap.empty){reqContainer.innerHTML="<p>No friend requests 😌</p>"; return;}
+  reqSnap.forEach(async r=>{
+    const fromUID=r.id;
+    const dataSnap=await getDoc(doc(db,"users",fromUID));
+    const data=dataSnap.data();
+    const card=document.createElement("div");
+    card.className="request-card";
+    card.innerHTML=`
+      <img src="${data.photoURL||'https://i.imgur.com/GYUx3Um.png'}">
+      <div class="req-info">${data.name||'Unknown User'}</div>
+      <div class="req-btns">
+        <button class="btn accept" onclick="acceptReq('${fromUID}')">Accept</button>
+        <button class="btn decline" onclick="declineReq('${fromUID}')">Decline</button>
+      </div>`;
+    reqContainer.appendChild(card);
+  });
+}
+window.acceptReq=async(uid)=>{
+  await setDoc(doc(db,"users",currentUser.uid,"friends",uid),{accepted:true});
+  await setDoc(doc(db,"users",uid,"friends",currentUser.uid),{accepted:true});
+  await deleteDoc(doc(db,"users",currentUser.uid,"requests",uid));
+  loadFriendRequests();
+  loadFriends();
+};
+window.declineReq=async(uid)=>{
+  await deleteDoc(doc(db,"users",currentUser.uid,"requests",uid));
+  loadFriendRequests();
+};
 
-function openChat(friendId, friendName){
-  chatWithId = friendId;
-  chatBox.style.display="flex";
-  document.getElementById("chatHeader").innerHTML=`Chat with ${friendName} <span id="closeChat" style="cursor:pointer;">✖</span>`;
-  document.getElementById("closeChat").onclick=()=>{chatBox.style.display="none"; chatWithId=null;};
-
-  const messagesRef = collection(db,"chats",generateChatId(currentUser.uid,friendId),"messages");
-  const messagesQuery = query(messagesRef, orderBy("timestamp"));
-  const chatMessagesDiv = document.getElementById("chatMessages");
-  chatMessagesDiv.innerHTML="";
-
-  onSnapshot(messagesQuery, snapshot=>{
-    chatMessagesDiv.innerHTML="";
-    snapshot.forEach(msg=>{
-      const m = msg.data();
-      const div = document.createElement("div");
-      div.className="message "+(m.sender===currentUser.uid?"self":"other");
-      div.textContent = m.text;
-      chatMessagesDiv.appendChild(div);
-    });
-    chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+// FRIENDS LIST
+async function loadFriends(){
+  friendListDiv.innerHTML="";
+  const snap = await getDocs(collection(db,"users",currentUser.uid,"friends"));
+  snap.forEach(async f=>{
+    const friendSnap = await getDoc(doc(db,"users",f.id));
+    const fData=friendSnap.data();
+    const card=document.createElement("div");
+    card.className="friend-card";
+    card.innerHTML=`
+      <img src="${fData.photoURL||'https://i.imgur.com/GYUx3Um.png'}">
+      <div class="friend-info">${fData.name||'Unknown'}</div>
+      <div class="friend-btns">
+        <button class="btn chat-btn" onclick="openChat('${f.id}','${fData.name}')">Chat</button>
+      </div>`;
+    friendListDiv.appendChild(card);
   });
 }
 
-document.getElementById("sendBtn").onclick = async ()=>{
-  const input = document.getElementById("chatInput");
-  const text = input.value.trim();
-  if(!text || !chatWithId) return;
-  const messagesRef = collection(db,"chats",generateChatId(currentUser.uid,chatWithId),"messages");
-  await addDoc(messagesRef,{text, sender:currentUser.uid, timestamp:new Date()});
-  input.value="";
+// CHAT
+function generateChatId(u1,u2){return u1<u2?u1+"_"+u2:u2+"_"+u1;}
+window.openChat=(friendId,friendName)=>{
+  chatWithId=friendId;
+  chatPanel.style.display="flex";
+  chatHeader.innerHTML=`Chat with ${friendName} <span style="cursor:pointer;" onclick="chatPanel.style.display='none';chatWithId=null;">✖</span>`;
+  const msgRef=collection(db,"chats",generateChatId(currentUser.uid,friendId),"messages");
+  const msgQuery=query(msgRef,orderBy("timestamp"));
+  onSnapshot(msgQuery,snap=>{
+    chatMessages.innerHTML="";
+    snap.forEach(m=>{
+      const data=m.data();
+      const div=document.createElement("div");
+      div.className="message "+(data.sender===currentUser.uid?"self":"other");
+      div.textContent=data.text;
+      chatMessages.appendChild(div);
+    });
+    chatMessages.scrollTop=chatMessages.scrollHeight;
+  });
+};
+sendBtn.onclick=async()=>{
+  if(!chatWithId||!chatInput.value.trim()) return;
+  await addDoc(collection(db,"chats",generateChatId(currentUser.uid,chatWithId),"messages"),{
+    text:chatInput.value.trim(),
+    sender:currentUser.uid,
+    timestamp:new Date()
+  });
+  chatInput.value="";
 };
 </script>
 </head>
 <body>
-<h1>VIEW USER PROFILE</h1>
+<h1>Search & Add Friends</h1>
+<div class="panel">
 <div class="search-container">
-  <input type="text" id="searchInput" placeholder="Enter UID or Name..." />
-  <button id="searchBtn">🔍 Search</button>
+<input type="text" id="searchInput" placeholder="UID or Name">
+<button id="searchBtn">Search</button>
 </div>
-<div id="profileCard" class="profile-card">
-  <p style="color:#0ff;">Enter UID or Name to view profile</p>
+<div id="profileCard" class="profile-card"><p style="color:#0ff;">Search a user to add as friend</p></div>
+</div>
+
+<h1>Friend Requests</h1>
+<div class="panel" id="reqContainer"></div>
+
+<h1>Your Friends</h1>
+<div class="panel friend-list" id="friendList"></div>
+
+<div id="chatPanel">
+<div id="chatHeader">Chat <span style="cursor:pointer;" onclick="chatPanel.style.display='none';chatWithId=null;">✖</span></div>
+<div id="chatMessages"></div>
+<div id="chatInputContainer">
+<input type="text" id="chatInput" placeholder="Type a message...">
+<button id="sendBtn">Send</button>
+</div>
 </div>
 </body>
 </html>
