@@ -49,7 +49,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
   authDomain: "crownforgestudio-2581a.firebaseapp.com",
   projectId: "crownforgestudio-2581a",
-  storageBucket: "crownforgestudio-2581a.firebasestorage.app",
+  storageBucket: "crownforgestudio-2581a.appspot.com",
   messagingSenderId: "223324386293",
   appId: "1:223324386293:web:9d7919c6b2e93781b026bc",
   measurementId: "G-FC52FSYPGV"
@@ -75,6 +75,10 @@ const chatInput = document.getElementById("chatInput");
 const sendBtn = document.getElementById("sendBtn");
 const chatHeader = document.getElementById("chatHeader");
 
+// Helper to safely get name/photo
+function safeName(user) { return user?.name || "Unnamed"; }
+function safePhoto(user) { return user?.photoURL || "https://i.imgur.com/GYUx3Um.png"; }
+
 onAuthStateChanged(auth,user=>{
   if(!user) return alert("Login required");
   currentUser=user;
@@ -96,8 +100,8 @@ searchBtn.onclick=async()=>{
   }
   if(!userData) return alert("User not found!");
   profileCard.innerHTML=`
-    <img src="${userData.photoURL||'https://i.imgur.com/GYUx3Um.png'}" class="profile-pic">
-    <div class="profile-name">${userData.name||'Unnamed'}</div>
+    <img src="${safePhoto(userData)}" class="profile-pic">
+    <div class="profile-name">${safeName(userData)}</div>
     <div class="profile-email">${userData.email||'No Email'}</div>
     <button class="btn add-btn" id="addFriendBtn">Add Friend</button>`;
   document.getElementById("addFriendBtn").onclick=async()=>{
@@ -118,8 +122,8 @@ async function loadFriendRequests(){
     const card=document.createElement("div");
     card.className="request-card";
     card.innerHTML=`
-      <img src="${data.photoURL||'https://i.imgur.com/GYUx3Um.png'}">
-      <div class="req-info">${data.name||'Unknown User'}</div>
+      <img src="${safePhoto(data)}">
+      <div class="req-info">${safeName(data)}</div>
       <div class="req-btns">
         <button class="btn accept" onclick="acceptReq('${fromUID}')">Accept</button>
         <button class="btn decline" onclick="declineReq('${fromUID}')">Decline</button>
@@ -149,10 +153,10 @@ async function loadFriends(){
     const card=document.createElement("div");
     card.className="friend-card";
     card.innerHTML=`
-      <img src="${fData.photoURL||'https://i.imgur.com/GYUx3Um.png'}">
-      <div class="friend-info">${fData.name||'Unknown'}</div>
+      <img src="${safePhoto(fData)}">
+      <div class="friend-info">${safeName(fData)}</div>
       <div class="friend-btns">
-        <button class="btn chat-btn" onclick="openChat('${f.id}','${fData.name}')">Chat</button>
+        <button class="btn chat-btn" onclick="openChat('${f.id}','${safeName(fData)}')">Chat</button>
       </div>`;
     friendListDiv.appendChild(card);
   });
