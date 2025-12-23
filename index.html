@@ -2,184 +2,184 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Crownforge Officals | Maintenance</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CrownForge - Login / Signup</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
+*{box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{
+margin:0;height:100vh;display:flex;justify-content:center;align-items:center;
+background:radial-gradient(circle at 25% 25%,#ff8800,transparent 40%),
+radial-gradient(circle at 75% 75%,#00d5ff,transparent 40%),#060606;
+overflow:hidden;
 }
-
-/* BACKGROUND */
-body {
-  height: 100vh;
-  background: radial-gradient(circle at top, #0f2027, #000);
-  overflow: hidden;
-  color: white;
+.bg-glow{
+position:fixed;inset:0;
+background:radial-gradient(circle at 30% 30%,#ff007f66,transparent 60%),
+radial-gradient(circle at 70% 70%,#00ffff55,transparent 60%);
+filter:blur(100px);animation:pulse 8s infinite alternate;z-index:0;
 }
-
-/* PARTICLES */
-.particles span {
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  background: cyan;
-  border-radius: 50%;
-  animation: float 8s linear infinite;
+@keyframes pulse{0%{opacity:.5}100%{opacity:1;transform:scale(1.2)}}
+.particle{position:absolute;border-radius:50%;opacity:.6;filter:blur(5px);animation:floaty 10s infinite}
+@keyframes floaty{0%{transform:translate(0)}50%{transform:translate(-40px,30px)}100%{transform:translate(0)}}
+.auth-card{
+position:relative;width:360px;padding:40px 30px;border-radius:20px;
+backdrop-filter:blur(25px);background:rgba(255,255,255,.05);
+box-shadow:0 0 50px rgba(255,0,128,.4);color:#fff;text-align:center;z-index:2;
 }
-
-@keyframes float {
-  from { transform: translateY(100vh); opacity: 0; }
-  to { transform: translateY(-10vh); opacity: 1; }
+.auth-card h2{
+background:linear-gradient(90deg,#ff7b00,#ff00c8);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
-
-/* MAIN CARD */
-.container {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+input{
+width:100%;padding:12px;margin:8px 0;border:none;border-radius:10px;
+background:rgba(255,255,255,.1);color:#fff;
 }
-
-.card {
-  width: 90%;
-  max-width: 580px;
-  padding: 35px;
-  text-align: center;
-  border-radius: 22px;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(16px);
-  box-shadow: 0 0 45px rgba(0,255,255,0.45);
-  animation: pop 1.2s ease;
+button{
+width:100%;padding:12px;margin-top:15px;border:none;border-radius:10px;
+background:linear-gradient(90deg,#ff7b00,#ff00c8);cursor:pointer;
 }
-
-@keyframes pop {
-  from { transform: scale(0.7); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+.google-btn{display:flex;justify-content:center;gap:10px;background:#fff;color:#000}
+.google-btn img{width:20px}
+.switch-link{color:#ff7b00;cursor:pointer;font-size:13px;text-decoration:underline}
+.form{display:none}
+.form.active{display:block}
+.loader{
+width:30px;height:30px;border:4px solid transparent;border-top:4px solid red;
+border-radius:50%;animation:spin 1s linear infinite;display:none;margin:auto;
 }
-
-/* LOGO / NAME */
-.brand {
-  font-size: 1.1rem;
-  letter-spacing: 2px;
-  color: #7fffd4;
-  margin-bottom: 8px;
-}
-
-/* TITLE */
-.card h1 {
-  font-size: 2.3rem;
-  margin-bottom: 12px;
-  background: linear-gradient(90deg, cyan, #00ff88);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* SUBTEXT */
-.card p {
-  font-size: 1rem;
-  color: #ccc;
-  margin-bottom: 20px;
-}
-
-/* REASONS */
-.reasons {
-  text-align: left;
-  margin: 22px 0;
-}
-
-.reasons li {
-  list-style: none;
-  margin: 12px 0;
-  padding-left: 28px;
-  position: relative;
-  animation: slide 1s ease forwards;
-}
-
-@keyframes slide {
-  from { opacity: 0; transform: translateX(-25px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.reasons li::before {
-  content: "⚠️";
-  position: absolute;
-  left: 0;
-}
-
-/* LOADER */
-.loader {
-  margin: 28px auto;
-  width: 72px;
-  height: 72px;
-  border: 6px solid rgba(255,255,255,0.2);
-  border-top: 6px solid cyan;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* FOOTER */
-.footer {
-  margin-top: 18px;
-  font-size: 0.85rem;
-  color: #aaa;
-}
-
-/* RESPONSIVE */
-@media (max-width: 480px) {
-  .card h1 { font-size: 1.8rem; }
-}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 
 <body>
 
-<!-- PARTICLES -->
-<div class="particles">
+<div class="bg-glow"></div>
+
 <script>
-for(let i=0;i<90;i++){
-  document.write(`<span style="
-    left:${Math.random()*100}%;
-    animation-delay:${Math.random()*5}s;
-    animation-duration:${5+Math.random()*5}s"></span>`);
+for(let i=0;i<20;i++){
+const d=document.createElement("div");
+d.className="particle";
+d.style.width=d.style.height=Math.random()*6+3+"px";
+d.style.background=["#ff00c8","#ff7b00","#00ffff"][Math.floor(Math.random()*3)];
+d.style.top=Math.random()*100+"%";
+d.style.left=Math.random()*100+"%";
+document.body.appendChild(d);
 }
 </script>
+
+<div class="auth-card">
+<div id="loginForm" class="form active">
+<h2>Welcome to CrownForge</h2>
+<input id="loginEmail" placeholder="Email">
+<input id="loginPass" type="password" placeholder="Password">
+<button id="loginBtn">Login</button>
+<button id="googleLogin" class="google-btn">
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg">Google
+</button>
+<p class="switch-link" onclick="switchForm('signup')">Create Account</p>
 </div>
 
-<!-- CONTENT -->
-<div class="container">
-  <div class="card">
-
-    <div class="brand">CROWNFORGE OFFICALS</div>
-
-    <h1>🚧 Website Under Maintenance</h1>
-    <p>We’re upgrading our systems to deliver a stronger and smoother experience.</p>
-
-    <ul class="reasons">
-      <li>Fixing critical errors & unexpected crashes</li>
-      <li>Improving performance and loading speed</li>
-      <li>Security updates and bug fixes</li>
-      <li>design & UI upgrades</li>
-    </ul>
-
-    <div class="loader"></div>
-
-    <p><strong>Reopening Soon — Stay Tuned</strong></p>
-
-    <div class="footer">
-      © 2025 Crownforge Officals • All Rights Reserved
-    </div>
-
-  </div>
+<div id="signupForm" class="form">
+<h2>Create Account</h2>
+<input id="signupEmail" placeholder="Email">
+<input id="signupPass" type="password" placeholder="Password">
+<input id="signupConfirm" type="password" placeholder="Confirm Password">
+<button id="signupBtn">Signup</button>
+<button id="googleSignup" class="google-btn">
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg">Google
+</button>
+<p class="switch-link" onclick="switchForm('login')">Already have account?</p>
 </div>
 
+<div id="loader" class="loader"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+signInWithPopup, GoogleAuthProvider, setPersistence,
+browserLocalPersistence, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import {
+getFirestore, doc, setDoc, getDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+const loader = document.getElementById("loader");
+
+// 🔐 1 MONTH SESSION
+const ONE_MONTH = 30 * 24 * 60 * 60 * 1000;
+
+function showLoader(s){loader.style.display=s?"block":"none"}
+window.switchForm=f=>{
+document.querySelectorAll(".form").forEach(x=>x.classList.remove("active"));
+document.getElementById(f+"Form").classList.add("active");
+};
+
+async function ensureUser(user){
+const ref=doc(db,"users",user.uid);
+if(!(await getDoc(ref)).exists()){
+await setDoc(ref,{
+uid:user.uid,
+email:user.email,
+createdAt:serverTimestamp()
+});
+}
+}
+
+// LOGIN
+loginBtn.onclick=async()=>{
+showLoader(true);
+await setPersistence(auth,browserLocalPersistence);
+const c=await signInWithEmailAndPassword(auth,loginEmail.value,loginPass.value);
+localStorage.setItem("cf_login_time",Date.now());
+await ensureUser(c.user);
+location.href="Crownforgepage.html";
+};
+
+// SIGNUP
+signupBtn.onclick=async()=>{
+if(signupPass.value!==signupConfirm.value)return alert("Passwords not match");
+showLoader(true);
+const c=await createUserWithEmailAndPassword(auth,signupEmail.value,signupPass.value);
+localStorage.setItem("cf_login_time",Date.now());
+await ensureUser(c.user);
+location.href="Crownforgepage.html";
+};
+
+// GOOGLE
+[googleLogin,googleSignup].forEach(b=>{
+b.onclick=async()=>{
+showLoader(true);
+await setPersistence(auth,browserLocalPersistence);
+const r=await signInWithPopup(auth,provider);
+localStorage.setItem("cf_login_time",Date.now());
+await ensureUser(r.user);
+location.href="Crownforgepage.html";
+};
+});
+
+// 🔁 AUTO CHECK SESSION
+onAuthStateChanged(auth,async(user)=>{
+if(user){
+const t=localStorage.getItem("cf_login_time");
+if(!t || Date.now()-t>ONE_MONTH){
+await signOut(auth);
+localStorage.removeItem("cf_login_time");
+}else{
+await ensureUser(user);
+location.href="Crownforgepage.html";
+}
+}
+});
+</script>
 </body>
 </html>
-
