@@ -7,8 +7,10 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+const path = require('path');
 
 const CASHFREE_SECRET = process.env.CASHFREE_SECRET;
+const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID;
 const ENV = process.env.ENV || 'sandbox';
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 const SERVER_BASE_URL = process.env.SERVER_BASE_URL || `http://localhost:${PORT}`;
@@ -23,6 +25,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Allow static files (serve index.html from public/)
 app.use(express.static('public'));
+
+// Serve pretty routes for store pages (so URLs without .html work)
+app.get('/buy-ranks', (req, res) => {
+  return res.sendFile(path.join(__dirname, 'public', 'buy-ranks.html'));
+});
+
+app.get('/checkout/basket', (req, res) => {
+  return res.sendFile(path.join(__dirname, 'public', 'checkout', 'basket.html'));
+});
 
 // Create order endpoint (called by frontend)
 app.post('/create-order', async (req, res) => {

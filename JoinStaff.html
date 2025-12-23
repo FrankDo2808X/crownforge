@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CrownForge | Staff Apply</title>
+
+<style>
+:root{
+  --neon:#00eaff;
+  --glass:rgba(255,255,255,.08);
+}
+*{box-sizing:border-box;font-family:Poppins,Arial}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:radial-gradient(circle at top,#0f2027,#000);
+  color:#fff;
+}
+
+.card{
+  width:100%;
+  max-width:520px;
+  background:var(--glass);
+  backdrop-filter:blur(16px);
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 0 30px rgba(0,234,255,.25);
+}
+
+h2{text-align:center}
+
+label{display:block;margin-top:10px;font-size:14px}
+
+input,select,button{
+  width:100%;
+  margin-top:6px;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+}
+
+input,select{background:#fff;color:#000}
+
+.phone-row{display:flex;gap:8px}
+.phone-row select{width:40%}
+.phone-row input{width:60%}
+
+button{
+  margin-top:16px;
+  background:linear-gradient(135deg,#00c6ff,#0072ff);
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#status{text-align:center;margin-top:10px;font-size:13px}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>🚀 Staff Apply Form</h2>
+
+<form id="form">
+
+<label>Full Name *</label>
+<input id="name" required>
+
+<label>Age *</label>
+<input type="number" id="age" required>
+
+<label>Discord Username</label>
+<input id="discord">
+
+<label>Skill / Role *</label>
+<select id="role" required>
+<option value="">Select</option>
+<option>Game Developer</option>
+<option>Website Developer</option>
+<option>App Developer</option>
+<option>3D Modeler</option>
+<option>VFX / GFX</option>
+<option>Music Artist</option>
+<option>MultiSkill</option>
+</select>
+
+<label>Payment / UPI *</label>
+<select id="payment" required>
+<option value="">Select</option>
+<option>UPI</option>
+<option>Bank Transfer</option>
+<option>Card</option>
+</select>
+
+<label>Email *</label>
+<input type="email" id="email" required>
+
+<label>Phone *</label>
+<div class="phone-row">
+<select id="code">
+<option value="+91">🇮🇳 +91</option>
+<option value="+1">🇺🇸 +1</option>
+</select>
+<input id="phone" required>
+</div>
+
+<button type="submit">Send Application</button>
+<div id="status"></div>
+</form>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+/* 🔥 Firebase Config */
+firebase.initializeApp({
+  apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
+  authDomain: "crownforgestudio-2581a.firebaseapp.com",
+  projectId: "crownforgestudio-2581a"
+});
+
+const db = firebase.firestore();
+
+/* 🔥 Discord Webhook */
+const WEBHOOK =
+"https://discord.com/api/webhooks/1453047822709690368/VV10m5YNvnJS2j4IYW5DOuuNRB23Qt4tRRad7CaMc7uZ-rbzWIhNMOZJn4BBSBT4faTP";
+
+const form = document.getElementById("form");
+const status = document.getElementById("status");
+
+form.onsubmit = async e => {
+  e.preventDefault();
+  status.textContent = "⏳ Sending...";
+
+  const data = {
+    name: name.value,
+    age: age.value,
+    discord: discord.value || "Not Provided",
+    role: role.value,
+    payment: payment.value,
+    email: email.value,
+    phone: code.value + " " + phone.value,
+    time: new Date().toISOString()
+  };
+
+  try{
+    /* Save to Firestore */
+    await db.collection("staffApplications").add(data);
+
+    /* Send to Discord */
+    await fetch(WEBHOOK,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        embeds:[{
+          title:"📝 New Staff Application",
+          color:0x00eaff,
+          fields:[
+            {name:"Name",value:data.name,inline:true},
+            {name:"Age",value:data.age,inline:true},
+            {name:"Discord",value:data.discord},
+            {name:"Role",value:data.role,inline:true},
+            {name:"Payment",value:data.payment,inline:true},
+            {name:"Email",value:data.email},
+            {name:"Phone",value:data.phone}
+          ],
+          timestamp:new Date()
+        }]
+      })
+    });
+
+    status.textContent="✅ Application sent!";
+    form.reset();
+  }catch(err){
+    status.textContent="❌ Failed to send";
+  }
+};
+</script>
+
+</body>
+</html>

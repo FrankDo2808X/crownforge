@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Buy Ranks — Crownforge</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap">
+  <style>
+    :root{--bg:#0b0f14;--card:#0f1720;--accent:#7c3aed;--glass:rgba(255,255,255,0.04)}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;background:linear-gradient(120deg,#05060a 0%, #071126 100%);color:#e6eef8}
+    .wrap{max-width:1100px;margin:40px auto;padding:24px}
+    header{display:flex;align-items:center;gap:16px}
+    h1{margin:0;font-weight:800}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:20px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.04);padding:18px;border-radius:12px;backdrop-filter:blur(6px)}
+    .card h3{margin:0 0 8px 0}
+    .price{font-weight:800;font-size:20px;color:var(--accent)}
+    .controls{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+    .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:8px;border:0;cursor:pointer}
+    .secondary{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+    .pay-panel{margin-top:24px;padding:16px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.03)}
+    label{display:block;margin-bottom:6px;font-size:13px;color:#bfcfe8}
+    input[type=number],select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+    .muted{font-size:13px;color:#9fb0d6}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+    .loading{opacity:0.7;pointer-events:none}
+    @media(max-width:600px){.wrap{padding:12px;margin:16px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header style="justify-content:space-between">
+      <div>
+        <h1>Buy Ranks</h1>
+        <div class="muted">Professional store UI — Cashfree LIVE</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <button id="openCartBtn" class="btn">Cart (<span id="cartCount">0</span>)</button>
+      </div>
+    </header>
+
+    <section style="margin-top:18px">
+      <h2 style="margin:0 0 10px 0">Categories</h2>
+      <div class="grid" id="categoriesGrid"></div>
+    </section>
+
+    <section style="margin-top:24px">
+      <h2 style="margin:0 0 10px 0" id="categoryTitle">Featured Ranks</h2>
+      <div class="grid" id="ranksGrid"><!-- injected --></div>
+    </section>
+
+    <div id="rankPanel" style="display:none;position:fixed;right:0;top:0;height:100%;width:420px;background:linear-gradient(180deg,rgba(10,10,12,0.98),#071126);box-shadow:-20px 0 40px rgba(0,0,0,0.6);padding:20px;border-left:1px solid rgba(255,255,255,0.02);overflow:auto;z-index:1200">
+      <button id="closePanel" style="float:right" class="secondary">Close</button>
+      <div id="panelContent"></div>
+    </div>
+
+    <div id="overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1100"></div>
+
+    <div id="checkoutPanel" style="display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:720px;max-width:96%;background:#071126;border-radius:12px;padding:18px;z-index:1300;box-shadow:0 10px 60px rgba(0,0,0,0.7)">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3 style="margin:0">Checkout</h3>
+        <button id="closeCheckout" class="secondary">Close</button>
+      </div>
+      <div id="checkoutContent" style="margin-top:12px"></div>
+    </div>
+
+  </div>
+
+  <script src="firebase-config.js"></script>
+  <script src="buy-ranks.js"></script>
+</body>
+</html>

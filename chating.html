@@ -4,380 +4,208 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CrownForge Global Chat</title>
+
 <style>
-/* --- STYLES ARE IDENTICAL TO YOUR ORIGINAL CODE --- */
 :root {
-  --bg: rgba(10, 12, 20, 0.85);
-  --glass: rgba(255, 255, 255, 0.1);
-  --accent: #00c8ff;
-  --accent2: #00ffd9;
-  --text: #ffffff;
-  --radius: 14px;
+  --accent:#00c8ff;
+  --accent2:#00ffd9;
+  --bg:#0b0f1a;
+  --glass:rgba(255,255,255,0.08);
+  --text:#fff;
 }
 
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: radial-gradient(circle at top, #1a1a2e, #000);
-  color: var(--text);
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  backdrop-filter: blur(12px);
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:radial-gradient(circle at top,#1a1a2e,#000);
+  font-family:Poppins,sans-serif;
+  color:var(--text);
 }
 
-header {
-  text-align: center;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  padding: 14px;
-  color: white;
-  font-weight: 600;
-  letter-spacing: 1px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+/* HEADER */
+header{
+  padding:14px;
+  text-align:center;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  font-weight:600;
 }
 
-#chatBox {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  background: var(--bg);
-  border-top: 1px solid rgba(255,255,255,0.08);
+/* TYPING */
+#typingStatus{
+  text-align:center;
+  font-size:0.85em;
+  padding:4px;
+  color:#00ffd9;
+  min-height:18px;
 }
 
-.msgContainer {
-  position: relative;
-  background: var(--glass);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: var(--radius);
-  padding: 10px 14px;
-  width: fit-content;
-  max-width: 80%;
-  backdrop-filter: blur(20px);
-  animation: fadeIn 0.3s ease;
-  transition: 0.3s;
+/* CHAT */
+#chatBox{
+  flex:1;
+  overflow-y:auto;
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 
-.msgContainer.own {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  align-self: flex-end;
-  color: white;
+/* MESSAGE */
+.msg{
+  max-width:85%;
+  background:var(--glass);
+  padding:10px 14px;
+  border-radius:14px;
+  animation:fade .2s;
 }
 
-.msgHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.8em;
+.msg.own{
+  align-self:flex-end;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
 }
 
-.user {
-  font-weight: 600;
-  color: var(--accent);
+.user{
+  font-size:.75em;
+  opacity:.85;
+  font-weight:600;
 }
 
-.msgContainer.own .user {
-  color: #fff;
+.text{
+  margin-top:4px;
+  font-size:.95em;
+  line-height:1.4;
+  word-wrap:break-word;
 }
 
-.time {
-  opacity: 0.7;
-  margin-left: 10px;
+/* INPUT */
+#inputArea{
+  display:flex;
+  gap:8px;
+  padding:10px;
+  background:rgba(0,0,0,.6);
 }
 
-.msg {
-  margin-top: 4px;
-  font-size: 0.95em;
-  line-height: 1.4;
-  white-space: pre-wrap;
+#msgInput{
+  flex:1;
+  resize:vertical;
+  min-height:42px;
+  max-height:120px;
+  border-radius:10px;
+  border:none;
+  padding:10px;
+  font-size:1em;
+  background:rgba(255,255,255,.1);
+  color:white;
+  outline:none;
 }
 
-.replyTo {
-  background: rgba(255,255,255,0.1);
-  border-left: 3px solid var(--accent);
-  padding: 5px 10px;
-  margin-bottom: 4px;
-  border-radius: 6px;
-  font-size: 0.85em;
-  opacity: 0.9;
+#sendBtn{
+  padding:10px 18px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  font-weight:600;
+  cursor:pointer;
 }
 
-.options {
-  cursor: pointer;
-  opacity: 0;
-  transition: 0.2s;
-  margin-left: auto;
-  font-size: 1.3em;
+/* RESPONSIVE */
+@media(max-width:600px){
+  .msg{max-width:95%}
+  #sendBtn{padding:10px}
 }
 
-.msgContainer:hover .options {
-  opacity: 1;
-}
-
-.menu {
-  display: none;
-  flex-direction: column;
-  background: rgba(20,20,25,0.95);
-  border-radius: 10px;
-  position: absolute;
-  top: 26px;
-  right: 10px;
-  padding: 6px;
-  z-index: 5;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
-}
-
-.menu div {
-  cursor: pointer;
-  padding: 8px 10px;
-  border-radius: 6px;
-}
-
-.menu div:hover {
-  background: rgba(255,255,255,0.1);
-}
-
-.react {
-  display: flex;
-  gap: 6px;
-  font-size: 1.2em;
-  justify-content: center;
-  margin-bottom: 4px;
-}
-
-.reactionBar {
-  margin-top: 6px;
-  display: flex;
-  gap: 5px;
-  background: rgba(255,255,255,0.08);
-  padding: 4px 6px;
-  border-radius: 8px;
-  width: fit-content;
-  font-size: 1.1em;
-}
-
-#replyPreview {
-  display: none;
-  background: rgba(255,255,255,0.1);
-  padding: 6px 10px;
-  border-left: 3px solid var(--accent);
-  margin: 6px 10px;
-  border-radius: 6px;
-  font-size: 0.85em;
-}
-
-#inputArea {
-  background: var(--glass);
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-}
-
-#msgInput {
-  flex: 1;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  background: rgba(255,255,255,0.08);
-  color: white;
-  outline: none;
-  font-size: 1em;
-}
-
-#sendBtn {
-  margin-left: 10px;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  border: none;
-  padding: 12px 22px;
-  color: #fff;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  box-shadow: 0 0 10px rgb(0, 255, 255);
-}
-
-#sendBtn:hover {
-  opacity: 0.9;
-}
-
-@keyframes fadeIn {
-  from {opacity: 0; transform: translateY(10px);}
-  to {opacity: 1; transform: translateY(0);}
+@keyframes fade{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1}
 }
 </style>
 </head>
 
 <body>
-  <header>Welcome to Global Chat</header>
-  <div id="chatBox"></div>
-  <div id="replyPreview"></div>
-  <div id="inputArea">
-    <input id="msgInput" placeholder="Type your message..." />
-    <button id="sendBtn">Send</button>
-  </div>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<header>CrownForge Global Chat</header>
+<div id="typingStatus"></div>
+<div id="chatBox"></div>
+
+<div id="inputArea">
+  <textarea id="msgInput" placeholder="Type message..."></textarea>
+  <button id="sendBtn">Send</button>
+</div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 <script>
-// --- START of JavaScript Changes ---
-
-// 1. Initialize Firebase (Using v8 imports for simpler setup)
-const firebaseConfig = {
+/* FIREBASE CONFIG */
+firebase.initializeApp({
   apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
   authDomain: "crownforgestudio-2581a.firebaseapp.com",
-  projectId: "crownforgestudio-2581a",
-  storageBucket: "crownforgestudio-2581a.firebasestorage.app",
-  messagingSenderId: "223324386293",
-  appId: "1:223324386293:web:9d7919c6b2e93781b026bc",
-  measurementId: "G-FC52FSYPGV",
-  // 💡 Added databaseURL to ensure connection to Realtime Database
-  databaseURL: "https://crownforgestudio-2581a-default-rtdb.firebaseio.com"
-};
+  projectId: "crownforgestudio-2581a"
+});
 
-// Initialize Firebase
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+/* USERNAME */
+let username = localStorage.getItem("username");
+if(!username){
+  username = prompt("Enter username");
+  localStorage.setItem("username",username);
 }
 
-// Get Realtime Database reference
-const db = firebase.database();
-const chatRef = db.ref("messages");
-
-// 2. Force Unique Username Prompt on every load 
-// This ensures the "own" message class check works across devices
-let username = localStorage.getItem("currentUser");
-if (!username || username === "Guest") {
-    username = prompt("Enter your username:");
-    if (!username) {
-        username = "Guest-" + Math.floor(Math.random() * 1000);
-    }
-    localStorage.setItem("currentUser", username);
-}
-
-const isAdmin = username.toLowerCase() === "admin";
-
+/* REFS */
+const chatRef = db.collection("globalChat");
+const typingRef = db.collection("typing");
 const chatBox = document.getElementById("chatBox");
-const sendBtn = document.getElementById("sendBtn");
-const msgInput = document.getElementById("msgInput");
-const replyPreview = document.getElementById("replyPreview");
+const input = document.getElementById("msgInput");
+const typingStatus = document.getElementById("typingStatus");
 
-let replyTo = null;
+/* SEND MESSAGE */
+document.getElementById("sendBtn").onclick = send;
+input.addEventListener("keydown",e=>{ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); send(); }});
 
-sendBtn.addEventListener("click", sendMessage);
-msgInput.addEventListener("keypress", e => {
-  if (e.key === "Enter") sendMessage();
-});
-
-// 3. sendMessage function (mostly the same)
-function sendMessage() {
-  const msg = msgInput.value.trim();
-  if (msg) {
-    // 💡 push() is now accessed via chatRef.push() due to v8 SDK syntax
-    chatRef.push({ 
-      name: username,
-      text: msg,
-      time: new Date().toLocaleTimeString(),
-      reply: replyTo
-    });
-    msgInput.value = "";
-    replyTo = null;
-    replyPreview.style.display = "none";
-  }
+function send(){
+  const text=input.value.trim();
+  if(!text)return;
+  chatRef.add({
+    user:username,
+    text,
+    time:firebase.firestore.FieldValue.serverTimestamp()
+  });
+  input.value="";
+  typingRef.doc(username).delete();
 }
 
-// 4. onChildAdded listener (now using chatRef.on())
-// 💡 This is the part that enables real-time updates on ALL connected clients.
-// It will only work if your Firebase Security Rules are configured correctly (Step 4 below).
-chatRef.on('child_added', snapshot => {
-  const data = snapshot.val();
-  const msgId = snapshot.key;
-  createMessageElement(data, msgId);
-});
-
-// 5. createMessageElement function (mostly the same, updated delete logic)
-function createMessageElement(data, msgId) {
-  const div = document.createElement("div");
-  // The 'own' class check is now accurate because 'username' is unique per device
-  div.className = "msgContainer " + (data.name === username ? "own" : ""); 
-
-  const replyHtml = data.reply ? `<div class="replyTo">↩️ Replying to <b>${data.reply.name}</b>: ${data.reply.text}</div>` : "";
-
-  div.innerHTML = `
-    ${replyHtml}
-    <div class="msgHeader">
-      <span class="user">${data.name}</span>
-      <span class="time">${data.time}</span>
-      <div class="options">⋮</div>
-      <div class="menu">
-        <div class="react">😀 ❤️ 😂 👍 👎</div>
-        <div class="reply">💬 Reply</div>
-        ${(data.name === username || isAdmin) ? `<div class="delete">🗑️ Delete</div>` : ""}
-      </div>
-    </div>
-    <div class="msg">${data.text}</div>
-  `;
-
-  const options = div.querySelector(".options");
-  const menu = div.querySelector(".menu");
-
-  options.addEventListener("click", e => {
-    e.stopPropagation();
-    document.querySelectorAll(".menu").forEach(m => (m.style.display = "none"));
-    menu.style.display = "flex";
-  });
-
-  window.addEventListener("click", () => (menu.style.display = "none"));
-
-  // Reaction handling (simplified/removed for brevity as it doesn't involve Firebase yet)
-  // menu.querySelectorAll(".react span").forEach(btn => { ... });
-
-  const delBtn = menu.querySelector(".delete");
-  if (delBtn) {
-    delBtn.addEventListener("click", () => {
-      // 💡 remove() is now accessed via firebase.database().ref()
-      if(confirm(`Are you sure you want to delete this message from ${data.name}?`)) {
-          db.ref("messages/" + msgId).remove();
-          div.remove();
-      }
-    });
-  }
-
-  const replyBtn = menu.querySelector(".reply");
-  replyBtn.addEventListener("click", () => {
-    replyTo = { name: data.name, text: data.text };
-    replyPreview.innerHTML = `↩Replying to <b>${data.name}</b>: ${data.text}`;
-    replyPreview.style.display = "block";
-    menu.style.display = "none";
-  });
-
-  // Check if the message is already in the chatBox to prevent duplicates 
-  // on page load/reconnect, though onChildAdded should handle this.
-  if(!document.getElementById(msgId)) {
-    div.id = msgId;
+/* REALTIME CHAT */
+chatRef.orderBy("time").onSnapshot(snap=>{
+  chatBox.innerHTML="";
+  snap.forEach(doc=>{
+    const d=doc.data();
+    const div=document.createElement("div");
+    div.className="msg "+(d.user===username?"own":"");
+    div.innerHTML=`<div class="user">${d.user}</div><div class="text">${d.text}</div>`;
     chatBox.appendChild(div);
-  }
-  
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
+  });
+  chatBox.scrollTop=chatBox.scrollHeight;
+});
 
-// Reaction logic (kept simple as it was not fully connected to Firebase)
-function showReaction(div, emoji) {
-  let bar = div.querySelector(".reactionBar");
-  if (!bar) {
-    bar = document.createElement("div");
-    bar.className = "reactionBar";
-    div.appendChild(bar);
-  }
-  const span = document.createElement("span");
-  span.textContent = emoji;
-  bar.appendChild(span);
-}
+/* 🔴 TYPING INDICATOR */
+let typingTimer;
+input.addEventListener("input",()=>{
+  typingRef.doc(username).set({typing:true});
+  clearTimeout(typingTimer);
+  typingTimer=setTimeout(()=>typingRef.doc(username).delete(),1200);
+});
 
-// --- END of JavaScript Changes ---
+typingRef.onSnapshot(snap=>{
+  const users=[];
+  snap.forEach(d=>{ if(d.id!==username) users.push(d.id); });
+  typingStatus.textContent=users.length?`${users.join(", ")} typing...`:"";
+});
 </script>
+
 </body>
 </html>

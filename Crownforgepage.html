@@ -1,239 +1,381 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>CrownForge Studio — Home</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#071015;
-  --glass:rgba(255,255,255,0.05);
-  --neon:#00f1df;
-  --muted:rgba(255,255,255,0.6);
-  --radius:14px;
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CrownForge Studio - Neon Glass Hub</title>
+  <style>
+    /* ===== RESET & BASE STYLES ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-/* RESET */
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;}
-body{
-  font-family:Inter,system-ui,Arial;
-  background:linear-gradient(180deg,#041015,#07161a);
-  color:#eafcff;
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-}
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0a0f14; /* Dark base for contrast */
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-/* LOADER */
-#loader{
-  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(180deg,#030c10,#050e12);z-index:9999;
-  transition:opacity .5s ease,visibility .5s;
-}
-#loader.hidden{opacity:0;visibility:hidden}
-.loader-box{text-align:center;}
-.loader-logo img{width:100px;border-radius:12px;box-shadow:0 0 20px var(--neon);}
-.loader-bar{width:180px;height:6px;border-radius:10px;background:rgba(255,255,255,0.05);margin:10px auto;overflow:hidden;}
-.loader-progress{height:100%;width:0;background:var(--neon);box-shadow:0 0 20px var(--neon);transition:width .5s;}
-.loader-text{color:var(--muted);font-size:13px;}
+    /* ===== NAVIGATION BAR ===== */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 5%;
+      background: rgba(10, 15, 20, 0.7);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+    }
 
-/* NAVBAR */
-nav{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:12px 20px;margin:10px auto;
-  background:rgba(255,255,255,0.03);border-radius:12px;backdrop-filter:blur(6px);
-  border:1px solid rgba(255,255,255,0.04);
-  box-shadow:0 0 25px rgba(0,241,223,0.06);
-  position:relative;z-index:1000;
-}
-.brand{display:flex;align-items:center;gap:10px;}
-.brand img{width:44px;height:44px;border-radius:10px;box-shadow:0 0 12px var(--neon);}
-.brand .name{font-family:Orbitron;color:var(--neon);font-weight:900;font-size:17px;}
-.brand .sub{font-size:12px;color:var(--muted);}
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #00ffff;
+      text-shadow: 0 0 5px #00ffff;
+    }
 
-.nav-links{
-  display:flex;gap:12px;transition:right .4s ease;flex-wrap:wrap;
-}
-.nav-links a{
-  text-decoration:none;color:var(--muted);font-weight:600;
-  padding:6px 12px;border-radius:8px;
-  transition:all .2s;
-}
-.nav-links a:hover{color:#fff;box-shadow:0 0 15px rgba(0,241,223,0.15);background:rgba(255,255,255,0.03);}
-.menu-btn{display:none;font-size:26px;color:var(--neon);background:none;border:0;cursor:pointer;}
+    .navbar .logo img {
+      height: 32px;
+      width: auto;
+      border-radius: 4px;
+    }
 
-/* SIDEBAR MENU (mobile) */
-@media(max-width:768px){
-  .menu-btn{display:block;}
-  .nav-links{
-    flex-direction:column;
-    position:fixed;top:0;right:-100%;
-    background:rgba(0,0,0,0.95);
-    height:100vh;width:70%;
-    padding-top:90px;
-    border-left:1px solid rgba(0,255,255,0.1);
-    backdrop-filter:blur(10px);
-    box-shadow:-4px 0 30px rgba(0,255,255,0.15);
-    align-items:center;
-  }
-  .nav-links.open{right:0;}
-  .nav-links a{
-    display:block;text-align:center;
-    padding:12px 0;
-    font-size:16px;
-    width:80%;
-    border-radius:8px;
-  }
-}
+    .navbar nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
 
-/* HERO */
-.hero{
-  margin:20px auto;padding:30px 20px;border-radius:16px;
-  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);
-  max-width:1100px;backdrop-filter:blur(8px);position:relative;overflow:hidden;
-}
-.hero::before{
-  content:"";position:absolute;top:-100px;left:-100px;width:250px;height:250px;
-  background:radial-gradient(circle,var(--neon) 0%,transparent 70%);
-  opacity:.1;filter:blur(40px);animation:floatLight 8s infinite alternate ease-in-out;
-}
-@keyframes floatLight{from{transform:translate(0,0);}to{transform:translate(40px,60px);}}
+    .navbar nav ul li a {
+      color: #e0e0e0;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
 
+    .navbar nav ul li a:hover {
+      color: #00ffff;
+      text-shadow: 0 0 3px #00ffff;
+    }
 
-.hero h1{font-family:Orbitron;color:var(--neon);font-size:38px;margin-bottom:10px;text-shadow:0 0 10px var(--neon);}
-.hero p{color:var(--muted);line-height:1.6;margin-bottom:18px;font-size:16px;}
-.hero-actions{display:flex;gap:10px;flex-wrap:wrap;}
-.btn{
-  padding:10px 20px;border-radius:999px;border:2px solid rgba(0,241,223,0.2);
-  color:var(--neon);text-decoration:none;font-weight:700;transition:all .2s;position:relative;
-}
-.btn:hover{background:rgba(0,241,223,0.06);transform:translateY(-3px);box-shadow:0 0 15px rgba(0,241,223,0.2)}
+    /* ===== HERO SECTION WITH GLASSMORPHISM ===== */
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 80px; /* Account for fixed navbar */
+    }
 
-/* GRID */
-.grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:16px;margin-top:30px;
-}
-.card{
-  background:rgba(255,255,255,0.03);border-radius:var(--radius);
-  padding:16px;border:1px solid rgba(255,255,255,0.04);
-  transition:transform .25s,box-shadow .25s;
-  backdrop-filter:blur(6px);
-}
-.card:hover{transform:translateY(-5px);box-shadow:0 0 25px rgba(0,241,223,0.1);}
-.card .title{color:#e6ffff;font-weight:700;margin-bottom:6px;font-size:17px;}
-.card .meta{color:var(--muted);font-size:14px;}
+    /* BACKGROUND ANIMATION (SOFT ORANGE SPHERES) */
+    .bg-spheres {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
 
-/* FOOTER */
-footer{text-align:center;padding:25px;color:var(--muted);font-size:14px;margin-top:50px;border-top:1px solid rgba(255,255,255,0.05)}
+    .sphere {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #ff9a3c, #ff6b6b);
+      filter: blur(60px);
+      opacity: 0.7;
+    }
 
-/* RESPONSIVE HERO */
-@media(max-width:768px){
-  .hero h1{font-size:28px;}
-  .hero p{font-size:15px;}
-}
-@media(max-width:480px){
-  .hero{padding:20px;}
-  .hero h1{font-size:24px;}
-  .btn{padding:8px 14px;font-size:14px;}
-  .grid{gap:12px;}
-}
-</style>
+    .sphere-1 {
+      width: 400px;
+      height: 400px;
+      top: -150px;
+      right: -100px;
+    }
+
+    .sphere-2 {
+      width: 200px;
+      height: 200px;
+      bottom: -50px;
+      left: 10%;
+    }
+
+    .sphere-3 {
+      width: 300px;
+      height: 300px;
+      top: 50%;
+      left: -100px;
+    }
+
+    .sphere-4 {
+      width: 150px;
+      height: 150px;
+      bottom: 20%;
+      right: 5%;
+    }
+
+    /* GLASS PANEL */
+    .glass-panel {
+      background: rgba(15, 25, 35, 0.3);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 3rem;
+      max-width: 800px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      z-index: 1;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .glass-panel h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff;
+      letter-spacing: 1px;
+    }
+
+    .glass-panel p {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      color: #cccccc;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      border: 2px solid #00ffff;
+      background: transparent;
+      color: #00ffff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      background: rgba(0, 255, 255, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    }
+
+    .btn.secondary {
+      border-color: #ffffff;
+      color: #ffffff;
+    }
+
+    .btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+
+    /* CONTENT CARDS BELOW HERO */
+    .content-cards {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 3rem 5%;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: rgba(20, 30, 40, 0.4);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 1.5rem;
+      width: 300px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: #aaaaaa;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(10, 15, 20, 0.7);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(0, 255, 255, 0.1);
+      margin-top: 3rem;
+      font-size: 0.85rem;
+      color: #bbbbbb;
+    }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 768px) {
+      .navbar nav ul {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .glass-panel {
+        padding: 2rem 1rem;
+      }
+
+      .glass-panel h1 {
+        font-size: 2rem;
+      }
+
+      .btn-group {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .content-cards {
+        padding: 2rem 3%;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<!-- LOADER -->
-<div id="loader">
-  <div class="loader-box">
-    <div class="loader-logo"><img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="CrownForge Logo"></div>
-    <div class="loader-bar"><div id="prog" class="loader-progress"></div></div>
-    <div class="loader-text">Loading CrownForge assets…</div>
-  </div>
-</div>
-
-<!-- NAV -->
-<nav>
-  <div class="brand">
-    <img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="Logo">
-    <div>
-      <div class="name">CrownForge Studio</div>
-      <div class="sub">Making Games in India</div>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">
+      <img src="https://via.placeholder.com/32/00ffff/000000?text=CF" alt="CrownForge Logo"> <!-- Replace with your actual logo -->
+      <span>CrownForge Studio</span>
     </div>
-  </div>
+    <nav>
+      <ul>
+        <li><a href="Crownforgepage.html">Home</a></li>
+        <li><a href="tralers.html">Videos</a></li>
+        <li><a href="Games.html">Games</a></li>
+        <li><a href="Newupdates.html">Updates</a></li>
+        <li><a href="Support.html">Support</a></li>
+        <li><a href="index.html">Logout</a></li>
+        <li><a href="leaderborad.html">Leaderboard</a></li>
+        <li><a href="chating.html">FORGE-CHAT</a></li>
+        <li><a href="profile.html">PROFILE</a></li>
+        <li><a href="friends.html">FORGE FRIENDS</a></li>
+        <li><a href="#">Comming soon..</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  <button class="menu-btn" id="menuBtn">☰</button>
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="bg-spheres">
+      <div class="sphere sphere-1"></div>
+      <div class="sphere sphere-2"></div>
+      <div class="sphere sphere-3"></div>
+      <div class="sphere sphere-4"></div>
+    </div>
 
-  <div class="nav-links" id="navLinks">
-    <a href="Crownforgepage.html">Home</a>
-    <a href="tralers.html">Videos</a>
-    <a href="Games.html">Games</a>
-    <a href="Newupdates.html">Updates</a>
-    <a href="contact.html">Contact</a>
-    <a href="index.html">Logout</a>
-    <a href="leaderborad.html">Leaderboard</a>
-    <a href="chating.html">FORGE-CHAT</a>
-    <a href="public/register.html">Registration</a>
-    <a href="profile.html">PROFILE</a>
-    <a href="friends.html">FORGE FRIENDS</a>
-  </div>
-</nav>
+    <div class="glass-panel">
+      <h1>CrownForge Studio</h1>
+      <p>Welcome to CrownForge — your neon-glass hub for trailers, updates, and new game launches. Built for creators and players alike.</p>
+      <div class="btn-group">
+        <a href="#" class="btn">Enter Studio</a>
+        <a href="#" class="btn secondary">Latest Updates</a>
+      </div>
+    </div>
+  </section>
 
-<!-- HERO -->
-<section class="hero">
-  <h1>🌌 CrownForge Studio</h1>
-  <p>Welcome to CrownForge — your neon-glass hub for trailers, updates, and new game launches. Built for creators and players alike.</p>
-  <div class="hero-actions">
-    <a href="tralers.html" class="btn">🎮 Enter Studio</a>
-    <a href="Newupdates.html" class="btn">⚡ Latest Updates</a>
-  </div>
-
-  <div class="grid">
+  <!-- CONTENT CARDS -->
+  <div class="content-cards">
     <div class="card">
-      <div class="title">Studio News</div>
-      <div class="meta">Get patch notes, new game logs, and developer insights.</div>
+      <h3>Studio News</h3>
+      <p>Get patch notes, new game logs, and developer insights.</p>
     </div>
     <div class="card">
-      <div class="title">Dev Center</div>
-      <div class="meta">Download Unity, SDKs, and other developer tools.</div>
+      <h3>Dev Center</h3>
+      <p>Download Unity, SDKs, and other developer tools.</p>
     </div>
     <div class="card">
-      <div class="title">Community</div>
-      <div class="meta">Join our Discord, share projects, and connect with devs.</div>
+      <h3>Community</h3>
+      <p>Join our Discord, share projects, and connect with devs.</p>
     </div>
   </div>
-</section>
 
-<footer>
-  &copy; <span id="year"></span> CrownForge Studio — All Rights Reserved.
-</footer>
+  <!-- FOOTER -->
+  <footer>
+    &copy; 2025 CrownForge Studio — All Rights Reserved.
+  </footer>
 
-<script>
-/* Loader */
-const loader=document.getElementById('loader');
-const prog=document.getElementById('prog');
-let p=0;
-const load=setInterval(()=>{
-  p+=Math.random()*10;
-  if(p>=100){p=100;clearInterval(load);setTimeout(()=>loader.classList.add('hidden'),400);}
-  prog.style.width=p+'%';
-},180);
+  <!-- OPTIONAL: JAVASCRIPT FOR INTERACTIVITY -->
+  <script>
+    // Optional: Add subtle animations or interactions
+    document.addEventListener('DOMContentLoaded', function() {
+      // Example: Animate spheres slightly on scroll
+      window.addEventListener('scroll', function() {
+        const spheres = document.querySelectorAll('.sphere');
+        const scrollY = window.scrollY;
 
-/* Year */
-document.getElementById('year').textContent=new Date().getFullYear();
+        spheres.forEach((sphere, index) => {
+          sphere.style.transform = `translateY(${scrollY * 0.05 * (index + 1)}px)`;
+        });
+      });
 
-/* Mobile Menu */
-const menuBtn=document.getElementById('menuBtn');
-const navLinks=document.getElementById('navLinks');
-menuBtn.addEventListener('click',()=>navLinks.classList.toggle('open'));
-
-// close menu when clicking outside
-document.addEventListener('click',e=>{
-  if(!navLinks.contains(e.target)&&!menuBtn.contains(e.target)){
-    navLinks.classList.remove('open');
-  }
-});
-</script>
+      // Example: Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+    });
+  </script>
 
 </body>
 </html>
