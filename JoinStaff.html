@@ -3,124 +3,208 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CrownForge | Staff Apply</title>
+<title>CrownForge | Staff Recruitment</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --neon:#00eaff;
-  --glass:rgba(255,255,255,.08);
-}
-*{box-sizing:border-box;font-family:Poppins,Arial}
-
-body{
-  margin:0;
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:radial-gradient(circle at top,#0f2027,#000);
-  color:#fff;
+:root {
+  --neon: #00eaff;
+  --neon-purple: #7000ff;
+  --glass: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.1);
 }
 
-.card{
-  width:100%;
-  max-width:520px;
-  background:var(--glass);
-  backdrop-filter:blur(16px);
-  border-radius:18px;
-  padding:22px;
-  box-shadow:0 0 30px rgba(0,234,255,.25);
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #02040a;
+  background-image: 
+    radial-gradient(circle at 10% 10%, rgba(0, 234, 255, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 90% 90%, rgba(112, 0, 255, 0.1) 0%, transparent 40%);
+  color: #fff;
+  padding: 20px;
 }
 
-h2{text-align:center}
-
-label{display:block;margin-top:10px;font-size:14px}
-
-input,select,button{
-  width:100%;
-  margin-top:6px;
-  padding:10px;
-  border-radius:10px;
-  border:none;
+/* --- THE CARD --- */
+.card {
+  width: 100%;
+  max-width: 550px;
+  background: var(--glass);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  animation: slideUp 0.6s ease-out;
 }
 
-input,select{background:#fff;color:#000}
-
-.phone-row{display:flex;gap:8px}
-.phone-row select{width:40%}
-.phone-row input{width:60%}
-
-button{
-  margin-top:16px;
-  background:linear-gradient(135deg,#00c6ff,#0072ff);
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-#status{text-align:center;margin-top:10px;font-size:13px}
+h2 {
+  font-family: 'Orbitron', sans-serif;
+  text-align: center;
+  font-size: 1.6rem;
+  letter-spacing: 2px;
+  color: var(--neon);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.sub-title {
+  text-align: center;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 30px;
+  display: block;
+}
+
+/* --- FORM STYLING --- */
+label {
+  display: block;
+  margin: 15px 0 6px 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--neon);
+  text-transform: uppercase;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s;
+}
+
+input:focus, select:focus {
+  border-color: var(--neon);
+  background: rgba(255,255,255,0.07);
+  box-shadow: 0 0 15px rgba(0, 234, 255, 0.15);
+}
+
+option { background: #0a0a15; color: #fff; }
+
+.phone-row { display: flex; gap: 10px; }
+.phone-row select { width: 40%; }
+.phone-row input { width: 60%; }
+
+/* --- BUTTON --- */
+button {
+  width: 100%;
+  margin-top: 30px;
+  padding: 16px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, var(--neon), #0072ff);
+  color: #000;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 234, 255, 0.4);
+  filter: brightness(1.1);
+}
+
+button:active { transform: translateY(0); }
+
+#status {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.85rem;
+  min-height: 20px;
+  line-height: 1.4;
+}
+
+.success { color: #00ff88; text-shadow: 0 0 10px rgba(0,255,136,0.3); }
+.error { color: #ff4d4d; }
+
+@media(max-width: 480px) {
+  .card { padding: 25px; }
+}
 </style>
 </head>
 
 <body>
 
 <div class="card">
-<h2>🚀 Staff Apply Form</h2>
+  <h2>Staff Recruitment</h2>
+  <span class="sub-title">Join the CrownForge Forge-Team</span>
 
-<form id="form">
+  <form id="form">
+    <label>Full Name</label>
+    <input id="name" placeholder="Enter your full name" required>
 
-<label>Full Name *</label>
-<input id="name" required>
+    <label>Age (Min 16+)</label>
+    <input type="number" id="age" placeholder="Your age" required min="16">
 
-<label>Age *</label>
-<input type="number" id="age" required>
+    <label>Discord Username</label>
+    <input id="discord" placeholder="example#0000" required>
 
-<label>Discord Username</label>
-<input id="discord">
+    <label>Primary Skill / Role</label>
+    <select id="role" required>
+      <option value="" disabled selected>Select your expertise</option>
+      <option>Game Developer</option>
+      <option>Website Developer</option>
+      <option>App Developer</option>
+      <option>3D Modeler</option>
+      <option>VFX / GFX Artist</option>
+      <option>Music/Sound Artist</option>
+      <option>Community Manager</option>
+    </select>
 
-<label>Skill / Role *</label>
-<select id="role" required>
-<option value="">Select</option>
-<option>Game Developer</option>
-<option>Website Developer</option>
-<option>App Developer</option>
-<option>3D Modeler</option>
-<option>VFX / GFX</option>
-<option>Music Artist</option>
-<option>MultiSkill</option>
-</select>
+    <label>Payment Preference</label>
+    <select id="payment" required>
+      <option value="" disabled selected>Select method</option>
+      <option>UPI (GPAY/PhonePe)</option>
+      <option>Bank Transfer</option>
+      <option>Fampay / Wallet</option>
+      <option>International (PayPal/Card)</option>
+    </select>
 
-<label>Payment / UPI *</label>
-<select id="payment" required>
-<option value="">Select</option>
-<option>UPI</option>
-<option>Bank Transfer</option>
-<option>Card</option>
-</select>
+    <label>War-X Login Email</label>
+    <input type="email" id="email" placeholder="email@example.com" required>
 
-<label>Email *</label>
-<input type="email" id="email" required>
+    <label>Phone Number</label>
+    <div class="phone-row">
+      <select id="code">
+        <option value="+91">🇮🇳 +91</option>
+        <option value="+1">🇺🇸 +1</option>
+        <option value="+92">🇵🇰 +92</option>
+        <option value="Other">🌍 Other</option>
+      </select>
+      <input id="phone" type="tel" placeholder="Your number" required>
+    </div>
 
-<label>Phone *</label>
-<div class="phone-row">
-<select id="code">
-<option value="+91">🇮🇳 +91</option>
-<option value="+1">🇺🇸 +1</option>
-</select>
-<input id="phone" required>
+    <button type="submit" id="submitBtn">Transmit Application</button>
+    <div id="status"></div>
+  </form>
 </div>
 
-<button type="submit">Send Application</button>
-<div id="status"></div>
-</form>
-</div>
-
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script>
-/* 🔥 Firebase Config */
+/* Firebase Config */
 firebase.initializeApp({
   apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
   authDomain: "crownforgestudio-2581a.firebaseapp.com",
@@ -129,58 +213,70 @@ firebase.initializeApp({
 
 const db = firebase.firestore();
 
-/* 🔥 Discord Webhook */
-const WEBHOOK =
-"https://discord.com/api/webhooks/1453047822709690368/VV10m5YNvnJS2j4IYW5DOuuNRB23Qt4tRRad7CaMc7uZ-rbzWIhNMOZJn4BBSBT4faTP";
+/* Webhook */
+const WEBHOOK = "https://discord.com/api/webhooks/1453047822709690368/VV10m5YNvnJS2j4IYW5DOuuNRB23Qt4tRRad7CaMc7uZ-rbzWIhNMOZJn4BBSBT4faTP";
 
-const form = document.getElementById("form");
-const status = document.getElementById("status");
+const applyForm = document.getElementById("form");
+const statusMsg = document.getElementById("status");
+const btn = document.getElementById("submitBtn");
 
-form.onsubmit = async e => {
+applyForm.onsubmit = async e => {
   e.preventDefault();
-  status.textContent = "⏳ Sending...";
+  
+  btn.disabled = true;
+  btn.textContent = "TRANSMITTING...";
+  statusMsg.innerHTML = "⏳ Scanning credentials...";
 
-  const data = {
-    name: name.value,
-    age: age.value,
-    discord: discord.value || "Not Provided",
-    role: role.value,
-    payment: payment.value,
-    email: email.value,
-    phone: code.value + " " + phone.value,
-    time: new Date().toISOString()
+  const formData = {
+    name: document.getElementById("name").value,
+    age: document.getElementById("age").value,
+    discord: document.getElementById("discord").value,
+    role: document.getElementById("role").value,
+    payment: document.getElementById("payment").value,
+    email: document.getElementById("email").value,
+    phone: document.getElementById("code").value + " " + document.getElementById("phone").value,
+    time: new Date().toLocaleString()
   };
 
-  try{
-    /* Save to Firestore */
-    await db.collection("staffApplications").add(data);
+  try {
+    // 1. Save to Firebase
+    await db.collection("staffApplications").add(formData);
 
-    /* Send to Discord */
-    await fetch(WEBHOOK,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        embeds:[{
-          title:"📝 New Staff Application",
-          color:0x00eaff,
-          fields:[
-            {name:"Name",value:data.name,inline:true},
-            {name:"Age",value:data.age,inline:true},
-            {name:"Discord",value:data.discord},
-            {name:"Role",value:data.role,inline:true},
-            {name:"Payment",value:data.payment,inline:true},
-            {name:"Email",value:data.email},
-            {name:"Phone",value:data.phone}
+    // 2. Send to Discord
+    await fetch(WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        content: "🚀 **New Forge Application Received!**",
+        embeds: [{
+          title: "Forge Staff Candidate",
+          color: 59391, // Neon Cyan
+          fields: [
+            { name: "👤 Name", value: formData.name, inline: true },
+            { name: "🎂 Age", value: formData.age, inline: true },
+            { name: "💬 Discord", value: formData.discord, inline: true },
+            { name: "🛠️ Role", value: formData.role, inline: true },
+            { name: "💰 Payment", value: formData.payment, inline: true },
+            { name: "📧 Email", value: formData.email },
+            { name: "📞 Phone", value: formData.phone }
           ],
-          timestamp:new Date()
+          footer: { text: "CrownForge Studio • Neural Recruitment" },
+          timestamp: new Date()
         }]
       })
     });
 
-    status.textContent="✅ Application sent!";
-    form.reset();
-  }catch(err){
-    status.textContent="❌ Failed to send";
+    statusMsg.className = "success";
+    statusMsg.innerHTML = "✅ **Identity Verified.** <br> Application transmitted to the Forge Core. Expect contact within 24 cycles.";
+    applyForm.reset();
+    
+  } catch (err) {
+    statusMsg.className = "error";
+    statusMsg.innerHTML = "❌ **Signal Lost.** Connection failed. Please retry transmission.";
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Transmit Application";
   }
 };
 </script>

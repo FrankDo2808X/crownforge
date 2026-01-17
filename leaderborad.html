@@ -3,134 +3,177 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CrownForge Leaderboard</title>
-<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+<title>CrownForge | Elite Leaderboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: radial-gradient(circle at top, #2fd2c7, #1906a6, #1a1a1a);
-  color: #fff;
-  text-align: center;
-  min-height: 100vh;
-  overflow-x: hidden;
+:root {
+  --neon-cyan: #00f2ff;
+  --neon-purple: #bc13fe;
+  --gold: #ffcc00;
+  --silver: #e0e0e0;
+  --bronze: #cd7f32;
+  --bg-dark: #02040a;
 }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(0, 242, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 50% 100%, rgba(188, 19, 254, 0.1) 0%, transparent 50%);
+  color: #fff;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.container { max-width: 600px; margin: 0 auto; }
 
 h1 {
-  margin-top: 30px;
-  text-shadow: 0 0 20px #1c1b18;
-  font-size: 2em;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 2.5rem;
+  text-align: center;
+  letter-spacing: 5px;
+  background: linear-gradient(to bottom, #fff, var(--neon-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
 }
 
-#leaderboard {
-  margin: 30px auto;
-  max-width: 400px;
-  background: rgba(255, 165, 0, 0.1);
-  border-radius: 15px;
-  box-shadow: 0 0 20px rgba(255, 200, 0, 0.3);
+.note-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(0, 242, 255, 0.1);
   padding: 15px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 30px;
+  text-align: center;
 }
+
+.note-box b { color: var(--neon-cyan); }
+
+/* --- CONTROLS --- */
+.controls { text-align: center; margin-bottom: 40px; }
+
+.btn {
+  font-family: 'Orbitron';
+  padding: 12px 25px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: 0.3s;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.btn-login {
+  background: var(--neon-cyan);
+  color: #000;
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+}
+
+.btn-logout {
+  background: transparent;
+  color: #ff4d4d;
+  border: 1px solid #ff4d4d;
+}
+
+.btn:hover { transform: translateY(-2px); box-shadow: 0 5px 25px rgba(0, 242, 255, 0.5); }
+
+/* --- LEADERBOARD --- */
+#leaderboard { display: grid; gap: 12px; }
 
 .player {
-  background: rgba(255,255,255,0.1);
-  border-radius: 10px;
-  padding: 10px 15px;
-  margin: 8px 0;
-  text-align: left;
-  transition: 0.3s;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 15px 20px;
+  border-radius: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: 0.3s;
 }
 
 .player:hover {
-  background: rgba(255,255,255,0.2);
-  transform: scale(1.02);
+  background: rgba(0, 242, 255, 0.05);
+  border-color: var(--neon-cyan);
+  transform: translateX(5px);
 }
 
-.rank {
+.rank-circle {
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  font-family: 'Orbitron';
+  font-weight: 900;
+  margin-right: 15px;
+  background: rgba(255,255,255,0.05);
+}
+
+.p-info { flex-grow: 1; text-align: left; }
+.p-name { font-weight: 700; font-size: 1.1rem; color: #fff; }
+.p-email { font-size: 0.75rem; color: rgba(255,255,255,0.4); font-family: monospace; }
+
+.p-time {
+  font-family: 'Orbitron';
+  color: var(--neon-cyan);
   font-weight: 700;
-  font-size: 1.2em;
-}
-
-.gold { color: gold; }
-.silver { color: silver; }
-.bronze { color: #cd7f32; }
-
-.name {
-  font-size: 1.1em;
-  font-weight: 600;
-}
-
-.email-small {
-  font-size: 0.8em;
-  opacity: 0.7;
-  font-family: monospace;
-}
-
-.time {
-  font-weight: bold;
-  color: #000000;
-  text-align: right;
-  background: rgba(255,255,255,0.8);
-  padding: 5px 10px;
+  font-size: 0.9rem;
+  background: rgba(0, 242, 255, 0.1);
+  padding: 6px 12px;
   border-radius: 8px;
+  text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
 }
 
-button {
-  background: linear-gradient(90deg, #ffcc33, #ff6600);
-  border: none;
-  color: black;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  margin: 10px;
-  box-shadow: 0 0 10px #000000;
-  transition: 0.2s;
-}
+/* TIERS */
+.gold-tier { border: 1px solid var(--gold); box-shadow: 0 0 15px rgba(255, 204, 0, 0.1); }
+.gold-tier .rank-circle { background: var(--gold); color: #000; box-shadow: 0 0 15px var(--gold); }
+.gold-tier .p-name { color: var(--gold); }
 
-button:hover {
-  box-shadow: 0 0 20px #ffaa00;
-}
+.silver-tier .rank-circle { background: var(--silver); color: #000; }
+.bronze-tier .rank-circle { background: var(--bronze); color: #000; }
 
-#userInfo {
-  margin-top: 10px;
-  font-size: 1em;
-}
+#userInfo { margin: 15px 0; font-size: 0.9rem; color: var(--neon-cyan); }
 </style>
 </head>
 <body>
 
-<h1>LEADERBOARD</h1>
-<p><b>NOTE:</b> and make sure you open the leaderboard Stay active for 7 days to win War-X rewards! Top 3 will get exclusive items.  
-Enable notifications — you’ll get an official mail from CrownForge if you win.  
-Never share OTP or private info!</p>
+<div class="container">
+  <h1>ELITE BOARD</h1>
+  
+  <div class="note-box">
+    <b>REWARDS:</b> Stay active for 7 days to win <b>War-X</b> exclusive items! 
+    Top 3 will get legendary drops. We will email the winners from <u>official CrownForge mail</u>.
+  </div>
 
-<button id="login">Login with Google</button>
-<button id="logout" style="display:none;">Logout</button>
-<div id="userInfo"></div>
+  <div class="controls">
+    <button id="login" class="btn btn-login">Google Auth</button>
+    <button id="logout" class="btn btn-logout" style="display:none;">Disconnect</button>
+    <div id="userInfo"></div>
+  </div>
 
-<div id="leaderboard"></div>
+  <div id="leaderboard">
+    </div>
+</div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
   import { getFirestore, doc, setDoc, onSnapshot, collection, query, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-  // Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
     authDomain: "crownforgestudio-2581a.firebaseapp.com",
     projectId: "crownforgestudio-2581a",
     storageBucket: "crownforgestudio-2581a.appspot.com",
     messagingSenderId: "223324386293",
-    appId: "1:223324386293:web:783a3e64f0d10b1ab026bc",
-    measurementId: "G-EYRLR2CH35"
+    appId: "1:223324386293:web:783a3e64f0d10b1ab026bc"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -148,86 +191,69 @@ Never share OTP or private info!</p>
   let timer = 0;
   let interval;
 
-  function getUserName(email) {
-    return email.split("@")[0];
-  }
-
   function hideEmail(email) {
     const [name, domain] = email.split("@");
     return name.slice(0, 3) + "***@" + domain;
   }
 
-  function formatTime(seconds) {
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = seconds % 60;
-    if (h > 0) return `${h}h ${m}m ${s}s`;
-    if (m > 0) return `${m}m ${s}s`;
-    return `${s}s`;
+  function formatTime(s) {
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    return `${h > 0 ? h + 'H ' : ''}${m > 0 ? m + 'M ' : ''}${sec}S`;
   }
 
-  loginBtn.onclick = async () => {
-    await signInWithPopup(auth, provider);
-  };
-
-  logoutBtn.onclick = async () => {
-    clearInterval(interval);
-    await signOut(auth);
-  };
+  loginBtn.onclick = () => signInWithPopup(auth, provider);
+  logoutBtn.onclick = () => { clearInterval(interval); signOut(auth); };
 
   onAuthStateChanged(auth, async (u) => {
     if (u) {
       user = u;
       loginBtn.style.display = "none";
       logoutBtn.style.display = "inline-block";
-      userInfo.innerHTML = `<p>Logged in as: <strong>${u.email}</strong></p>`;
+      userInfo.innerHTML = `Identity: <b>${u.email}</b>`;
 
-      // Get saved time
       const docRef = doc(db, "leaderboard", u.uid);
       const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        timer = docSnap.data().time || 0;
-      }
+      if (docSnap.exists()) timer = docSnap.data().time || 0;
 
-      // Timer update (stable)
+      // Stable timer sync (Every 5 seconds instead of 1 to save Firestore quota)
       interval = setInterval(async () => {
-        timer++;
+        timer += 5;
         await setDoc(doc(db, "leaderboard", u.uid), {
           email: u.email,
           time: timer
-        });
-      }, 1000);
+        }, { merge: true });
+      }, 5000);
 
-      // Real-time leaderboard
       const q = query(collection(db, "leaderboard"), orderBy("time", "desc"));
       onSnapshot(q, (snapshot) => {
         leaderboardDiv.innerHTML = "";
         let rank = 1;
         snapshot.forEach((docSnap) => {
           const data = docSnap.data();
-          const username = getUserName(data.email);
+          let tierClass = rank === 1 ? "gold-tier" : rank === 2 ? "silver-tier" : rank === 3 ? "bronze-tier" : "";
           let emailDisplay = u.email === adminEmail ? data.email : hideEmail(data.email);
-          let rankClass = rank === 1 ? "gold" : rank === 2 ? "silver" : rank === 3 ? "bronze" : "";
-
+          
           leaderboardDiv.innerHTML += `
-            <div class="player">
-              <div>
-                <div class="rank ${rankClass}">#${rank}</div>
-                <div class="name">${username}</div>
-                <div class="email-small">${emailDisplay}</div>
+            <div class="player ${tierClass}">
+              <div class="rank-circle">${rank}</div>
+              <div class="p-info">
+                <div class="p-name">${data.email.split("@")[0]}</div>
+                <div class="p-email">${emailDisplay}</div>
               </div>
-              <div class="time">${formatTime(data.time)}</div>
+              <div class="p-time">${formatTime(data.time)}</div>
             </div>
           `;
           rank++;
         });
       });
-
     } else {
-      userInfo.innerHTML = "";
       loginBtn.style.display = "inline-block";
       logoutBtn.style.display = "none";
-      leaderboardDiv.innerHTML = "";
+      userInfo.innerHTML = "";
+      leaderboardDiv.innerHTML = "<p style='opacity:0.5'>Please authenticate to view ranks.</p>";
+      clearInterval(interval);
     }
   });
 </script>

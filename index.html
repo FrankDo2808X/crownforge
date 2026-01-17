@@ -1,185 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CrownForge - Login / Signup</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
-<style>
-*{box-sizing:border-box;font-family:'Poppins',sans-serif;}
-body{
-margin:0;height:100vh;display:flex;justify-content:center;align-items:center;
-background:radial-gradient(circle at 25% 25%,#ff8800,transparent 40%),
-radial-gradient(circle at 75% 75%,#00d5ff,transparent 40%),#060606;
-overflow:hidden;
-}
-.bg-glow{
-position:fixed;inset:0;
-background:radial-gradient(circle at 30% 30%,#ff007f66,transparent 60%),
-radial-gradient(circle at 70% 70%,#00ffff55,transparent 60%);
-filter:blur(100px);animation:pulse 8s infinite alternate;z-index:0;
-}
-@keyframes pulse{0%{opacity:.5}100%{opacity:1;transform:scale(1.2)}}
-.particle{position:absolute;border-radius:50%;opacity:.6;filter:blur(5px);animation:floaty 10s infinite}
-@keyframes floaty{0%{transform:translate(0)}50%{transform:translate(-40px,30px)}100%{transform:translate(0)}}
-.auth-card{
-position:relative;width:360px;padding:40px 30px;border-radius:20px;
-backdrop-filter:blur(25px);background:rgba(255,255,255,.05);
-box-shadow:0 0 50px rgba(255,0,128,.4);color:#fff;text-align:center;z-index:2;
-}
-.auth-card h2{
-background:linear-gradient(90deg,#ff7b00,#ff00c8);
--webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-input{
-width:100%;padding:12px;margin:8px 0;border:none;border-radius:10px;
-background:rgba(255,255,255,.1);color:#fff;
-}
-button{
-width:100%;padding:12px;margin-top:15px;border:none;border-radius:10px;
-background:linear-gradient(90deg,#ff7b00,#ff00c8);cursor:pointer;
-}
-.google-btn{display:flex;justify-content:center;gap:10px;background:#fff;color:#000}
-.google-btn img{width:20px}
-.switch-link{color:#ff7b00;cursor:pointer;font-size:13px;text-decoration:underline}
-.form{display:none}
-.form.active{display:block}
-.loader{
-width:30px;height:30px;border:4px solid transparent;border-top:4px solid red;
-border-radius:50%;animation:spin 1s linear infinite;display:none;margin:auto;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrownForge | Neural Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #00f2ff; --secondary: #7000ff; --accent: #ff00c8; --bg: #02040a; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { height: 100vh; display: flex; justify-content: center; align-items: center; background: var(--bg); font-family: 'Plus Jakarta Sans', sans-serif; color: #fff; overflow: hidden; perspective: 1000px; }
+        #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, #0a1128 0%, #02040a 100%); }
+        .auth-wrapper { position: relative; padding: 3px; border-radius: 30px; background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent)); background-size: 300% 300%; animation: electricBorder 4s linear infinite; box-shadow: 0 0 50px rgba(112, 0, 255, 0.3); transition: transform 0.1s; }
+        @keyframes electricBorder { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .auth-card { width: 400px; background: rgba(2, 4, 10, 0.95); backdrop-filter: blur(40px); padding: 50px 40px; border-radius: 28px; text-align: center; position: relative; z-index: 10; }
+        h2 { font-family: 'Orbitron'; font-weight: 900; margin-bottom: 30px; background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 2px; }
+        input { width: 100%; padding: 15px 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; color: #fff; margin-bottom: 15px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--primary); background: rgba(0, 242, 255, 0.08); }
+        .glow-btn { width: 100%; padding: 16px; border: none; border-radius: 14px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #000; font-family: 'Orbitron'; font-weight: 800; cursor: pointer; transition: 0.3s; text-transform: uppercase; margin-top: 10px; }
+        .glow-btn:hover { transform: scale(1.02); box-shadow: 0 0 25px var(--primary); }
+        .google-btn { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .google-btn img { width: 20px; }
+        .switch-link { margin-top: 25px; font-size: 0.85rem; color: rgba(255,255,255,0.4); cursor: pointer; }
+        .switch-link span { color: var(--primary); text-decoration: underline; }
+        .form { display: none; }
+        .form.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        #loader { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 4px solid transparent; border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; z-index: 100; }
+        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+    </style>
 </head>
-
 <body>
 
-<div class="bg-glow"></div>
+    <div id="canvas-container"></div>
 
-<script>
-for(let i=0;i<20;i++){
-const d=document.createElement("div");
-d.className="particle";
-d.style.width=d.style.height=Math.random()*6+3+"px";
-d.style.background=["#ff00c8","#ff7b00","#00ffff"][Math.floor(Math.random()*3)];
-d.style.top=Math.random()*100+"%";
-d.style.left=Math.random()*100+"%";
-document.body.appendChild(d);
-}
-</script>
+    <div class="auth-wrapper" id="authWrapper">
+        <div class="auth-card">
+            <div id="loader"></div>
+            
+            <div id="loginForm" class="form active">
+                <h2>Access Portal</h2>
+                <input id="loginEmail" type="email" placeholder="Neural ID (Email)">
+                <input id="loginPass" type="password" placeholder="Pass-Key">
+                <button class="glow-btn" id="loginBtn">Initialize Session</button>
+                <button class="glow-btn google-btn" id="googleLogin">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"> Google Sync
+                </button>
+                <p class="switch-link" onclick="switchForm('signup')">New Citizen? <span>Create Account</span></p>
+            </div>
 
-<div class="auth-card">
-<div id="loginForm" class="form active">
-<h2>Welcome to CrownForge</h2>
-<input id="loginEmail" placeholder="Email">
-<input id="loginPass" type="password" placeholder="Password">
-<button id="loginBtn">Login</button>
-<button id="googleLogin" class="google-btn">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg">Google
-</button>
-<p class="switch-link" onclick="switchForm('signup')">Create Account</p>
-</div>
+            <div id="signupForm" class="form">
+                <h2>Create Identity</h2>
+                <input id="signupEmail" type="email" placeholder="Neural ID (Email)">
+                <input id="signupPass" type="password" placeholder="Set Pass-Key">
+                <input id="signupConfirm" type="password" placeholder="Confirm Pass-Key">
+                <button class="glow-btn" id="signupBtn">Forge Account</button>
+                <button class="glow-btn google-btn" id="googleSignup">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"> Google Sync
+                </button>
+                <p class="switch-link" onclick="switchForm('login')">Known Identity? <span>Login Here</span></p>
+            </div>
+        </div>
+    </div>
 
-<div id="signupForm" class="form">
-<h2>Create Account</h2>
-<input id="signupEmail" placeholder="Email">
-<input id="signupPass" type="password" placeholder="Password">
-<input id="signupConfirm" type="password" placeholder="Confirm Password">
-<button id="signupBtn">Signup</button>
-<button id="googleSignup" class="google-btn">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg">Google
-</button>
-<p class="switch-link" onclick="switchForm('login')">Already have account?</p>
-</div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-<div id="loader" class="loader"></div>
-</div>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
+            authDomain: "crownforgestudio-2581a.firebaseapp.com",
+            projectId: "crownforgestudio-2581a",
+            storageBucket: "crownforgestudio-2581a.appspot.com",
+            messagingSenderId: "223324386293",
+            appId: "1:223324386293:web:9d7919c6b2e93781b026bc"
+        };
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
-signInWithPopup, GoogleAuthProvider, setPersistence,
-browserLocalPersistence, onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import {
-getFirestore, doc, setDoc, getDoc, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { firebaseConfig } from "./firebase-config.js";
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
-const loader = document.getElementById("loader");
+        const loader = document.getElementById("loader");
 
-// 🔐 1 MONTH SESSION
-const ONE_MONTH = 30 * 24 * 60 * 60 * 1000;
+        function showLoader(s) { loader.style.display = s ? "block" : "none"; }
 
-function showLoader(s){loader.style.display=s?"block":"none"}
-window.switchForm=f=>{
-document.querySelectorAll(".form").forEach(x=>x.classList.remove("active"));
-document.getElementById(f+"Form").classList.add("active");
-};
+        window.switchForm = f => {
+            document.querySelectorAll(".form").forEach(x => x.classList.remove("active"));
+            document.getElementById(f + "Form").classList.add("active");
+        };
 
-async function ensureUser(user){
-const ref=doc(db,"users",user.uid);
-if(!(await getDoc(ref)).exists()){
-await setDoc(ref,{
-uid:user.uid,
-email:user.email,
-createdAt:serverTimestamp()
-});
-}
-}
+        async function ensureUser(user) {
+            const ref = doc(db, "users", user.uid);
+            if (!(await getDoc(ref)).exists()) {
+                await setDoc(ref, { uid: user.uid, email: user.email, createdAt: serverTimestamp() });
+            }
+        }
 
-// LOGIN
-loginBtn.onclick=async()=>{
-showLoader(true);
-await setPersistence(auth,browserLocalPersistence);
-const c=await signInWithEmailAndPassword(auth,loginEmail.value,loginPass.value);
-localStorage.setItem("cf_login_time",Date.now());
-await ensureUser(c.user);
-location.href="Crownforgepage.html";
-};
+        // --- FIXED BUTTON CLICKS ---
+        document.getElementById("loginBtn").addEventListener("click", async () => {
+            const email = document.getElementById("loginEmail").value;
+            const pass = document.getElementById("loginPass").value;
+            if(!email || !pass) return alert("Enter details!");
+            
+            showLoader(true);
+            try {
+                await setPersistence(auth, browserLocalPersistence);
+                const res = await signInWithEmailAndPassword(auth, email, pass);
+                localStorage.setItem("cf_login_time", Date.now());
+                await ensureUser(res.user);
+                window.location.href = "Crownforgepage.html";
+            } catch (e) { alert(e.message); }
+            showLoader(false);
+        });
 
-// SIGNUP
-signupBtn.onclick=async()=>{
-if(signupPass.value!==signupConfirm.value)return alert("Passwords not match");
-showLoader(true);
-const c=await createUserWithEmailAndPassword(auth,signupEmail.value,signupPass.value);
-localStorage.setItem("cf_login_time",Date.now());
-await ensureUser(c.user);
-location.href="Crownforgepage.html";
-};
+        document.getElementById("signupBtn").addEventListener("click", async () => {
+            const email = document.getElementById("signupEmail").value;
+            const pass = document.getElementById("signupPass").value;
+            const confirm = document.getElementById("signupConfirm").value;
+            if(pass !== confirm) return alert("Passwords match nahi ho rahe!");
 
-// GOOGLE
-[googleLogin,googleSignup].forEach(b=>{
-b.onclick=async()=>{
-showLoader(true);
-await setPersistence(auth,browserLocalPersistence);
-const r=await signInWithPopup(auth,provider);
-localStorage.setItem("cf_login_time",Date.now());
-await ensureUser(r.user);
-location.href="Crownforgepage.html";
-};
-});
+            showLoader(true);
+            try {
+                const res = await createUserWithEmailAndPassword(auth, email, pass);
+                localStorage.setItem("cf_login_time", Date.now());
+                await ensureUser(res.user);
+                window.location.href = "Crownforgepage.html";
+            } catch (e) { alert(e.message); }
+            showLoader(false);
+        });
 
-// 🔁 AUTO CHECK SESSION
-onAuthStateChanged(auth,async(user)=>{
-if(user){
-const t=localStorage.getItem("cf_login_time");
-if(!t || Date.now()-t>ONE_MONTH){
-await signOut(auth);
-localStorage.removeItem("cf_login_time");
-}else{
-await ensureUser(user);
-location.href="Crownforgepage.html";
-}
-}
-});
-</script>
+        const gLogin = async () => {
+            showLoader(true);
+            try {
+                await setPersistence(auth, browserLocalPersistence);
+                const res = await signInWithPopup(auth, provider);
+                localStorage.setItem("cf_login_time", Date.now());
+                await ensureUser(res.user);
+                window.location.href = "Crownforgepage.html";
+            } catch (e) { alert(e.message); }
+            showLoader(false);
+        };
+        document.getElementById("googleLogin").onclick = gLogin;
+        document.getElementById("googleSignup").onclick = gLogin;
+
+    </script>
+
+    <script>
+        // Mouse Tilt Effect
+        const card = document.getElementById('authWrapper');
+        document.addEventListener('mousemove', (e) => {
+            let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+    </script>
 </body>
 </html>

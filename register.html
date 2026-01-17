@@ -3,138 +3,119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tournament Registration Form</title>
+<title>CrownForge | Arena Registration</title>
 
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-  * {
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  :root {
+    --neon: #00f2ff;
+    --neon-dark: #008080;
+    --bg-dark: #02040a;
+    --glass: rgba(255, 255, 255, 0.05);
   }
 
+  * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
   body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    background: radial-gradient(circle at top left, #001f3f, #000);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow-x: hidden;
+    margin: 0; padding: 0; min-height: 100vh;
+    background: var(--bg-dark);
+    background-image: radial-gradient(circle at top right, rgba(0, 242, 255, 0.15), transparent 40%);
+    display: flex; justify-content: center; align-items: center;
+    overflow-x: hidden; color: #fff;
   }
 
   .container {
-    width: 95%;
-    max-width: 450px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 2px solid rgba(0, 255, 255, 0.3);
-    border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2), inset 0 0 20px rgba(0, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    padding: 25px 30px;
-    color: #fff;
+    width: 95%; max-width: 480px;
+    background: rgba(2, 4, 10, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 242, 255, 0.2);
+    border-radius: 24px;
+    padding: 35px;
     text-align: center;
-    animation: glowBorder 3s infinite alternate;
-  }
-
-  @keyframes glowBorder {
-    from { box-shadow: 0 0 10px cyan, inset 0 0 15px rgba(0, 255, 255, 0.2); }
-    to { box-shadow: 0 0 25px cyan, inset 0 0 25px rgba(0, 255, 255, 0.4); }
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
   }
 
   h2 {
-    font-size: 1.8em;
-    color: cyan;
-    text-shadow: 0 0 10px cyan;
-    margin-bottom: 20px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    color: var(--neon);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
   }
 
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .full-width { grid-column: span 2; }
+
   input, select {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border: none;
+    width: 100%; padding: 12px 15px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 15px;
-    outline: none;
-    transition: 0.3s;
+    background: rgba(255, 255, 255, 0.03);
+    color: white; font-size: 14px;
+    outline: none; transition: 0.3s;
   }
 
   input:focus, select:focus {
-    box-shadow: 0 0 12px cyan;
-    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--neon);
+    background: rgba(0, 242, 255, 0.05);
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
   }
 
-  option { color: black; }
-
-  input::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-  }
+  option { background: #0a0a0a; color: white; }
 
   button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 15px;
-    border: none;
+    width: 100%; padding: 15px;
+    margin-top: 10px; border: none;
     border-radius: 12px;
-    background: linear-gradient(90deg, cyan, #00ffffc0);
-    color: black;
-    font-weight: 600;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
+    background: linear-gradient(135deg, var(--neon), #0072ff);
+    color: #000; font-family: 'Orbitron';
+    font-weight: 900; cursor: pointer;
+    transition: 0.3s; text-transform: uppercase;
   }
 
-  button:hover {
-    background: linear-gradient(90deg, #00ffff, #00ffe0);
-    box-shadow: 0 0 20px cyan;
+  button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 242, 255, 0.4);
   }
 
-  #message {
-    margin-top: 15px;
-    font-weight: bold;
-    font-size: 14px;
-  }
+  button:disabled { opacity: 0.6; cursor: not-allowed; }
 
-  .success { color: #00ffcc; }
-  .error { color: #ff7b7b; }
+  #message { margin-top: 20px; font-size: 13px; line-height: 1.5; }
+  .success { color: var(--neon); }
+  .error { color: #ff4d4d; }
 
-  /* Responsive tweaks */
-  @media (max-width: 600px) {
-    body {
-      padding: 15px;
-      background: radial-gradient(circle at bottom, #001f3f, #000);
-    }
-    .container {
-      padding: 20px;
-      border-radius: 18px;
-    }
-    h2 {
-      font-size: 1.6em;
-    }
-    input, select, button {
-      font-size: 14px;
-    }
+  @media (max-width: 480px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .full-width { grid-column: span 1; }
+    .container { padding: 25px 20px; }
   }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>Tournament Registration</h2>
+  <h2>Arena Registration</h2>
   <form id="registerForm">
-    <input type="text" id="fullName" placeholder="Full Name" required>
-    <input type="text" id="ign" placeholder="In-Game Name (IGN)" required>
-    <input type="text" id="playerId" placeholder="Player ID / UID" required>
-    <input type="text" id="teamName" placeholder="Team Name" required>
-    <input type="email" id="email" placeholder="Email Address" required>
-    <input type="tel" id="phone" placeholder="Phone Number" required>
-    <input type="text" id="discord" placeholder="Discord ID" required>
-    <input type="text" id="tournamentName" placeholder="Tournament Name" required>
+    <div class="form-grid">
+      <input type="text" id="fullName" placeholder="Full Name" class="full-width" required>
+      <input type="text" id="ign" placeholder="In-Game Name (IGN)" required>
+      <input type="text" id="playerId" placeholder="Player ID / UID" required>
+      <input type="text" id="teamName" placeholder="Team Name" class="full-width" required>
+      <input type="email" id="email" placeholder="Email Address" class="full-width" required>
+      <input type="tel" id="phone" placeholder="Phone Number" required>
+      <input type="text" id="discord" placeholder="Discord ID">
+      <input type="text" id="tournamentName" placeholder="Tournament Name" class="full-width" required>
+    </div>
 
     <select id="matchType" required>
       <option value="">Select Match Type</option>
@@ -143,97 +124,101 @@
       <option value="Squad">Squad</option>
     </select>
 
-    <select id="region">
-      <option value="India">India</option>
-      <option value="Asia">Asia</option>
-      <option value="Europe">Europe</option>
-    </select>
+    <div class="form-grid">
+      <select id="region">
+        <option value="India">India</option>
+        <option value="Asia">Asia</option>
+        <option value="Europe">Europe</option>
+      </select>
+      <select id="language">
+        <option value="Hindi">Hindi</option>
+        <option value="English">English</option>
+      </select>
+    </div>
 
-    <select id="language">
-      <option value="Hindi">Hindi</option>
-      <option value="English">English</option>
-    </select>
-
-    <button type="submit">Submit Registration</button>
+    <button type="submit" id="submitBtn">Transmit Data</button>
     <div id="message"></div>
   </form>
 </div>
 
-<!-- Firebase + Discord Script -->
 <script type="module">
-  // Import Firebase SDK
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  // Firebase Config
   const firebaseConfig = {
     apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
     authDomain: "crownforgestudio-2581a.firebaseapp.com",
     projectId: "crownforgestudio-2581a",
     storageBucket: "crownforgestudio-2581a.firebasestorage.app",
     messagingSenderId: "223324386293",
-    appId: "1:223324386293:web:9d7919c6b2e93781b026bc",
-    measurementId: "G-FC52FSYPGV"
+    appId: "1:223324386293:web:9d7919c6b2e93781b026bc"
   };
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-
-  // Discord Webhook URL
   const webhookURL = "https://discord.com/api/webhooks/1436267732827115660/myV-BKwgFu9bd2BY_SNz88dD93LYhwsizXilXi8aHw66eSXq6KX0VAyR1yGlVmHMJ9dw";
 
   const form = document.getElementById("registerForm");
   const messageDiv = document.getElementById("message");
+  const btn = document.getElementById("submitBtn");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = "Processing Signal...";
+    
     const formData = {
-      fullName: fullName.value.trim(),
-      ign: ign.value.trim(),
-      playerId: playerId.value.trim(),
-      teamName: teamName.value.trim(),
-      email: email.value.trim(),
-      phone: phone.value.trim(),
-      discord: discord.value.trim(),
-      tournamentName: tournamentName.value.trim(),
-      matchType: matchType.value,
-      region: region.value,
-      language: language.value,
-      date: new Date().toLocaleString()
+      fullName: document.getElementById("fullName").value,
+      ign: document.getElementById("ign").value,
+      playerId: document.getElementById("playerId").value,
+      teamName: document.getElementById("teamName").value,
+      email: document.getElementById("email").value,
+      phone: document.getElementById("phone").value,
+      discord: document.getElementById("discord").value || "N/A",
+      tournamentName: document.getElementById("tournamentName").value,
+      matchType: document.getElementById("matchType").value,
+      region: document.getElementById("region").value,
+      language: document.getElementById("language").value,
+      timestamp: new Date().toLocaleString()
     };
 
     try {
-      // Save in Firebase
+      // 1. Firebase Save
       await addDoc(collection(db, "tournament_registrations"), formData);
 
-      // Send to Discord
-      const discordMessage = {
-        content: `🏆 **New Tournament Registration**
-👤 **Name:** ${formData.fullName}
-🎮 **IGN:** ${formData.ign}
-🆔 **Player ID:** ${formData.playerId}
-👥 **Team Name:** ${formData.teamName}
-📧 **Email:** ${formData.email}
-📱 **Phone:** ${formData.phone}
-💬 **Discord ID:** ${formData.discord}
-🎯 **Tournament:** ${formData.tournamentName}
-⚔️ **Match Type:** ${formData.matchType}
-🌍 **Region:** ${formData.region}
-🗣️ **Language:** ${formData.language}
-🕓 **Date:** ${formData.date}`
+      // 2. Discord Embed (Better Look)
+      const discordPayload = {
+        embeds: [{
+          title: "🏆 New Arena Registration",
+          color: 0x00f2ff,
+          fields: [
+            { name: "👤 Name", value: formData.fullName, inline: true },
+            { name: "🎮 IGN", value: formData.ign, inline: true },
+            { name: "🆔 UID", value: formData.playerId, inline: true },
+            { name: "👥 Team", value: formData.teamName, inline: true },
+            { name: "🎯 Event", value: formData.tournamentName, inline: true },
+            { name: "⚔️ Type", value: formData.matchType, inline: true },
+            { name: "📱 Contact", value: formData.phone, inline: true },
+            { name: "📧 Email", value: formData.email }
+          ],
+          footer: { text: "CrownForge Arena • System Logs" },
+          timestamp: new Date()
+        }]
       };
 
       await fetch(webhookURL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(discordMessage)
+        body: JSON.stringify(discordPayload)
       });
 
-      messageDiv.innerHTML = `<div class="success">✅ Registration Successful! Data sent to Discord & Firebase.</div>`;
+      messageDiv.innerHTML = `<div class="success">✅ TRANSMISSION COMPLETE.<br>Data secured in Neural Core & Discord Logs.</div>`;
       form.reset();
     } catch (error) {
-      console.error(error);
-      messageDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+      messageDiv.innerHTML = `<div class="error">❌ SIGNAL LOST: ${error.message}</div>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Transmit Data";
     }
   });
 </script>

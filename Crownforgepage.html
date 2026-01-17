@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CrownForge Studio - Neon Glass Hub</title>
+  <title>CrownForge Studio | Neon Glass Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  
   <style>
-    /* ===== RESET & BASE STYLES ===== */
+    /* ===== RESET & MODERN BASE ===== */
     * {
       margin: 0;
       padding: 0;
@@ -13,368 +15,291 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0a0f14; /* Dark base for contrast */
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #05080a; /* Pehle se dark, premium look */
       color: white;
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* ===== NAVIGATION BAR ===== */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 5%;
-      background: rgba(10, 15, 20, 0.7);
-      backdrop-filter: blur(10px);
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      border-bottom: 1px solid rgba(0, 255, 255, 0.1);
-    }
-
-    .navbar .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #00ffff;
-      text-shadow: 0 0 5px #00ffff;
-    }
-
-    .navbar .logo img {
-      height: 32px;
-      width: auto;
-      border-radius: 4px;
-    }
-
-    .navbar nav ul {
-      display: flex;
-      list-style: none;
-      gap: 2rem;
-    }
-
-    .navbar nav ul li a {
-      color: #e0e0e0;
-      text-decoration: none;
-      font-size: 0.9rem;
-      transition: color 0.3s ease;
-    }
-
-    .navbar nav ul li a:hover {
-      color: #00ffff;
-      text-shadow: 0 0 3px #00ffff;
-    }
-
-    /* ===== HERO SECTION WITH GLASSMORPHISM ===== */
-    .hero {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      padding-top: 80px; /* Account for fixed navbar */
-    }
-
-    /* BACKGROUND ANIMATION (SOFT ORANGE SPHERES) */
+    /* ===== DYNAMIC BACKGROUND SPHERES ===== */
     .bg-spheres {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       z-index: -1;
-      pointer-events: none;
+      overflow: hidden;
     }
 
     .sphere {
       position: absolute;
       border-radius: 50%;
-      background: linear-gradient(45deg, #ff9a3c, #ff6b6b);
-      filter: blur(60px);
-      opacity: 0.7;
+      filter: blur(80px);
+      opacity: 0.5;
+      animation: float 20s infinite alternate ease-in-out;
     }
 
     .sphere-1 {
-      width: 400px;
-      height: 400px;
-      top: -150px;
-      right: -100px;
+      width: 500px; height: 500px;
+      background: linear-gradient(45deg, #00ffff, #0066ff);
+      top: -10%; right: -10%;
     }
 
     .sphere-2 {
-      width: 200px;
-      height: 200px;
-      bottom: -50px;
-      left: 10%;
+      width: 400px; height: 400px;
+      background: linear-gradient(45deg, #ff00ff, #7000ff);
+      bottom: -10%; left: -5%;
+      animation-delay: -5s;
     }
 
-    .sphere-3 {
-      width: 300px;
-      height: 300px;
-      top: 50%;
-      left: -100px;
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-50px, 50px) scale(1.1); }
     }
 
-    .sphere-4 {
-      width: 150px;
-      height: 150px;
-      bottom: 20%;
-      right: 5%;
+    /* ===== PREMIUM NAVBAR ===== */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 5%;
+      background: rgba(5, 8, 10, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    /* GLASS PANEL */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span {
+      background: linear-gradient(90deg, #00ffff, #00a2ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #00ffff;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    }
+
+    /* ===== HERO SECTION ===== */
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5%;
+    }
+
     .glass-panel {
-      background: rgba(15, 25, 35, 0.3);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(15px);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 3rem;
-      max-width: 800px;
-      width: 90%;
+      border-radius: 30px;
+      padding: 4rem 2rem;
+      max-width: 900px;
       text-align: center;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      z-index: 1;
-      animation: fadeInUp 1s ease-out;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
     }
 
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    /* Glow effect inside glass */
+    .glass-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+      transition: 0.5s;
+    }
+
+    .glass-panel:hover::before {
+      left: 100%;
     }
 
     .glass-panel h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      color: #00ffff;
-      text-shadow: 0 0 10px #00ffff;
-      letter-spacing: 1px;
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+      background: linear-gradient(to bottom, #fff 30%, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .glass-panel p {
-      font-size: 1rem;
-      line-height: 1.6;
-      margin-bottom: 2rem;
-      color: #cccccc;
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.6);
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
     }
 
-    .btn-group {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      margin-bottom: 2rem;
-    }
-
+    /* ===== COOL BUTTONS ===== */
     .btn {
-      padding: 0.75rem 1.5rem;
-      border-radius: 50px;
-      border: 2px solid #00ffff;
-      background: transparent;
-      color: #00ffff;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      padding: 1rem 2.5rem;
+      border-radius: 12px;
+      font-weight: 700;
       text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       display: inline-block;
+      position: relative;
+      background: #00ffff;
+      color: #000;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
     }
 
     .btn:hover {
-      background: rgba(0, 255, 255, 0.1);
-      transform: translateY(-2px);
-      box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+      transform: scale(1.05) translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 255, 255, 0.5);
     }
 
-    .btn.secondary {
-      border-color: #ffffff;
-      color: #ffffff;
-    }
-
-    .btn.secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-    }
-
-    /* CONTENT CARDS BELOW HERO */
+    /* ===== CONTENT CARDS ===== */
     .content-cards {
-      display: flex;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 2rem;
-      padding: 3rem 5%;
-      flex-wrap: wrap;
+      padding: 5rem 5%;
       max-width: 1200px;
       margin: 0 auto;
     }
 
     .card {
-      background: rgba(20, 30, 40, 0.4);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      padding: 1.5rem;
-      width: 300px;
-      text-align: center;
-      transition: transform 0.3s ease;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+      padding: 2.5rem;
+      transition: 0.4s;
+      cursor: pointer;
     }
 
     .card:hover {
-      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(0, 255, 255, 0.3);
+      transform: translateY(-10px);
     }
 
     .card h3 {
-      margin-bottom: 0.5rem;
-      color: #ffffff;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #00ffff;
     }
 
     .card p {
-      font-size: 0.9rem;
-      color: #aaaaaa;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.6;
     }
 
-    /* FOOTER */
     footer {
       text-align: center;
-      padding: 1.5rem;
-      background: rgba(10, 15, 20, 0.7);
-      backdrop-filter: blur(10px);
-      border-top: 1px solid rgba(0, 255, 255, 0.1);
-      margin-top: 3rem;
-      font-size: 0.85rem;
-      color: #bbbbbb;
+      padding: 4rem 1rem;
+      color: rgba(255,255,255,0.3);
+      font-size: 0.9rem;
+      letter-spacing: 1px;
     }
 
-    /* RESPONSIVE DESIGN */
-    @media (max-width: 768px) {
-      .navbar nav ul {
-        gap: 1rem;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #05080a; }
+    ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #00ffff; }
 
-      .glass-panel {
-        padding: 2rem 1rem;
-      }
-
-      .glass-panel h1 {
-        font-size: 2rem;
-      }
-
-      .btn-group {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .content-cards {
-        padding: 2rem 3%;
-      }
-
-      .card {
-        width: 100%;
-        max-width: 300px;
-      }
-    }
   </style>
 </head>
 <body>
 
-  <!-- NAVBAR -->
+  <div class="bg-spheres">
+    <div class="sphere sphere-1"></div>
+    <div class="sphere sphere-2"></div>
+  </div>
+
   <header class="navbar">
     <div class="logo">
-      <img src="https://yt3.googleusercontent.com/6Luh44TZYpMHGByu5PTZYTMoXi7L8zWhz6tfOStduKlpvmH1DkyL-WxZk0atM8ygiaEUFxVX=s900-c-k-c0x00ffffff-no-rj" alt="CrownForge Logo"> <!-- Replace with your actual logo -->
-      <span>CrownForge Studio</span>
+      <div style="width:35px; height:35px; background:#00ffff; border-radius:8px; display:grid; place-items:center; color:#000;">CF</div>
+      <span>CrownForge</span>
     </div>
     <nav>
-      <ul>
-        <li><a href="Crownforgepage.html">Home</a></li>
-        <li><a href="tralers.html">Videos</a></li>
+      <ul class="nav-links">
         <li><a href="Games.html">Games</a></li>
+        <li><a href="chating.html" style="color:#e5ff00">Forge-Chat</a></li>
+        <li><a href="friends.html">friends</a></li>
         <li><a href="Newupdates.html">Updates</a></li>
         <li><a href="Support.html">Support</a></li>
-        <li><a href="index.html">Logout</a></li>
-        <li><a href="leaderborad.html">Leaderboard</a></li>
-        <li><a href="chating.html">FORGE-CHAT</a></li>
-        <li><a href="profile.html">PROFILE</a></li>
-        <li><a href="friends.html">FORGE FRIENDS</a></li>
-        <li><a href="#">Comming soon..</a></li>
+        <li><a href="profile.html" style="color:#00ffff">Profile</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- HERO SECTION -->
   <section class="hero">
-    <div class="bg-spheres">
-      <div class="sphere sphere-1"></div>
-      <div class="sphere sphere-2"></div>
-      <div class="sphere sphere-3"></div>
-      <div class="sphere sphere-4"></div>
-    </div>
-
     <div class="glass-panel">
-      <h1>CrownForge Studio</h1>
-      <p>Welcome to CrownForge — your neon-glass hub for trailers, updates, and new game launches. Built for creators and players alike.</p>
+      <h1>The Future of <br> Neon Gaming.</h1>
+      <p>Forge your destiny in the digital void. CrownForge Studio brings you next-gen visuals and immersive glassmorphic experiences.</p>
       <div class="btn-group">
-        <a href="Newupdates.html" class="btn secondary">Latest Updates</a>
+        <a href="Newupdates.html" class="btn">Explore Updates</a>
       </div>
     </div>
   </section>
 
-  <!-- CONTENT CARDS -->
   <div class="content-cards">
     <div class="card">
       <h3>Studio News</h3>
-      <p>Get patch notes, new game logs, and developer insights.</p>
+      <p>Experience the latest patch 2.0 with enhanced ray-tracing support and new neon environments.</p>
     </div>
     <div class="card">
       <h3>Dev Center</h3>
-      <p>Download Unity, SDKs, and other developer tools.</p>
+      <p>Access our proprietary SDKs and high-fidelity assets to build your own glass-world dreams.</p>
     </div>
     <div class="card">
       <h3>Community</h3>
-      <p>Join our Discord, share projects, and connect with devs.</p>
+      <p>Join 10,000+ creators in our Forge-Chat. Share, collaborate, and dominate the leaderboard.</p>
     </div>
   </div>
 
-  <!-- FOOTER -->
   <footer>
-    &copy; 2025 CrownForge Studio — All Rights Reserved.
+    &copy; 2026 CROWNFORGE STUDIO. DESIGNED FOR THE NEXT GEN.
   </footer>
 
-  <!-- OPTIONAL: JAVASCRIPT FOR INTERACTIVITY -->
   <script>
-    // Optional: Add subtle animations or interactions
-    document.addEventListener('DOMContentLoaded', function() {
-      // Example: Animate spheres slightly on scroll
-      window.addEventListener('scroll', function() {
-        const spheres = document.querySelectorAll('.sphere');
-        const scrollY = window.scrollY;
-
-        spheres.forEach((sphere, index) => {
-          sphere.style.transform = `translateY(${scrollY * 0.05 * (index + 1)}px)`;
-        });
-      });
-
-      // Example: Smooth scroll for anchor links
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-          e.preventDefault();
-          document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-          });
-        });
+    // Smooth Tilt effect for cards
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--x', `${x}px`);
+        card.style.setProperty('--y', `${y}px`);
       });
     });
   </script>
-
 </body>
 </html>

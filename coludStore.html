@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudVault - Secure Storage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: #e2e8f0; height: 100vh; overflow: hidden; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .loader { border-top-color: #3b82f6; animation: spinner 1.5s linear infinite; }
+        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    </style>
+</head>
+<body class="flex items-center justify-center bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center">
+
+    <div class="absolute inset-0 bg-gray-900/80"></div>
+
+    <div id="login-screen" class="relative z-10 w-full max-w-md p-8 glass rounded-2xl shadow-2xl text-center">
+        <i class="fa-solid fa-cloud-shield text-6xl text-blue-500 mb-6"></i>
+        <h1 class="text-3xl font-bold mb-2">CloudVault</h1>
+        <p class="text-gray-400 mb-8">Secure 10GB Personal Cloud</p>
+        <button id="login-btn" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold flex items-center justify-center gap-2 transition">
+            <i class="fa-brands fa-google"></i> Login with Google
+        </button>
+    </div>
+
+    <div id="dashboard" class="hidden relative z-10 w-full h-full flex flex-col md:flex-row p-4 gap-4">
+        <aside class="w-full md:w-64 glass rounded-xl p-6 flex flex-col justify-between">
+            <div>
+                <div class="text-blue-400 font-bold text-xl mb-8"><i class="fa-solid fa-cloud-bolt"></i> CloudVault</div>
+                <div class="p-4 bg-white/5 rounded-lg mb-6 flex items-center gap-3">
+                    <img id="user-avatar" class="w-10 h-10 rounded-full border border-gray-500">
+                    <div>
+                        <h3 id="user-name" class="font-bold text-sm truncate w-24">User</h3>
+                        <p class="text-xs text-green-400">● Online</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="text-xs text-gray-400 font-bold uppercase">Storage (10GB Limit)</div>
+                    <div class="w-full bg-gray-700 rounded-full h-2">
+                        <div id="storage-bar" class="bg-blue-500 h-2 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <p id="used-space" class="text-xs text-right text-gray-300">0 MB / 10 GB</p>
+                </div>
+            </div>
+            <button id="logout-btn" class="py-2 px-4 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-lg text-sm transition"><i class="fa-solid fa-power-off mr-2"></i> Logout</button>
+        </aside>
+
+        <main class="flex-1 flex flex-col gap-4">
+            <div id="drop-zone" class="glass rounded-xl p-8 border-2 border-dashed border-gray-600 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-white/5 transition">
+                <input type="file" id="file-input" class="hidden">
+                <i class="fa-solid fa-cloud-arrow-up text-4xl text-blue-400 mb-3"></i>
+                <h3 class="text-xl font-bold">Upload Files</h3>
+                <p class="text-sm text-gray-400 mb-4">APK (Max 80MB) • PNG • JPG • DOC • EXE</p>
+                
+                <div id="upload-status" class="hidden w-full max-w-sm">
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="text-blue-400">Uploading...</span>
+                        <span id="progress-text">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-2">
+                        <div id="upload-bar" class="bg-green-500 h-2 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 glass rounded-xl p-6 overflow-hidden flex flex-col">
+                <h2 class="font-bold mb-4 pb-2 border-b border-gray-700">My Files</h2>
+                <div class="overflow-y-auto flex-1">
+                    <table class="w-full text-left text-sm">
+                        <thead class="text-gray-500 border-b border-gray-700">
+                            <tr><th class="py-2">Name</th><th class="py-2">Type</th><th class="py-2">Size</th><th class="py-2 text-right">Actions</th></tr>
+                        </thead>
+                        <tbody id="file-list"></tbody>
+                    </table>
+                    <div id="empty-state" class="hidden h-32 flex flex-col items-center justify-center text-gray-500">
+                        <i class="fa-regular fa-folder-open text-2xl mb-2"></i> No files yet.
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast" class="fixed top-5 right-5 z-50 glass px-6 py-4 rounded-lg transform translate-x-full transition-transform duration-300 flex items-center gap-3 border-l-4 border-blue-500">
+        <i id="toast-icon" class="fa-solid fa-info-circle"></i>
+        <span id="toast-msg">Message</span>
+    </div>
+
+    <script type="module">
+        // --- 1. PASTE YOUR FIREBASE CONFIG HERE ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, where, onSnapshot, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
+
+        // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
+    authDomain: "crownforgestudio-2581a.firebaseapp.com",
+    projectId: "crownforgestudio-2581a",
+    storageBucket: "crownforgestudio-2581a.appspot.com",
+    messagingSenderId: "223324386293",
+    appId: "1:223324386293:web:783a3e64f0d10b1ab026bc",
+    measurementId: "G-EYRLR2CH35"
+  };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+        const provider = new GoogleAuthProvider();
+
+        // Variables
+        let currentUser = null;
+        let totalUsage = 0;
+        const LIMIT_10GB = 10 * 1024 * 1024 * 1024;
+        const LIMIT_APK = 80 * 1024 * 1024;
+
+        // --- AUTH ---
+        document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider).catch(e => showToast(e.message, true));
+        document.getElementById('logout-btn').onclick = () => signOut(auth);
+
+        onAuthStateChanged(auth, user => {
+            const loginScreen = document.getElementById('login-screen');
+            const dashboard = document.getElementById('dashboard');
+            if (user) {
+                currentUser = user;
+                loginScreen.classList.add('hidden');
+                dashboard.classList.remove('hidden');
+                document.getElementById('user-name').innerText = user.displayName;
+                document.getElementById('user-avatar').src = user.photoURL;
+                loadFiles();
+            } else {
+                currentUser = null;
+                loginScreen.classList.remove('hidden');
+                dashboard.classList.add('hidden');
+            }
+        });
+
+        // --- UPLOAD ---
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+
+        dropZone.onclick = () => fileInput.click();
+        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('bg-white/10'); };
+        dropZone.ondragleave = () => dropZone.classList.remove('bg-white/10');
+        dropZone.ondrop = (e) => { e.preventDefault(); dropZone.classList.remove('bg-white/10'); handleFile(e.dataTransfer.files[0]); };
+        fileInput.onchange = (e) => handleFile(e.target.files[0]);
+
+        function handleFile(file) {
+            if (!file) return;
+            const ext = file.name.split('.').pop().toLowerCase();
+            
+            // Rules Check
+            if (!['apk','png','jpg','jpeg','doc','docx','exe'].includes(ext)) return showToast("File type not allowed!", true);
+            if (ext === 'apk' && file.size > LIMIT_APK) return showToast("APK exceeds 80MB limit!", true);
+            if (totalUsage + file.size > LIMIT_10GB) return showToast("10GB Storage Full!", true);
+
+            // Upload Logic
+            document.getElementById('upload-status').classList.remove('hidden');
+            const storageRef = ref(storage, `users/${currentUser.uid}/${Date.now()}_${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    document.getElementById('upload-bar').style.width = progress + '%';
+                    document.getElementById('progress-text').innerText = Math.round(progress) + '%';
+                },
+                (error) => {
+                    console.error("Upload Error:", error);
+                    showToast("Upload Failed: " + error.message, true); // SHOWS ERROR ON SCREEN
+                    document.getElementById('upload-status').classList.add('hidden');
+                },
+                async () => {
+                    const url = await getDownloadURL(uploadTask.snapshot.ref);
+                    await addDoc(collection(db, "files"), {
+                        uid: currentUser.uid,
+                        name: file.name,
+                        size: file.size,
+                        type: ext,
+                        url: url,
+                        path: uploadTask.snapshot.ref.fullPath,
+                        createdAt: new Date()
+                    });
+                    showToast("Upload Successful!");
+                    document.getElementById('upload-status').classList.add('hidden');
+                }
+            );
+        }
+
+        // --- LOAD FILES ---
+        function loadFiles() {
+            const q = query(collection(db, "files"), where("uid", "==", currentUser.uid), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snap) => {
+                const list = document.getElementById('file-list');
+                list.innerHTML = '';
+                totalUsage = 0;
+                
+                if (snap.empty) document.getElementById('empty-state').classList.remove('hidden');
+                else document.getElementById('empty-state').classList.add('hidden');
+
+                snap.forEach(d => {
+                    const data = d.data();
+                    totalUsage += data.size;
+                    const row = document.createElement('tr');
+                    row.className = "hover:bg-white/5 border-b border-gray-700/50";
+                    row.innerHTML = `
+                        <td class="py-3 flex items-center gap-2"><i class="fa-solid fa-file text-blue-400"></i> ${data.name}</td>
+                        <td class="py-3 uppercase text-xs">${data.type}</td>
+                        <td class="py-3 text-xs text-gray-400">${(data.size/1024/1024).toFixed(2)} MB</td>
+                        <td class="py-3 text-right">
+                            <a href="${data.url}" target="_blank" class="text-blue-400 mr-3"><i class="fa-solid fa-download"></i></a>
+                            <button class="delete-btn text-red-400"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    `;
+                    // Delete Logic
+                    row.querySelector('.delete-btn').onclick = async () => {
+                        if(confirm('Delete file?')) {
+                            await deleteObject(ref(storage, data.path));
+                            await deleteDoc(doc(db, "files", d.id));
+                            showToast("File Deleted");
+                        }
+                    };
+                    list.appendChild(row);
+                });
+                
+                // Update Storage Bar
+                const pct = (totalUsage / LIMIT_10GB) * 100;
+                document.getElementById('storage-bar').style.width = pct + '%';
+                document.getElementById('used-space').innerText = `${(totalUsage/1024/1024).toFixed(0)} MB / 10 GB`;
+            });
+        }
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.className = `fixed top-5 right-5 z-50 glass px-6 py-4 rounded-lg transition-transform duration-300 flex items-center gap-3 border-l-4 ${isError ? 'border-red-500 text-red-300' : 'border-green-500 text-green-300'}`;
+            toast.classList.remove('translate-x-full');
+            setTimeout(() => toast.classList.add('translate-x-full'), 3000);
+        }
+    </script>
+</body>
+</html>

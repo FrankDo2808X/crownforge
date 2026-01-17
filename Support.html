@@ -3,233 +3,218 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CrownForge Studio - Support</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<title>CrownForge | Support Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg-dark:#050b18;
-  --neon-blue:#00aaff;
-  --neon-cyan:#00ffff;
-  --text-light:#fff;
+:root {
+  --bg-dark: #02060c;
+  --neon-blue: #00aaff;
+  --neon-cyan: #00ffff;
+  --glass: rgba(255, 255, 255, 0.03);
 }
 
 /* RESET */
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
-  font-family:'Inter',sans-serif;
-  background:var(--bg-dark);
-  color:var(--text-light);
-  overflow-x:hidden;
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-dark);
+  color: #fff;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(0, 170, 255, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(0, 255, 255, 0.05) 0%, transparent 40%);
 }
 
 /* NAVIGATION */
-nav{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background:rgba(0,0,0,0.4);
-  padding:15px 40px;
-  border-bottom:1px solid rgba(0,170,255,0.2);
-  box-shadow:0 0 20px rgba(0,170,255,0.3);
-  position:sticky;
-  top:0;
-  z-index:1000;
-  backdrop-filter:blur(10px);
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 5%;
+  background: rgba(2, 6, 12, 0.85);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
-nav img{
-  height:50px;
-  border-radius:50%;
-  box-shadow:0 0 20px var(--neon-cyan);
-}
-nav ul{
-  list-style:none;
-  display:flex;
-  gap:25px;
-  transition:0.4s ease;
-}
-nav ul li a{
-  color:var(--text-light);
-  text-decoration:none;
-  font-family:'Orbitron';
-  font-weight:700;
-  letter-spacing:1px;
-  transition:0.3s;
-}
-nav ul li a:hover{
-  color:var(--neon-cyan);
-  text-shadow:0 0 10px var(--neon-blue),0 0 20px var(--neon-cyan);
-}
+.nav-logo { height: 45px; border-radius: 50%; border: 2px solid var(--neon-cyan); box-shadow: 0 0 15px var(--neon-cyan); }
 
-/* HAMBURGER */
-.menu-btn{
-  display:none;
-  flex-direction:column;
-  cursor:pointer;
-  gap:5px;
+nav ul { list-style: none; display: flex; gap: 30px; }
+nav ul li a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-family: 'Orbitron';
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  transition: 0.3s;
 }
-.menu-btn div{
-  width:26px;
-  height:3px;
-  background:var(--neon-cyan);
-  box-shadow:0 0 8px var(--neon-blue);
-  transition:0.3s;
+nav ul li a:hover, nav ul li a.active {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px var(--neon-cyan);
 }
 
 /* HEADER */
-header{
-  text-align:center;
-  padding:100px 20px 40px;
+header {
+  text-align: center;
+  padding: 80px 20px 40px;
 }
-header h1{
-  font-family:'Orbitron';
-  font-size:3rem;
-  background:linear-gradient(90deg,var(--neon-blue),var(--neon-cyan));
-  -webkit-background-clip:text;
-  color:transparent;
-  text-shadow:0 0 20px var(--neon-blue),0 0 25px var(--neon-cyan);
-  margin-bottom:16px;
+header h1 {
+  font-family: 'Orbitron';
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  text-transform: uppercase;
+  background: linear-gradient(to bottom, #fff 40%, var(--neon-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
 }
-header p{
-  font-size:1.1rem;
-  color:var(--neon-cyan);
-  max-width:700px;
-  margin:0 auto;
-  line-height:1.6;
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 255, 255, 0.1);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-family: 'Orbitron';
+  color: var(--neon-cyan);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+}
+.dot { width: 8px; height: 8px; background: var(--neon-cyan); border-radius: 50%; animation: pulse 1.5s infinite; }
+
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.7); }
+  70% { transform: scale(1.2); box-shadow: 0 0 0 10px rgba(0, 255, 255, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
 }
 
-/* CONTACT CARDS */
-.contact-container{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:24px;
-  max-width:600px;
-  margin:50px auto;
+/* CONTACT GRID */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
 }
-.contact-card{
-  display:flex;
-  align-items:center;
-  gap:16px;
-  padding:16px 28px;
-  border-radius:20px;
-  background:rgba(0,0,0,0.4);
-  border:1px solid rgba(0,170,255,0.3);
-  box-shadow:0 0 25px rgba(0,170,255,0.5);
-  width:100%;
-  transition:0.3s;
-  text-decoration:none;
-  color:var(--text-light);
+
+.contact-card {
+  position: relative;
+  background: var(--glass);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 24px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
 }
-.contact-card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 0 40px var(--neon-cyan),0 0 60px var(--neon-blue);
+
+.contact-card:hover {
+  transform: translateY(-10px);
+  background: rgba(0, 255, 255, 0.05);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 255, 255, 0.1);
 }
-.contact-card img{
-  width:42px;
-  height:42px;
+
+.contact-card img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.3));
 }
-.contact-card span{
-  font-family:'Inter',sans-serif;
-  font-weight:600;
-  font-size:1rem;
-  color:var(--neon-cyan);
+
+.contact-card h3 {
+  font-family: 'Orbitron';
+  font-size: 1rem;
+  color: #fff;
+  margin-bottom: 8px;
 }
+
+.contact-card span {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  word-break: break-all;
+}
+
+.contact-card::after {
+  content: "OPEN LINK";
+  position: absolute;
+  bottom: -40px;
+  font-family: 'Orbitron';
+  font-size: 0.7rem;
+  color: var(--neon-cyan);
+  transition: 0.3s;
+}
+
+.contact-card:hover::after { bottom: 15px; }
 
 /* FOOTER */
-footer{
-  text-align:center;
-  padding:30px 20px;
-  color:rgba(255,255,255,0.6);
-  border-top:1px solid rgba(0,170,255,0.2);
-  font-size:0.95rem;
-  margin-top:60px;
+footer {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(255, 255, 255, 0.3);
+  font-family: 'Orbitron';
+  font-size: 0.7rem;
+  letter-spacing: 2px;
 }
 
-/* RESPONSIVE MENU */
-@media(max-width:820px){
-  .menu-btn{display:flex;}
-  nav ul{
-    position:fixed;
-    top:0;
-    right:-100%;
-    flex-direction:column;
-    background:rgba(0,0,0,0.95);
-    backdrop-filter:blur(12px);
-    height:100vh;
-    width:70%;
-    justify-content:center;
-    align-items:center;
-    gap:40px;
-    transition:0.4s ease;
-  }
-  nav ul.show{right:0;}
+/* RESPONSIVE */
+@media(max-width: 768px) {
+  nav ul { display: none; }
 }
 </style>
 </head>
 <body>
 
-<!-- ✅ NAVIGATION BAR -->
 <nav>
-  <img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="CrownForge Studio Logo">
-  
-  <div class="menu-btn" id="menuBtn">
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
-
-  <ul id="menuList">
-    <li><a href="Crownforgepage.html">Home</a></li>
-    <li><a href="Games.html">Games</a></li>
-    <li><a href="tralers.html">Videos</a></li>
-    <li><a href="contact.html" style="color:var(--neon-cyan);">Contact</a></li>
+  <img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" class="nav-logo" alt="Logo">
+  <ul>
+    <li><a href="Crownforgepage.html">HOME</a></li>
+    <li><a href="Games.html">GAMES</a></li>
+    <li><a href="tralers.html">VIDEOS</a></li>
+    <li><a href="contact.html" class="active">SUPPORT</a></li>
   </ul>
 </nav>
 
 <header>
-  <h1>CrownForge Studio</h1>
-  <p>Get in touch with us! Connect via Email, Instagram, Discord, or YouTube for the latest updates and collaborations.</p>
+  <div class="status-indicator"><div class="dot"></div> SUPPORT UPLINK ACTIVE</div>
+  <h1>GET IN TOUCH</h1>
+  <p style="color: rgba(255,255,255,0.6); max-width: 600px; margin: 20px auto; font-size: 0.95rem;">
+    Have a bug to report or a business inquiry? Connect with the CrownForge Neural Network through the channels below.
+  </p>
 </header>
 
-<div class="contact-container">
+<div class="contact-grid">
   <a href="mailto:crownforgebusiness@gmail.com" class="contact-card">
-    <img src="https://img.icons8.com/color/48/000000/new-post.png" alt="Email">
+    <img src="https://img.icons8.com/fluency/96/mail.png" alt="Email">
+    <h3>OFFICIAL MAIL</h3>
     <span>crownforgebusiness@gmail.com</span>
   </a>
 
   <a href="https://www.instagram.com/crownforge_official" target="_blank" class="contact-card">
-    <img src="https://img.icons8.com/fluency/48/000000/instagram-new.png" alt="Instagram">
-    <span>Instagram</span>
+    <img src="https://img.icons8.com/fluency/96/instagram-new.png" alt="Instagram">
+    <h3>INSTAGRAM</h3>
+    <span>@crownforge_official</span>
   </a>
 
   <a href="https://discord.gg/C9rtFRtWax" target="_blank" class="contact-card">
-    <img src="https://img.icons8.com/fluency/48/000000/discord-logo.png" alt="Discord">
-    <span>Discord</span>
+    <img src="https://img.icons8.com/fluency/96/discord-logo.png" alt="Discord">
+    <h3>DISCORD SERVER</h3>
+    <span>Join the Community</span>
   </a>
 
   <a href="https://www.youtube.com/@CrownForgeStudio" target="_blank" class="contact-card">
-    <img src="https://img.icons8.com/color/48/000000/youtube-play.png" alt="YouTube">
-    <span>YouTube</span>
+    <img src="https://img.icons8.com/fluency/96/youtube-play.png" alt="YouTube">
+    <h3>YOUTUBE</h3>
+    <span>Studio Devlogs</span>
   </a>
 </div>
 
-<footer>&copy; 2025 CrownForge Studio. All Rights Reserved.</footer>
-
-<script>
-const menuBtn=document.getElementById('menuBtn');
-const menuList=document.getElementById('menuList');
-
-menuBtn.addEventListener('click',()=>{
-  menuList.classList.toggle('show');
-});
-
-// Hide menu when clicking outside
-document.addEventListener('click',e=>{
-  if(!menuBtn.contains(e.target) && !menuList.contains(e.target)){
-    menuList.classList.remove('show');
-  }
-});
-</script>
+<footer>&copy; 2026 CROWNFORGE STUDIO // NEURAL INTERFACE V2.0</footer>
 
 </body>
 </html>
