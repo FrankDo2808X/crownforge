@@ -1,159 +1,336 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CrownForge | Neural Access</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary: #00f2ff; --secondary: #7000ff; --accent: #ff00c8; --bg: #02040a; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { height: 100vh; display: flex; justify-content: center; align-items: center; background: var(--bg); font-family: 'Plus Jakarta Sans', sans-serif; color: #fff; overflow: hidden; perspective: 1000px; }
-        #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, #0a1128 0%, #02040a 100%); }
-        .auth-wrapper { position: relative; padding: 3px; border-radius: 30px; background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent)); background-size: 300% 300%; animation: electricBorder 4s linear infinite; box-shadow: 0 0 50px rgba(112, 0, 255, 0.3); transition: transform 0.1s; }
-        @keyframes electricBorder { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .auth-card { width: 400px; background: rgba(2, 4, 10, 0.95); backdrop-filter: blur(40px); padding: 50px 40px; border-radius: 28px; text-align: center; position: relative; z-index: 10; }
-        h2 { font-family: 'Orbitron'; font-weight: 900; margin-bottom: 30px; background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 2px; }
-        input { width: 100%; padding: 15px 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; color: #fff; margin-bottom: 15px; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--primary); background: rgba(0, 242, 255, 0.08); }
-        .glow-btn { width: 100%; padding: 16px; border: none; border-radius: 14px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #000; font-family: 'Orbitron'; font-weight: 800; cursor: pointer; transition: 0.3s; text-transform: uppercase; margin-top: 10px; }
-        .glow-btn:hover { transform: scale(1.02); box-shadow: 0 0 25px var(--primary); }
-        .google-btn { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .google-btn img { width: 20px; }
-        .switch-link { margin-top: 25px; font-size: 0.85rem; color: rgba(255,255,255,0.4); cursor: pointer; }
-        .switch-link span { color: var(--primary); text-decoration: underline; }
-        .form { display: none; }
-        .form.active { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        #loader { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 4px solid transparent; border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; z-index: 100; }
-        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>CrownForge Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root { 
+        --primary: #00f2ff; 
+        --secondary: #7000ff; 
+        --accent: #ff00c8; 
+        --bg: #05080a; 
+        --glass: rgba(255, 255, 255, 0.05);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* === ANIMATED BACKGROUND === */
+    .bg-spheres { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+    .sphere { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.35; animation: float 15s infinite alternate ease-in-out; }
+    .sphere-1 { width: 60vw; height: 60vw; background: radial-gradient(circle, var(--primary), transparent); top: -10%; left: -10%; }
+    .sphere-2 { width: 50vw; height: 50vw; background: radial-gradient(circle, var(--secondary), transparent); bottom: -10%; right: -10%; animation-delay: -5s; }
+    @keyframes float { 0% { transform: translate(0, 0); } 100% { transform: translate(30px, -30px); } }
+
+    /* === NAVBAR === */
+    .navbar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 15px 5%; background: rgba(5, 8, 10, 0.7);
+      backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-family: 'Orbitron'; font-weight: 900; letter-spacing: 1px; }
+    .logo span { background: linear-gradient(90deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    /* Desktop Nav Links */
+    .nav-links { display: flex; list-style: none; gap: 2rem; align-items: center; }
+    .nav-links a { 
+        color: rgba(255,255,255,0.6); text-decoration: none; 
+        font-size: 0.85rem; font-weight: 600; text-transform: uppercase; 
+        transition: 0.3s; position: relative;
+    }
+    .nav-links a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+    
+    /* Login Button in Navbar */
+    .auth-trigger-btn {
+        padding: 8px 24px; border-radius: 50px; border: 1px solid var(--primary);
+        background: rgba(0, 242, 255, 0.1); color: var(--primary); cursor: pointer;
+        font-family: 'Orbitron'; font-size: 0.75rem; letter-spacing: 1px; transition: 0.3s;
+    }
+    .auth-trigger-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary); }
+
+    /* === HAMBURGER MENU (MOBILE) === */
+    .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; z-index: 1001; }
+    .bar { width: 25px; height: 3px; background: #fff; border-radius: 5px; transition: 0.3s; }
+    
+    /* Mobile Menu Overlay */
+    .mobile-menu {
+        position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
+        background: rgba(2, 4, 10, 0.98); backdrop-filter: blur(20px);
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        gap: 2rem; transition: 0.4s ease-in-out; z-index: 999;
+    }
+    .mobile-menu.active { right: 0; }
+    .mobile-menu a { font-family: 'Orbitron'; font-size: 1.5rem; color: #fff; text-decoration: none; }
+    .mobile-menu a:hover { color: var(--primary); }
+
+    /* === LOGIN PANEL / MODAL === */
+    #authOverlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+        display: none; justify-content: center; align-items: center; z-index: 2000;
+        animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn { from {opacity:0} to {opacity:1} }
+
+    .auth-wrapper { 
+        position: relative; width: 90%; max-width: 400px; padding: 2px; border-radius: 20px; 
+        background: linear-gradient(45deg, var(--primary), var(--secondary));
+        box-shadow: 0 0 50px rgba(0, 242, 255, 0.2);
+    }
+    
+    .auth-card { 
+        background: #080c14; padding: 40px 30px; border-radius: 18px; 
+        text-align: center; position: relative;
+    }
+    
+    .close-modal { position: absolute; top: 15px; right: 15px; color: #fff; font-size: 1.5rem; cursor: pointer; opacity: 0.5; }
+    .close-modal:hover { opacity: 1; color: var(--accent); }
+
+    .auth-card h2 { font-family: 'Orbitron'; color: #fff; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; }
+    
+    .input-group { position: relative; margin-bottom: 15px; }
+    .input-group input { 
+        width: 100%; padding: 14px 15px; background: rgba(255,255,255,0.03); 
+        border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #fff; outline: none; transition: 0.3s; 
+    }
+    .input-group input:focus { border-color: var(--primary); background: rgba(0, 242, 255, 0.05); }
+
+    .glow-btn { 
+        width: 100%; padding: 14px; border: none; border-radius: 10px; 
+        background: linear-gradient(90deg, var(--primary), var(--secondary)); 
+        color: #fff; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; margin-top: 10px; 
+        text-transform: uppercase; letter-spacing: 1px;
+    }
+    .google-btn { background: #fff; color: #000; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    
+    .form { display: none; }
+    .form.active { display: block; animation: slideUp 0.4s ease; }
+    @keyframes slideUp { from {transform: translateY(20px); opacity:0;} to {transform: translateY(0); opacity:1;} }
+
+    /* === HERO SECTION === */
+    .hero { height: 100vh; display: flex; align-items: center; justify-content: center; padding: 0 20px; text-align: center; }
+    .glass-panel { 
+        background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); 
+        border-radius: 30px; padding: 3rem 1.5rem; max-width: 800px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+    }
+    .glass-panel h1 { font-family: 'Orbitron'; font-size: clamp(2rem, 6vw, 4rem); margin-bottom: 1rem; line-height: 1.1; }
+    .glass-panel p { color: rgba(255,255,255,0.6); margin-bottom: 2rem; font-size: 1.1rem; }
+
+    /* === RESPONSIVE RULES === */
+    @media (max-width: 768px) {
+        .nav-links { display: none; } /* Hide desktop links */
+        .hamburger { display: flex; } /* Show hamburger */
+        .auth-trigger-btn { padding: 6px 15px; font-size: 0.7rem; }
+    }
+  </style>
 </head>
 <body>
 
-    <div id="canvas-container"></div>
+  <div class="bg-spheres">
+    <div class="sphere sphere-1"></div>
+    <div class="sphere sphere-2"></div>
+  </div>
 
-    <div class="auth-wrapper" id="authWrapper">
+  <header class="navbar">
+    <div class="logo">
+      <div style="width:30px; height:30px; background:var(--primary); border-radius:4px; display:grid; place-items:center; color:#000; font-weight:900;">C</div>
+      <span>CrownForge</span>
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="Games.html">Games</a></li>
+      <li><a href="chating.html" style="color:#e5ff00">Forge-Chat</a></li>
+      <li><a href="friends.html">Friends</a></li>
+      <li><a href="Newupdates.html">Updates</a></li>
+      <li><a href="Support.html">Support</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="leaderborad.html">Leaderborad</a></li>
+    </ul>
+
+    <div style="display:flex; gap:15px; align-items:center;">
+        <button class="auth-trigger-btn" id="authMainBtn">LOGIN</button>
+        <div class="hamburger" id="hamburgerBtn">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="Games.html">Games</a>
+    <a href="chating.html" style="color:#e5ff00">Forge-Chat</a>
+    <a href="friends.html">Friends</a>
+    <a href="Newupdates.html">Updates</a>
+    <a href="Support.html">Support</a>
+    <a href="profile.html">Profile</a>
+    <a href="leaderborad.html">Leaderborad</a>
+    <p style="margin-top:50px; color:rgba(255,255,255,0.3); font-size:0.8rem;" onclick="toggleMobileMenu()">[ CLOSE MENU ]</p>
+  </div>
+
+  <div id="authOverlay">
+    <div class="auth-wrapper">
         <div class="auth-card">
-            <div id="loader"></div>
+            <span class="close-modal" onclick="closeAuth()">&times;</span>
             
             <div id="loginForm" class="form active">
-                <h2>Access Portal</h2>
-                <input id="loginEmail" type="email" placeholder="Neural ID (Email)">
-                <input id="loginPass" type="password" placeholder="Pass-Key">
+                <h2>System Login</h2>
+                <div class="input-group"><input id="loginEmail" type="email" placeholder="Neural ID (Email)"></div>
+                <div class="input-group"><input id="loginPass" type="password" placeholder="Pass-Key"></div>
                 <button class="glow-btn" id="loginBtn">Initialize Session</button>
                 <button class="glow-btn google-btn" id="googleLogin">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"> Google Sync
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" width="20"> Sync Google
                 </button>
-                <p class="switch-link" onclick="switchForm('signup')">New Citizen? <span>Create Account</span></p>
+                <p style="margin-top:20px; font-size:0.85rem; color:rgba(255,255,255,0.5);">
+                   New User? <span style="color:var(--primary); cursor:pointer; text-decoration:underline;" onclick="switchForm('signup')">Create Account</span>
+                </p>
             </div>
 
             <div id="signupForm" class="form">
-                <h2>Create Identity</h2>
-                <input id="signupEmail" type="email" placeholder="Neural ID (Email)">
-                <input id="signupPass" type="password" placeholder="Set Pass-Key">
-                <input id="signupConfirm" type="password" placeholder="Confirm Pass-Key">
-                <button class="glow-btn" id="signupBtn">Forge Account</button>
-                <button class="glow-btn google-btn" id="googleSignup">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"> Google Sync
-                </button>
-                <p class="switch-link" onclick="switchForm('login')">Known Identity? <span>Login Here</span></p>
+                <h2>Create Access</h2>
+                <div class="input-group"><input id="signupEmail" type="email" placeholder="Email Address"></div>
+                <div class="input-group"><input id="signupPass" type="password" placeholder="Create Password"></div>
+                <div class="input-group"><input id="signupConfirm" type="password" placeholder="Confirm Password"></div>
+                <button class="glow-btn" id="signupBtn">Forge Identity</button>
+                <p style="margin-top:20px; font-size:0.85rem; color:rgba(255,255,255,0.5);">
+                   Already have ID? <span style="color:var(--primary); cursor:pointer; text-decoration:underline;" onclick="switchForm('login')">Login Here</span>
+                </p>
             </div>
         </div>
     </div>
+  </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  <section class="hero">
+    <div class="glass-panel">
+      <h1>WELCOME TO THE<br><span style="color:var(--primary)">Crownforge Offical Page</span></h1>
+      <p>Your gateway to next-gen gaming, chat, and community experiences. Login to sync your progress.</p>
+      <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+          <a href="Games.html" class="glow-btn" style="width:auto; padding:12px 30px; text-decoration:none; color:#fff;">Start Playing</a>
+      </div>
+    </div>
+  </section>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
-            authDomain: "crownforgestudio-2581a.firebaseapp.com",
-            projectId: "crownforgestudio-2581a",
-            storageBucket: "crownforgestudio-2581a.appspot.com",
-            messagingSenderId: "223324386293",
-            appId: "1:223324386293:web:9d7919c6b2e93781b026bc"
-        };
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
+    // --- FIREBASE CONFIG ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
+        authDomain: "crownforgestudio-2581a.firebaseapp.com",
+        projectId: "crownforgestudio-2581a",
+        storageBucket: "crownforgestudio-2581a.appspot.com",
+        messagingSenderId: "223324386293",
+        appId: "1:223324386293:web:9d7919c6b2e93781b026bc"
+    };
 
-        const loader = document.getElementById("loader");
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
 
-        function showLoader(s) { loader.style.display = s ? "block" : "none"; }
+    // --- UI ELEMENTS ---
+    const authOverlay = document.getElementById("authOverlay");
+    const authMainBtn = document.getElementById("authMainBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
 
-        window.switchForm = f => {
-            document.querySelectorAll(".form").forEach(x => x.classList.remove("active"));
-            document.getElementById(f + "Form").classList.add("active");
-        };
+    // --- FUNCTIONS ---
 
-        async function ensureUser(user) {
-            const ref = doc(db, "users", user.uid);
-            if (!(await getDoc(ref)).exists()) {
-                await setDoc(ref, { uid: user.uid, email: user.email, createdAt: serverTimestamp() });
-            }
+    // Toggle Mobile Menu
+    window.toggleMobileMenu = () => {
+        mobileMenu.classList.toggle("active");
+    };
+    hamburgerBtn.onclick = window.toggleMobileMenu;
+
+    // Switch Login/Signup
+    window.switchForm = (f) => {
+        document.querySelectorAll(".form").forEach(x => x.classList.remove("active"));
+        document.getElementById(f + "Form").classList.add("active");
+    };
+
+    // Open/Close Auth Modal
+    window.closeAuth = () => { authOverlay.style.display = "none"; };
+    
+    authMainBtn.onclick = () => {
+        if(authMainBtn.innerText === "LOGOUT") {
+            signOut(auth).then(() => alert("Logged out successfully"));
+        } else {
+            authOverlay.style.display = "flex";
         }
+    };
 
-        // --- FIXED BUTTON CLICKS ---
-        document.getElementById("loginBtn").addEventListener("click", async () => {
-            const email = document.getElementById("loginEmail").value;
-            const pass = document.getElementById("loginPass").value;
-            if(!email || !pass) return alert("Enter details!");
-            
-            showLoader(true);
-            try {
-                await setPersistence(auth, browserLocalPersistence);
-                const res = await signInWithEmailAndPassword(auth, email, pass);
-                localStorage.setItem("cf_login_time", Date.now());
-                await ensureUser(res.user);
-                window.location.href = "Crownforgepage.html";
-            } catch (e) { alert(e.message); }
-            showLoader(false);
-        });
+    // User Data Save Helper
+    async function ensureUser(user) {
+        const ref = doc(db, "users", user.uid);
+        const snap = await getDoc(ref);
+        if (!snap.exists()) {
+            await setDoc(ref, { uid: user.uid, email: user.email, createdAt: serverTimestamp() });
+        }
+    }
 
-        document.getElementById("signupBtn").addEventListener("click", async () => {
-            const email = document.getElementById("signupEmail").value;
-            const pass = document.getElementById("signupPass").value;
-            const confirm = document.getElementById("signupConfirm").value;
-            if(pass !== confirm) return alert("Passwords match nahi ho rahe!");
+    // --- AUTH LOGIC (PERSISTENCE) ---
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            authMainBtn.innerText = "LOGOUT";
+            authMainBtn.style.borderColor = "#ff004c"; // Red border for logout
+            authMainBtn.style.color = "#ff004c";
+            authOverlay.style.display = "none";
+        } else {
+            authMainBtn.innerText = "LOGIN";
+            authMainBtn.style.borderColor = "var(--primary)";
+            authMainBtn.style.color = "var(--primary)";
+        }
+    });
 
-            showLoader(true);
-            try {
-                const res = await createUserWithEmailAndPassword(auth, email, pass);
-                localStorage.setItem("cf_login_time", Date.now());
-                await ensureUser(res.user);
-                window.location.href = "Crownforgepage.html";
-            } catch (e) { alert(e.message); }
-            showLoader(false);
-        });
+    // Login
+    document.getElementById("loginBtn").onclick = async () => {
+        const email = document.getElementById("loginEmail").value;
+        const pass = document.getElementById("loginPass").value;
+        try {
+            await setPersistence(auth, browserLocalPersistence);
+            const res = await signInWithEmailAndPassword(auth, email, pass);
+            await ensureUser(res.user);
+        } catch (e) { alert("Error: " + e.message); }
+    };
 
-        const gLogin = async () => {
-            showLoader(true);
-            try {
-                await setPersistence(auth, browserLocalPersistence);
-                const res = await signInWithPopup(auth, provider);
-                localStorage.setItem("cf_login_time", Date.now());
-                await ensureUser(res.user);
-                window.location.href = "Crownforgepage.html";
-            } catch (e) { alert(e.message); }
-            showLoader(false);
-        };
-        document.getElementById("googleLogin").onclick = gLogin;
-        document.getElementById("googleSignup").onclick = gLogin;
+    // Signup
+    document.getElementById("signupBtn").onclick = async () => {
+        const email = document.getElementById("signupEmail").value;
+        const pass = document.getElementById("signupPass").value;
+        const confirm = document.getElementById("signupConfirm").value;
+        if(pass !== confirm) return alert("Passwords do not match");
 
-    </script>
+        try {
+            const res = await createUserWithEmailAndPassword(auth, email, pass);
+            await ensureUser(res.user);
+        } catch (e) { alert("Error: " + e.message); }
+    };
 
-    <script>
-        // Mouse Tilt Effect
-        const card = document.getElementById('authWrapper');
-        document.addEventListener('mousemove', (e) => {
-            let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-            let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-        });
-    </script>
+    // Google
+    document.getElementById("googleLogin").onclick = async () => {
+        try {
+            await setPersistence(auth, browserLocalPersistence);
+            const res = await signInWithPopup(auth, provider);
+            await ensureUser(res.user);
+        } catch (e) { alert("Error: " + e.message); }
+    };
+
+  </script>
 </body>
 </html>
