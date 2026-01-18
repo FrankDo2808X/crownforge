@@ -2,237 +2,140 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CrownForge Studio | Neon Glass Hub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>CrownForge Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
   
   <style>
-    /* ===== RESET & MODERN BASE ===== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root { 
+        --primary: #00f2ff; 
+        --secondary: #7000ff; 
+        --accent: #ff00c8; 
+        --bg: #05080a; 
+        --glass: rgba(255, 255, 255, 0.05);
     }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: #05080a; /* Pehle se dark, premium look */
+      background: var(--bg);
       color: white;
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* ===== DYNAMIC BACKGROUND SPHERES ===== */
-    .bg-spheres {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      overflow: hidden;
-    }
+    /* === ANIMATED BACKGROUND === */
+    .bg-spheres { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+    .sphere { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.35; animation: float 15s infinite alternate ease-in-out; }
+    .sphere-1 { width: 60vw; height: 60vw; background: radial-gradient(circle, var(--primary), transparent); top: -10%; left: -10%; }
+    .sphere-2 { width: 50vw; height: 50vw; background: radial-gradient(circle, var(--secondary), transparent); bottom: -10%; right: -10%; animation-delay: -5s; }
+    @keyframes float { 0% { transform: translate(0, 0); } 100% { transform: translate(30px, -30px); } }
 
-    .sphere {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.5;
-      animation: float 20s infinite alternate ease-in-out;
-    }
-
-    .sphere-1 {
-      width: 500px; height: 500px;
-      background: linear-gradient(45deg, #00ffff, #0066ff);
-      top: -10%; right: -10%;
-    }
-
-    .sphere-2 {
-      width: 400px; height: 400px;
-      background: linear-gradient(45deg, #ff00ff, #7000ff);
-      bottom: -10%; left: -5%;
-      animation-delay: -5s;
-    }
-
-    @keyframes float {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(-50px, 50px) scale(1.1); }
-    }
-
-    /* ===== PREMIUM NAVBAR ===== */
+    /* === NAVBAR === */
     .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 5%;
-      background: rgba(5, 8, 10, 0.6);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 15px 5%; background: rgba(5, 8, 10, 0.7);
+      backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: -0.5px;
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-family: 'Orbitron'; font-weight: 900; letter-spacing: 1px; }
+    .logo span { background: linear-gradient(90deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    /* Desktop Nav Links */
+    .nav-links { display: flex; list-style: none; gap: 2rem; align-items: center; }
+    .nav-links a { 
+        color: rgba(255,255,255,0.6); text-decoration: none; 
+        font-size: 0.85rem; font-weight: 600; text-transform: uppercase; 
+        transition: 0.3s; position: relative;
     }
-
-    .logo span {
-      background: linear-gradient(90deg, #00ffff, #00a2ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .nav-links a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+    
+    /* Login Button in Navbar */
+    .auth-trigger-btn {
+        padding: 8px 24px; border-radius: 50px; border: 1px solid var(--primary);
+        background: rgba(0, 242, 255, 0.1); color: var(--primary); cursor: pointer;
+        font-family: 'Orbitron'; font-size: 0.75rem; letter-spacing: 1px; transition: 0.3s;
     }
+    .auth-trigger-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary); }
 
-    .nav-links {
-      display: flex;
-      list-style: none;
-      gap: 1.5rem;
+    /* === HAMBURGER MENU (MOBILE) === */
+    .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; z-index: 1001; }
+    .bar { width: 25px; height: 3px; background: #fff; border-radius: 5px; transition: 0.3s; }
+    
+    /* Mobile Menu Overlay */
+    .mobile-menu {
+        position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
+        background: rgba(2, 4, 10, 0.98); backdrop-filter: blur(20px);
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        gap: 2rem; transition: 0.4s ease-in-out; z-index: 999;
     }
+    .mobile-menu.active { right: 0; }
+    .mobile-menu a { font-family: 'Orbitron'; font-size: 1.5rem; color: #fff; text-decoration: none; }
+    .mobile-menu a:hover { color: var(--primary); }
 
-    .nav-links a {
-      color: rgba(255,255,255,0.7);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: 0.3s;
+    /* === LOGIN PANEL / MODAL === */
+    #authOverlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+        display: none; justify-content: center; align-items: center; z-index: 2000;
+        animation: fadeIn 0.3s ease;
     }
+    @keyframes fadeIn { from {opacity:0} to {opacity:1} }
 
-    .nav-links a:hover {
-      color: #00ffff;
-      text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    .auth-wrapper { 
+        position: relative; width: 90%; max-width: 400px; padding: 2px; border-radius: 20px; 
+        background: linear-gradient(45deg, var(--primary), var(--secondary));
+        box-shadow: 0 0 50px rgba(0, 242, 255, 0.2);
     }
-
-    /* ===== HERO SECTION ===== */
-    .hero {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 5%;
+    
+    .auth-card { 
+        background: #080c14; padding: 40px 30px; border-radius: 18px; 
+        text-align: center; position: relative;
     }
+    
+    .close-modal { position: absolute; top: 15px; right: 15px; color: #fff; font-size: 1.5rem; cursor: pointer; opacity: 0.5; }
+    .close-modal:hover { opacity: 1; color: var(--accent); }
 
-    .glass-panel {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 30px;
-      padding: 4rem 2rem;
-      max-width: 900px;
-      text-align: center;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      position: relative;
-      overflow: hidden;
+    .auth-card h2 { font-family: 'Orbitron'; color: #fff; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; }
+    
+    .input-group { position: relative; margin-bottom: 15px; }
+    .input-group input { 
+        width: 100%; padding: 14px 15px; background: rgba(255,255,255,0.03); 
+        border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #fff; outline: none; transition: 0.3s; 
     }
+    .input-group input:focus { border-color: var(--primary); background: rgba(0, 242, 255, 0.05); }
 
-    /* Glow effect inside glass */
-    .glass-panel::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-      transition: 0.5s;
+    .glow-btn { 
+        width: 100%; padding: 14px; border: none; border-radius: 10px; 
+        background: linear-gradient(90deg, var(--primary), var(--secondary)); 
+        color: #fff; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; margin-top: 10px; 
+        text-transform: uppercase; letter-spacing: 1px;
     }
+    .google-btn { background: #fff; color: #000; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    
+    .form { display: none; }
+    .form.active { display: block; animation: slideUp 0.4s ease; }
+    @keyframes slideUp { from {transform: translateY(20px); opacity:0;} to {transform: translateY(0); opacity:1;} }
 
-    .glass-panel:hover::before {
-      left: 100%;
+    /* === HERO SECTION === */
+    .hero { height: 100vh; display: flex; align-items: center; justify-content: center; padding: 0 20px; text-align: center; }
+    .glass-panel { 
+        background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); 
+        border-radius: 30px; padding: 3rem 1.5rem; max-width: 800px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(10px);
     }
+    .glass-panel h1 { font-family: 'Orbitron'; font-size: clamp(2rem, 6vw, 4rem); margin-bottom: 1rem; line-height: 1.1; }
+    .glass-panel p { color: rgba(255,255,255,0.6); margin-bottom: 2rem; font-size: 1.1rem; }
 
-    .glass-panel h1 {
-      font-size: clamp(2.5rem, 8vw, 4rem);
-      font-weight: 800;
-      margin-bottom: 1.5rem;
-      line-height: 1.1;
-      background: linear-gradient(to bottom, #fff 30%, #888);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    /* === RESPONSIVE RULES === */
+    @media (max-width: 768px) {
+        .nav-links { display: none; } /* Hide desktop links */
+        .hamburger { display: flex; } /* Show hamburger */
+        .auth-trigger-btn { padding: 6px 15px; font-size: 0.7rem; }
     }
-
-    .glass-panel p {
-      font-size: 1.1rem;
-      color: rgba(255,255,255,0.6);
-      max-width: 600px;
-      margin: 0 auto 2.5rem;
-    }
-
-    /* ===== COOL BUTTONS ===== */
-    .btn {
-      padding: 1rem 2.5rem;
-      border-radius: 12px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      display: inline-block;
-      position: relative;
-      background: #00ffff;
-      color: #000;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-    }
-
-    .btn:hover {
-      transform: scale(1.05) translateY(-3px);
-      box-shadow: 0 10px 30px rgba(0, 255, 255, 0.5);
-    }
-
-    /* ===== CONTENT CARDS ===== */
-    .content-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      padding: 5rem 5%;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 24px;
-      padding: 2.5rem;
-      transition: 0.4s;
-      cursor: pointer;
-    }
-
-    .card:hover {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: rgba(0, 255, 255, 0.3);
-      transform: translateY(-10px);
-    }
-
-    .card h3 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: #00ffff;
-    }
-
-    .card p {
-      color: rgba(255,255,255,0.5);
-      line-height: 1.6;
-    }
-
-    footer {
-      text-align: center;
-      padding: 4rem 1rem;
-      color: rgba(255,255,255,0.3);
-      font-size: 0.9rem;
-      letter-spacing: 1px;
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #05080a; }
-    ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: #00ffff; }
-
   </style>
 </head>
 <body>
@@ -244,62 +147,190 @@
 
   <header class="navbar">
     <div class="logo">
-      <div style="width:35px; height:35px; background:#00ffff; border-radius:8px; display:grid; place-items:center; color:#000;">CF</div>
+      <div style="width:30px; height:30px; background:var(--primary); border-radius:4px; display:grid; place-items:center; color:#000; font-weight:900;">C</div>
       <span>CrownForge</span>
     </div>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="Games.html">Games</a></li>
-        <li><a href="chating.html" style="color:#e5ff00">Forge-Chat</a></li>
-        <li><a href="friends.html">friends</a></li>
-        <li><a href="Newupdates.html">Updates</a></li>
-        <li><a href="Support.html">Support</a></li>
-        <li><a href="profile.html" style="color:#00ffff">Profile</a></li>
-      </ul>
-    </nav>
+
+    <ul class="nav-links">
+      <li><a href="Games.html">Games</a></li>
+      <li><a href="chating.html" style="color:#e5ff00">Forge-Chat</a></li>
+      <li><a href="friends.html">Friends</a></li>
+      <li><a href="Newupdates.html">Updates</a></li>
+      <li><a href="Support.html">Support</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="leaderborad.html">Leaderborad</a></li>
+    </ul>
+
+    <div style="display:flex; gap:15px; align-items:center;">
+        <button class="auth-trigger-btn" id="authMainBtn">LOGIN</button>
+        <div class="hamburger" id="hamburgerBtn">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
   </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="Games.html">Games</a>
+    <a href="chating.html" style="color:#e5ff00">Forge-Chat</a>
+    <a href="friends.html">Friends</a>
+    <a href="Newupdates.html">Updates</a>
+    <a href="Support.html">Support</a>
+    <a href="profile.html">Profile</a>
+    <a href="leaderborad.html">Leaderborad</a>
+    <p style="margin-top:50px; color:rgba(255,255,255,0.3); font-size:0.8rem;" onclick="toggleMobileMenu()">[ CLOSE MENU ]</p>
+  </div>
+
+  <div id="authOverlay">
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <span class="close-modal" onclick="closeAuth()">&times;</span>
+            
+            <div id="loginForm" class="form active">
+                <h2>System Login</h2>
+                <div class="input-group"><input id="loginEmail" type="email" placeholder="Neural ID (Email)"></div>
+                <div class="input-group"><input id="loginPass" type="password" placeholder="Pass-Key"></div>
+                <button class="glow-btn" id="loginBtn">Initialize Session</button>
+                <button class="glow-btn google-btn" id="googleLogin">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" width="20"> Sync Google
+                </button>
+                <p style="margin-top:20px; font-size:0.85rem; color:rgba(255,255,255,0.5);">
+                   New User? <span style="color:var(--primary); cursor:pointer; text-decoration:underline;" onclick="switchForm('signup')">Create Account</span>
+                </p>
+            </div>
+
+            <div id="signupForm" class="form">
+                <h2>Create Access</h2>
+                <div class="input-group"><input id="signupEmail" type="email" placeholder="Email Address"></div>
+                <div class="input-group"><input id="signupPass" type="password" placeholder="Create Password"></div>
+                <div class="input-group"><input id="signupConfirm" type="password" placeholder="Confirm Password"></div>
+                <button class="glow-btn" id="signupBtn">Forge Identity</button>
+                <p style="margin-top:20px; font-size:0.85rem; color:rgba(255,255,255,0.5);">
+                   Already have ID? <span style="color:var(--primary); cursor:pointer; text-decoration:underline;" onclick="switchForm('login')">Login Here</span>
+                </p>
+            </div>
+        </div>
+    </div>
+  </div>
 
   <section class="hero">
     <div class="glass-panel">
-      <h1>The Future of <br> Neon Gaming.</h1>
-      <p>Forge your destiny in the digital void. CrownForge Studio brings you next-gen visuals and immersive glassmorphic experiences.</p>
-      <div class="btn-group">
-        <a href="Newupdates.html" class="btn">Explore Updates</a>
+      <h1>WELCOME TO THE<br><span style="color:var(--primary)">Crownforge Offical Page</span></h1>
+      <p>Your gateway to next-gen gaming, chat, and community experiences. Login to sync your progress.</p>
+      <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+          <a href="Games.html" class="glow-btn" style="width:auto; padding:12px 30px; text-decoration:none; color:#fff;">Start Playing</a>
       </div>
     </div>
   </section>
 
-  <div class="content-cards">
-    <div class="card">
-      <h3>Studio News</h3>
-      <p>Experience the latest patch 2.0 with enhanced ray-tracing support and new neon environments.</p>
-    </div>
-    <div class="card">
-      <h3>Dev Center</h3>
-      <p>Access our proprietary SDKs and high-fidelity assets to build your own glass-world dreams.</p>
-    </div>
-    <div class="card">
-      <h3>Community</h3>
-      <p>Join 10,000+ creators in our Forge-Chat. Share, collaborate, and dominate the leaderboard.</p>
-    </div>
-  </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  <footer>
-    &copy; 2026 CROWNFORGE STUDIO. DESIGNED FOR THE NEXT GEN.
-  </footer>
+    // --- FIREBASE CONFIG ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
+        authDomain: "crownforgestudio-2581a.firebaseapp.com",
+        projectId: "crownforgestudio-2581a",
+        storageBucket: "crownforgestudio-2581a.appspot.com",
+        messagingSenderId: "223324386293",
+        appId: "1:223324386293:web:9d7919c6b2e93781b026bc"
+    };
 
-  <script>
-    // Smooth Tilt effect for cards
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--x', `${x}px`);
-        card.style.setProperty('--y', `${y}px`);
-      });
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+
+    // --- UI ELEMENTS ---
+    const authOverlay = document.getElementById("authOverlay");
+    const authMainBtn = document.getElementById("authMainBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+
+    // --- FUNCTIONS ---
+
+    // Toggle Mobile Menu
+    window.toggleMobileMenu = () => {
+        mobileMenu.classList.toggle("active");
+    };
+    hamburgerBtn.onclick = window.toggleMobileMenu;
+
+    // Switch Login/Signup
+    window.switchForm = (f) => {
+        document.querySelectorAll(".form").forEach(x => x.classList.remove("active"));
+        document.getElementById(f + "Form").classList.add("active");
+    };
+
+    // Open/Close Auth Modal
+    window.closeAuth = () => { authOverlay.style.display = "none"; };
+    
+    authMainBtn.onclick = () => {
+        if(authMainBtn.innerText === "LOGOUT") {
+            signOut(auth).then(() => alert("Logged out successfully"));
+        } else {
+            authOverlay.style.display = "flex";
+        }
+    };
+
+    // User Data Save Helper
+    async function ensureUser(user) {
+        const ref = doc(db, "users", user.uid);
+        const snap = await getDoc(ref);
+        if (!snap.exists()) {
+            await setDoc(ref, { uid: user.uid, email: user.email, createdAt: serverTimestamp() });
+        }
+    }
+
+    // --- AUTH LOGIC (PERSISTENCE) ---
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            authMainBtn.innerText = "LOGOUT";
+            authMainBtn.style.borderColor = "#ff004c"; // Red border for logout
+            authMainBtn.style.color = "#ff004c";
+            authOverlay.style.display = "none";
+        } else {
+            authMainBtn.innerText = "LOGIN";
+            authMainBtn.style.borderColor = "var(--primary)";
+            authMainBtn.style.color = "var(--primary)";
+        }
     });
+
+    // Login
+    document.getElementById("loginBtn").onclick = async () => {
+        const email = document.getElementById("loginEmail").value;
+        const pass = document.getElementById("loginPass").value;
+        try {
+            await setPersistence(auth, browserLocalPersistence);
+            const res = await signInWithEmailAndPassword(auth, email, pass);
+            await ensureUser(res.user);
+        } catch (e) { alert("Error: " + e.message); }
+    };
+
+    // Signup
+    document.getElementById("signupBtn").onclick = async () => {
+        const email = document.getElementById("signupEmail").value;
+        const pass = document.getElementById("signupPass").value;
+        const confirm = document.getElementById("signupConfirm").value;
+        if(pass !== confirm) return alert("Passwords do not match");
+
+        try {
+            const res = await createUserWithEmailAndPassword(auth, email, pass);
+            await ensureUser(res.user);
+        } catch (e) { alert("Error: " + e.message); }
+    };
+
+    // Google
+    document.getElementById("googleLogin").onclick = async () => {
+        try {
+            await setPersistence(auth, browserLocalPersistence);
+            const res = await signInWithPopup(auth, provider);
+            await ensureUser(res.user);
+        } catch (e) { alert("Error: " + e.message); }
+    };
+
   </script>
 </body>
 </html>
