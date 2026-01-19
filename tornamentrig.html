@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Registration</title>
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: white; display:flex; justify-content:center; align-items:center; height:100vh; }
+        .container { background: #1e1e1e; padding: 30px; border-radius: 10px; width: 350px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; background: #333; border: none; color: white; }
+        button { width: 100%; padding: 10px; background: #ff5722; border: none; color: white; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="formUI">
+    <h2>🏆 Register</h2>
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="text" id="uid" placeholder="Game UID">
+    <input type="text" id="team" placeholder="Team Name">
+    <button onclick="registerUser()">Pay ₹50 & Join</button>
+    <p id="status" style="text-align:center; color:#888;"></p>
+</div>
+
+<script type="module">
+    // 1. IMPORT FIREBASE
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+   
+  const firebaseConfig = {
+    apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
+    authDomain: "crownforgestudio-2581a.firebaseapp.com",
+    projectId: "crownforgestudio-2581a",
+    storageBucket: "crownforgestudio-2581a.appspot.com",
+    messagingSenderId: "223324386293",
+    appId: "1:223324386293:web:783a3e64f0d10b1ab026bc"
+  };
+    // Initialize
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const cashfree = Cashfree({ mode: "production" });
+
+    // YOUR CLOUD FUNCTION URL (We will get this in Phase 3)
+    const BACKEND_URL = "https://us-central1-YOUR_PROJECT.cloudfunctions.net/createOrder"; 
+
+    window.registerUser = async function() {
+        const name = document.getElementById('name').value;
+        const uid = document.getElementById('uid').value;
+        const team = document.getElementById('team').value;
+        const status = document.getElementById('status');
+
+        if (!name || !uid || !team) return alert("Fill all fields");
+
+        status.innerText = "Saving Data...";
+
+        try {
+            // STEP A: Save to Firestore FIRST
+            const docRef = await addDoc(collection(db, "registrations"), {
+                name: name,
+                uid: uid,
+                team: team,
+                paymentStatus: "PENDING",
+                timestamp: new Date()
+            });
+
+            // STEP B: Call Cloud Function for Payment
+            status.innerText = "Initiating Payment...";
+            
+            const response = await fetch(BACKEND_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: name,
+                    docId: docRef.id, // Send the Database ID to link payment
+                    returnUrl: window.location.href // Return here
+                })
+            });
+
+            const data = await response.json();
+            
+            if(data.payment_session_id) {
+                cashfree.checkout({ paymentSessionId: data.payment_session_id });
+            } else {
+                status.innerText = "Payment Error: " + JSON.stringify(data);
+            }
+
+        } catch (e) {
+            console.error(e);
+            alert("Error: " + e.message);
+        }
+    }
+</script>
+</body>
+</html>

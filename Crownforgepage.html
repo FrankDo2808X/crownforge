@@ -4,166 +4,195 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>CrownForge Studio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
   
   <style>
+    /* === ROCKSTAR DESIGN SYSTEM === */
     :root { 
-        --primary: #00f2ff; 
-        --secondary: #7000ff; 
-        --accent: #ff00c8; 
-        --bg: #05080a; 
-        --glass: rgba(255, 255, 255, 0.05);
+        --bg: #050505; 
+        --card-bg: #111111;
+        --text: #ffffff;
+        --accent: #fcaf17; /* Rockstar Yellow */
+        --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: var(--bg);
-      color: white;
-      min-height: 100vh;
-      overflow-x: hidden;
+    
+    body { 
+        font-family: var(--font-main); 
+        background-color: var(--bg);
+        background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #050505 80%);
+        color: var(--text); 
+        min-height: 100vh;
+        overflow-x: hidden; 
     }
-
-    /* === ANIMATED BACKGROUND === */
-    .bg-spheres { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-    .sphere { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.35; animation: float 15s infinite alternate ease-in-out; }
-    .sphere-1 { width: 60vw; height: 60vw; background: radial-gradient(circle, var(--primary), transparent); top: -10%; left: -10%; }
-    .sphere-2 { width: 50vw; height: 50vw; background: radial-gradient(circle, var(--secondary), transparent); bottom: -10%; right: -10%; animation-delay: -5s; }
-    @keyframes float { 0% { transform: translate(0, 0); } 100% { transform: translate(30px, -30px); } }
 
     /* === NAVBAR === */
     .navbar {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 15px 5%; background: rgba(5, 8, 10, 0.7);
-      backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0 40px; height: 80px; 
+      background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--accent);
+      position: fixed; top: 0; width: 100%; z-index: 1001;
     }
 
-    .logo { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-family: 'Orbitron'; font-weight: 900; letter-spacing: 1px; }
-    .logo span { background: linear-gradient(90deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-    /* Desktop Nav Links */
-    .nav-links { display: flex; list-style: none; gap: 2rem; align-items: center; }
-    .nav-links a { 
-        color: rgba(255,255,255,0.6); text-decoration: none; 
-        font-size: 0.85rem; font-weight: 600; text-transform: uppercase; 
-        transition: 0.3s; position: relative;
-    }
-    .nav-links a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+    .logo { font-weight: 900; font-size: 1.8rem; text-transform: uppercase; letter-spacing: -1px; cursor: pointer; color: #fff; }
     
-    /* Login Button in Navbar */
-    .auth-trigger-btn {
-        padding: 8px 24px; border-radius: 50px; border: 1px solid var(--primary);
-        background: rgba(0, 242, 255, 0.1); color: var(--primary); cursor: pointer;
-        font-family: 'Orbitron'; font-size: 0.75rem; letter-spacing: 1px; transition: 0.3s;
+    .nav-links { display: flex; list-style: none; gap: 3rem; align-items: center; }
+    .nav-tab { 
+        color: #bbb; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; 
+        cursor: pointer; transition: 0.2s; letter-spacing: 0.5px; text-decoration: none;
     }
-    .auth-trigger-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary); }
+    .nav-tab:hover, .nav-tab.active { color: var(--accent); }
 
-    /* === HAMBURGER MENU (MOBILE) === */
-    .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; z-index: 1001; }
-    .bar { width: 25px; height: 3px; background: #fff; border-radius: 5px; transition: 0.3s; }
-    
-    /* Mobile Menu Overlay */
-    .mobile-menu {
-        position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
-        background: rgba(2, 4, 10, 0.98); backdrop-filter: blur(20px);
-        display: flex; flex-direction: column; justify-content: center; align-items: center;
-        gap: 2rem; transition: 0.4s ease-in-out; z-index: 999;
+    /* === FIXED GAMES CARD (No Cutting) === */
+    .games-panel {
+        position: fixed; top: 80px; left: 0; width: 100%;
+        background: #000; border-bottom: 1px solid #333;
+        padding: 50px 5%;
+        visibility: hidden; opacity: 0; transform: translateY(-20px);
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        z-index: 900;
     }
-    .mobile-menu.active { right: 0; }
-    .mobile-menu a { font-family: 'Orbitron'; font-size: 1.5rem; color: #fff; text-decoration: none; }
-    .mobile-menu a:hover { color: var(--primary); }
+    .games-panel.active { visibility: visible; opacity: 1; transform: translateY(0); }
 
-    /* === LOGIN PANEL / MODAL === */
-    #authOverlay {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
-        display: none; justify-content: center; align-items: center; z-index: 2000;
-        animation: fadeIn 0.3s ease;
+    .mini-games-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+        gap: 25px; 
     }
-    @keyframes fadeIn { from {opacity:0} to {opacity:1} }
 
-    .auth-wrapper { 
-        position: relative; width: 90%; max-width: 400px; padding: 2px; border-radius: 20px; 
-        background: linear-gradient(45deg, var(--primary), var(--secondary));
-        box-shadow: 0 0 50px rgba(0, 242, 255, 0.2);
+    .mini-game-card { 
+        text-decoration: none; 
+        color: white; 
+        background: #080808;
+        border: 1px solid #333; 
+        transition: 0.3s; 
+        display: block;
+        position: relative;
     }
     
-    .auth-card { 
-        background: #080c14; padding: 40px 30px; border-radius: 18px; 
-        text-align: center; position: relative;
+    /* HOVER EFFECT: Yellow Border Glow */
+    .mini-game-card:hover { 
+        border-color: var(--accent); 
+        transform: translateY(-5px); 
+        box-shadow: 0 5px 20px rgba(252, 175, 23, 0.2);
     }
     
-    .close-modal { position: absolute; top: 15px; right: 15px; color: #fff; font-size: 1.5rem; cursor: pointer; opacity: 0.5; }
-    .close-modal:hover { opacity: 1; color: var(--accent); }
-
-    .auth-card h2 { font-family: 'Orbitron'; color: #fff; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; }
-    
-    .input-group { position: relative; margin-bottom: 15px; }
-    .input-group input { 
-        width: 100%; padding: 14px 15px; background: rgba(255,255,255,0.03); 
-        border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #fff; outline: none; transition: 0.3s; 
+    .img-wrapper { 
+        position: relative; 
+        width: 100%; 
+        aspect-ratio: 16/9; /* Standard Wide Shape */
+        background: #000;   /* Black background for transparency */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
     }
-    .input-group input:focus { border-color: var(--primary); background: rgba(0, 242, 255, 0.05); }
-
-    .glow-btn { 
-        width: 100%; padding: 14px; border: none; border-radius: 10px; 
-        background: linear-gradient(90deg, var(--primary), var(--secondary)); 
-        color: #fff; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; margin-top: 10px; 
-        text-transform: uppercase; letter-spacing: 1px;
-    }
-    .google-btn { background: #fff; color: #000; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
     
-    .form { display: none; }
-    .form.active { display: block; animation: slideUp 0.4s ease; }
-    @keyframes slideUp { from {transform: translateY(20px); opacity:0;} to {transform: translateY(0); opacity:1;} }
+    /* THIS FIXES THE CUTTING ISSUE */
+    .mini-img { 
+        width: 100%; 
+        height: 100%; 
+        object-fit: contain; /* Shows FULL image inside box */
+        padding: 10px;       /* Adds breathing room */
+        transition: transform 0.3s;
+    }
+    
+    .mini-game-card:hover .mini-img {
+        transform: scale(1.05);
+    }
+    
+    .card-info {
+        padding: 15px;
+        border-top: 1px solid #222;
+        background: #111;
+    }
+    .card-info h4 { font-size: 1.1rem; font-weight: 900; text-transform: uppercase; margin-bottom: 5px; color: #fff; }
+    .card-info span { font-size: 0.75rem; color: #666; font-weight: 700; text-transform: uppercase; }
 
     /* === HERO SECTION === */
-    .hero { height: 100vh; display: flex; align-items: center; justify-content: center; padding: 0 20px; text-align: center; }
-    .glass-panel { 
-        background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); 
-        border-radius: 30px; padding: 3rem 1.5rem; max-width: 800px;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+    .hero-section {
+        height: 100vh;
+        display: flex; flex-direction: column;
+        justify-content: center; align-items: center;
+        text-align: center; padding: 0 20px;
     }
-    .glass-panel h1 { font-family: 'Orbitron'; font-size: clamp(2rem, 6vw, 4rem); margin-bottom: 1rem; line-height: 1.1; }
-    .glass-panel p { color: rgba(255,255,255,0.6); margin-bottom: 2rem; font-size: 1.1rem; }
 
-    /* === RESPONSIVE RULES === */
+    .hero-title {
+        font-size: clamp(3rem, 9vw, 8rem);
+        font-weight: 900; line-height: 0.9; text-transform: uppercase;
+        margin-bottom: 20px;
+        background: linear-gradient(to bottom, #ffffff, #888888);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .hero-sub {
+        font-size: 1.2rem; color: var(--accent); text-transform: uppercase;
+        letter-spacing: 4px; margin-bottom: 40px; font-weight: 700;
+    }
+
+    .btn {
+        display: inline-block; padding: 18px 40px;
+        font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
+        cursor: pointer; transition: all 0.2s; border: 2px solid transparent;
+        font-size: 0.9rem; text-decoration: none;
+    }
+    .btn-primary { background: var(--accent); color: #000; border-color: var(--accent); }
+    .btn-primary:hover { background: #fff; border-color: #fff; }
+    .btn-outline { background: transparent; color: #fff; border-color: #fff; }
+    .btn-outline:hover { background: #fff; color: #000; }
+    .button-row { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+
+    /* === AUTH MODAL === */
+    #authOverlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.9); z-index: 2000;
+        display: none; justify-content: center; align-items: center;
+    }
+    .auth-card { 
+        background: #111; border: 2px solid var(--accent); padding: 40px; 
+        width: 90%; max-width: 400px; position: relative; 
+    }
+    .close-modal { position: absolute; top: 10px; right: 15px; font-size: 2rem; cursor: pointer; color: #fff; }
+    .input-group input { width: 100%; padding: 15px; margin-bottom: 15px; background: #000; border: 1px solid #333; color: white; outline: none; }
+    .form { display: none; }
+    .form.active { display: block; }
+
+    /* === MOBILE === */
+    .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 6px; }
+    .bar { width: 30px; height: 3px; background: #fff; }
+    .mobile-menu {
+        position: fixed; top: 80px; left: 0; width: 100%; height: 100vh;
+        background: #000; z-index: 998; display: flex; flex-direction: column; 
+        padding: 40px; gap: 20px; transform: translateX(100%); transition: 0.3s;
+    }
+    .mobile-menu.active { transform: translateX(0); }
+    .mobile-link { font-size: 1.5rem; color: #fff; font-weight: 900; text-transform: uppercase; text-decoration: none; }
+
     @media (max-width: 768px) {
-        .nav-links { display: none; } /* Hide desktop links */
-        .hamburger { display: flex; } /* Show hamburger */
-        .auth-trigger-btn { padding: 6px 15px; font-size: 0.7rem; }
+        .nav-links { display: none; }
+        .hamburger { display: flex; }
     }
   </style>
 </head>
 <body>
 
-  <div class="bg-spheres">
-    <div class="sphere sphere-1"></div>
-    <div class="sphere sphere-2"></div>
-  </div>
-
   <header class="navbar">
-    <div class="logo">
-      <div style="width:30px; height:30px; background:var(--primary); border-radius:4px; display:grid; place-items:center; color:#000; font-weight:900;">C</div>
-      <span>CrownForge</span>
-    </div>
+    <div class="logo">CrownForge</div>
 
     <ul class="nav-links">
-      <li><a href="Games.html">Games</a></li>
-      <li><a href="chating.html" style="color:#e5ff00">Forge-Chat</a></li>
-      <li><a href="friends.html">Friends</a></li>
-      <li><a href="Newupdates.html">Updates</a></li>
-      <li><a href="Support.html">Support</a></li>
-      <li><a href="profile.html">Profile</a></li>
-      <li><a href="leaderborad.html">Leaderborad</a></li>
+      <li><div class="nav-tab" id="gamesToggle">Games ▼</div></li>
+      <li><a href="Newupdates.html" class="nav-tab">Newswire</a></li>
+      <li><a href="Support.html" class="nav-tab">Support</a></li>
+      <li><a href="leaderborad.html" class="nav-tab">Leaderborad</a></li>
+      <li><a href="chating.html" class="nav-tab">Froge-Chat</a></li>
+      <li><a href="profile.html" class="nav-tab">Account</a></li>
+      <li><a href="support-portal.html" class="nav-tab">Feedback/Report</a></li>
     </ul>
 
-    <div style="display:flex; gap:15px; align-items:center;">
-        <button class="auth-trigger-btn" id="authMainBtn">LOGIN</button>
-        <div class="hamburger" id="hamburgerBtn">
+    <div style="display:flex; gap:20px; align-items:center;">
+        <button class="nav-tab" id="authBtn" style="background:none; border:none; font-size:0.9rem;">SIGN IN</button>
+        <div class="hamburger" id="hamBtn">
             <div class="bar"></div>
             <div class="bar"></div>
             <div class="bar"></div>
@@ -171,65 +200,101 @@
     </div>
   </header>
 
+  <div class="games-panel" id="gamesPanel">
+      <h2 style="margin-bottom:30px; font-weight:900; text-transform:uppercase;">Game Library</h2>
+      <div class="mini-games-grid">
+          
+          <a href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.Uitesting" target="_blank" class="mini-game-card">
+              <div class="img-wrapper">
+                  <img src="https://i.ibb.co/WWBbB53F/warx-logo.png" class="mini-img">
+              </div>
+              <div class="card-info">
+                  <h4>WAR-X</h4>
+                  <span>Tactical Shooter</span>
+              </div>
+          </a>
+
+          <a href="https://play.google.com/store/apps/details?id=com.CrownForgeStudio.ZombieStrikeForce" target="_blank" class="mini-game-card">
+              <div class="img-wrapper">
+                  <img src="https://i.ibb.co/BKZDrBHJ/zombie-strike-force-logo.png" class="mini-img">
+              </div>
+              <div class="card-info">
+                  <h4>Zombie SF</h4>
+                  <span>Survival Action</span>
+              </div>
+          </a>
+
+          <a href="https://play.google.com/store/apps/details?id=com.PRA3KGAMES.THEBLACKVEIL" target="_blank" class="mini-game-card">
+              <div class="img-wrapper">
+                  <img src="https://i.ibb.co/0pM8N2z0/the-black-veil-logo.png" class="mini-img">
+              </div>
+              <div class="card-info">
+                  <h4>Black Veil</h4>
+                  <span>Horror RPG</span>
+              </div>
+          </a>
+
+          <a href="#" class="mini-game-card" style="opacity:0.6;">
+            <div class="img-wrapper">
+                <img src="https://placehold.co/400x225/111/333?text=COMING+SOON" class="mini-img">
+            </div>
+            <div class="card-info">
+                <h4>Project Omega</h4>
+                <span>Coming 2026</span>
+            </div>
+        </a>
+
+      </div>
+  </div>
+
+  <section class="hero-section">
+      <div class="hero-sub">Official Studio Portal</div>
+      <div class="hero-title">Welcome To<br>CrownForge</div>
+      
+      <div class="button-row">
+          <a href="Support.html" class="btn btn-outline">Support</a>
+      </div>
+  </section>
+
   <div class="mobile-menu" id="mobileMenu">
-    <a href="Games.html">Games</a>
-    <a href="chating.html" style="color:#e5ff00">Forge-Chat</a>
-    <a href="friends.html">Friends</a>
-    <a href="Newupdates.html">Updates</a>
-    <a href="Support.html">Support</a>
-    <a href="profile.html">Profile</a>
-    <a href="leaderborad.html">Leaderborad</a>
-    <p style="margin-top:50px; color:rgba(255,255,255,0.3); font-size:0.8rem;" onclick="toggleMobileMenu()">[ CLOSE MENU ]</p>
+        <a href="support-portal.html" class="mobile-link">Report/Support</a>
+        <a href="friends.html" class="mobile-link">Friends</a>
+        <a href="chating.html" class="mobile-link" id="authBtnMobile">Froge-Chat</a>
+        <a href="Newupdates.html" class="mobile-link">Newswire</a>
+        <a href="Support.html" class="mobile-link">Support</a>
+        <a href="profile.html" class="mobile-link" id="authBtnMobile">Account</a>
+        <a href="tornamentrig.html" class="mobile-link" id="authBtnMobile">Tournament</a>
+        <a href="JoinStaff.html" class="mobile-link" id="authBtnMobile">staffApplication</a>
   </div>
 
   <div id="authOverlay">
-    <div class="auth-wrapper">
-        <div class="auth-card">
-            <span class="close-modal" onclick="closeAuth()">&times;</span>
-            
-            <div id="loginForm" class="form active">
-                <h2>System Login</h2>
-                <div class="input-group"><input id="loginEmail" type="email" placeholder="Neural ID (Email)"></div>
-                <div class="input-group"><input id="loginPass" type="password" placeholder="Pass-Key"></div>
-                <button class="glow-btn" id="loginBtn">Initialize Session</button>
-                <button class="glow-btn google-btn" id="googleLogin">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" width="20"> Sync Google
-                </button>
-                <p style="margin-top:20px; font-size:0.85rem; color:rgba(255,255,255,0.5);">
-                   New User? <span style="color:var(--primary); cursor:pointer; text-decoration:underline;" onclick="switchForm('signup')">Create Account</span>
-                </p>
-            </div>
+    <div class="auth-card">
+        <span class="close-modal" onclick="closeAuth()">&times;</span>
+        
+        <div id="loginForm" class="form active">
+            <h2 style="margin-bottom:20px; font-weight:900; text-transform:uppercase; color:var(--accent);">Sign In</h2>
+            <div class="input-group"><input id="logEmail" type="email" placeholder="Email Address"></div>
+            <div class="input-group"><input id="logPass" type="password" placeholder="Password"></div>
+            <button class="btn btn-primary" style="width:100%; margin-top:0;" id="doLogin">Log In</button>
+            <button class="btn btn-outline" style="width:100%; margin-top:10px; border:1px solid #333;" id="doGoogle">Google Sign In</button>
+            <p style="margin-top:20px; font-size:0.8rem; color:#888;">No account? <span onclick="switchAuth('signup')" style="color:#fff; cursor:pointer; text-decoration:underline;">Join Now</span></p>
+        </div>
 
-            <div id="signupForm" class="form">
-                <h2>Create Access</h2>
-                <div class="input-group"><input id="signupEmail" type="email" placeholder="Email Address"></div>
-                <div class="input-group"><input id="signupPass" type="password" placeholder="Create Password"></div>
-                <div class="input-group"><input id="signupConfirm" type="password" placeholder="Confirm Password"></div>
-                <button class="glow-btn" id="signupBtn">Forge Identity</button>
-                <p style="margin-top:20px; font-size:0.85rem; color:rgba(255,255,255,0.5);">
-                   Already have ID? <span style="color:var(--primary); cursor:pointer; text-decoration:underline;" onclick="switchForm('login')">Login Here</span>
-                </p>
-            </div>
+        <div id="signupForm" class="form">
+            <h2 style="margin-bottom:20px; font-weight:900; text-transform:uppercase; color:var(--accent);">Join Club</h2>
+            <div class="input-group"><input id="signEmail" type="email" placeholder="Email Address"></div>
+            <div class="input-group"><input id="signPass" type="password" placeholder="Create Password"></div>
+            <button class="btn btn-primary" style="width:100%; margin-top:0;" id="doSignup">Create Account</button>
+            <p style="margin-top:20px; font-size:0.8rem; color:#888;">Has account? <span onclick="switchAuth('login')" style="color:#fff; cursor:pointer; text-decoration:underline;">Log In</span></p>
         </div>
     </div>
   </div>
 
-  <section class="hero">
-    <div class="glass-panel">
-      <h1>WELCOME TO THE<br><span style="color:var(--primary)">Crownforge Offical Page</span></h1>
-      <p>Your gateway to next-gen gaming, chat, and community experiences. Login to sync your progress.</p>
-      <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
-          <a href="Games.html" class="glow-btn" style="width:auto; padding:12px 30px; text-decoration:none; color:#fff;">Start Playing</a>
-      </div>
-    </div>
-  </section>
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    // --- FIREBASE CONFIG ---
+    // FIREBASE CONFIG
     const firebaseConfig = {
         apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
         authDomain: "crownforgestudio-2581a.firebaseapp.com",
@@ -241,96 +306,68 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
 
-    // --- UI ELEMENTS ---
-    const authOverlay = document.getElementById("authOverlay");
-    const authMainBtn = document.getElementById("authMainBtn");
-    const mobileMenu = document.getElementById("mobileMenu");
-    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    // UI ELEMENTS
+    const gamesToggle = document.getElementById('gamesToggle');
+    const gamesPanel = document.getElementById('gamesPanel');
+    const authOverlay = document.getElementById('authOverlay');
+    const authBtn = document.getElementById('authBtn');
+    const hamBtn = document.getElementById('hamBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
 
-    // --- FUNCTIONS ---
-
-    // Toggle Mobile Menu
-    window.toggleMobileMenu = () => {
-        mobileMenu.classList.toggle("active");
+    // LOGIC
+    window.toggleGames = () => {
+        gamesToggle.classList.toggle('active');
+        gamesPanel.classList.toggle('active');
     };
-    hamburgerBtn.onclick = window.toggleMobileMenu;
-
-    // Switch Login/Signup
-    window.switchForm = (f) => {
-        document.querySelectorAll(".form").forEach(x => x.classList.remove("active"));
-        document.getElementById(f + "Form").classList.add("active");
-    };
-
-    // Open/Close Auth Modal
-    window.closeAuth = () => { authOverlay.style.display = "none"; };
-    
-    authMainBtn.onclick = () => {
-        if(authMainBtn.innerText === "LOGOUT") {
-            signOut(auth).then(() => alert("Logged out successfully"));
-        } else {
-            authOverlay.style.display = "flex";
-        }
+    window.toggleMobile = () => mobileMenu.classList.toggle('active');
+    window.closeAuth = () => authOverlay.style.display = 'none';
+    window.switchAuth = (m) => {
+        document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+        document.getElementById(m + 'Form').classList.add('active');
     };
 
-    // User Data Save Helper
-    async function ensureUser(user) {
-        const ref = doc(db, "users", user.uid);
-        const snap = await getDoc(ref);
-        if (!snap.exists()) {
-            await setDoc(ref, { uid: user.uid, email: user.email, createdAt: serverTimestamp() });
-        }
-    }
+    gamesToggle.onclick = (e) => { e.stopPropagation(); toggleGames(); };
+    hamBtn.onclick = toggleMobile;
+    authBtn.onclick = () => {
+        if(authBtn.innerText === "LOGOUT") { signOut(auth); }
+        else { authOverlay.style.display = 'flex'; }
+    };
 
-    // --- AUTH LOGIC (PERSISTENCE) ---
+    // AUTH OBSERVER
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            authMainBtn.innerText = "LOGOUT";
-            authMainBtn.style.borderColor = "#ff004c"; // Red border for logout
-            authMainBtn.style.color = "#ff004c";
-            authOverlay.style.display = "none";
+            authBtn.innerText = "LOGOUT";
+            authBtn.style.color = "var(--accent)";
+            authOverlay.style.display = 'none';
         } else {
-            authMainBtn.innerText = "LOGIN";
-            authMainBtn.style.borderColor = "var(--primary)";
-            authMainBtn.style.color = "var(--primary)";
+            authBtn.innerText = "SIGN IN";
+            authBtn.style.color = "#bbb";
         }
     });
 
-    // Login
-    document.getElementById("loginBtn").onclick = async () => {
-        const email = document.getElementById("loginEmail").value;
-        const pass = document.getElementById("loginPass").value;
-        try {
-            await setPersistence(auth, browserLocalPersistence);
-            const res = await signInWithEmailAndPassword(auth, email, pass);
-            await ensureUser(res.user);
-        } catch (e) { alert("Error: " + e.message); }
+    // ACTIONS
+    document.getElementById('doLogin').onclick = async () => {
+        try { await signInWithEmailAndPassword(auth, document.getElementById('logEmail').value, document.getElementById('logPass').value); } 
+        catch(err) { alert(err.message); }
+    };
+    document.getElementById('doSignup').onclick = async () => {
+        try { await createUserWithEmailAndPassword(auth, document.getElementById('signEmail').value, document.getElementById('signPass').value); } 
+        catch(err) { alert(err.message); }
+    };
+    document.getElementById('doGoogle').onclick = async () => {
+        try { await signInWithPopup(auth, provider); } catch(err) { alert(err.message); }
     };
 
-    // Signup
-    document.getElementById("signupBtn").onclick = async () => {
-        const email = document.getElementById("signupEmail").value;
-        const pass = document.getElementById("signupPass").value;
-        const confirm = document.getElementById("signupConfirm").value;
-        if(pass !== confirm) return alert("Passwords do not match");
-
-        try {
-            const res = await createUserWithEmailAndPassword(auth, email, pass);
-            await ensureUser(res.user);
-        } catch (e) { alert("Error: " + e.message); }
+    window.onclick = (e) => {
+        if(!gamesPanel.contains(e.target) && e.target !== gamesToggle) {
+            gamesToggle.classList.remove('active');
+            gamesPanel.classList.remove('active');
+        }
+        if(e.target === authOverlay) closeAuth();
     };
-
-    // Google
-    document.getElementById("googleLogin").onclick = async () => {
-        try {
-            await setPersistence(auth, browserLocalPersistence);
-            const res = await signInWithPopup(auth, provider);
-            await ensureUser(res.user);
-        } catch (e) { alert("Error: " + e.message); }
-    };
-
   </script>
+
 </body>
 </html>

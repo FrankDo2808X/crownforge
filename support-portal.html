@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrownForge Support | Submit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Teko:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root { --r-black: #101010; --r-dark: #1f1f1f; --r-yellow: #fcaf17; --r-white: #ffffff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--r-black); font-family: 'Roboto', sans-serif; color: var(--r-white); }
+
+        /* --- NAV --- */
+        nav { height: 60px; background: #000; border-bottom: 2px solid var(--r-yellow); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; }
+        .logo { font-family: 'Teko'; font-size: 1.8rem; color: var(--r-white); text-transform: uppercase; }
+        .nav-links a { color: #aaa; text-decoration: none; font-weight: bold; margin-left: 20px; font-size: 0.9rem; text-transform: uppercase; }
+        .nav-links a:hover, .nav-links a.active { color: var(--r-yellow); }
+
+        /* --- CONTAINER --- */
+        .container { max-width: 600px; margin: 50px auto; padding: 20px; }
+        .auth-box { text-align: center; margin-bottom: 30px; padding: 20px; background: var(--r-dark); border-radius: 4px; display: none; }
+        .show { display: block !important; }
+        h1 { font-family: 'Teko'; font-size: 2.5rem; margin-bottom: 10px; text-transform: uppercase; }
+        
+        /* --- FORM --- */
+        .form-box { background: var(--r-dark); padding: 30px; border-radius: 4px; display: none; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--r-yellow); text-transform: uppercase; font-size: 0.9rem; }
+        textarea { width: 100%; background: #000; border: 1px solid #333; color: white; padding: 15px; font-family: 'Roboto'; height: 150px; resize: vertical; margin-bottom: 20px; font-size: 1rem; }
+        textarea:focus { outline: none; border-color: var(--r-yellow); }
+
+        button { background: var(--r-yellow); color: #000; border: none; padding: 12px 30px; font-weight: bold; text-transform: uppercase; cursor: pointer; font-size: 1rem; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); transition: 0.2s; }
+        button:hover { background: #fff; }
+        
+        .user-info { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #333; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--r-yellow); }
+
+        /* --- NEW CUSTOM MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: none; justify-content: center; align-items: center;
+            z-index: 1000; backdrop-filter: blur(5px);
+        }
+        .modal-box {
+            background: var(--r-dark); border: 2px solid var(--r-yellow);
+            padding: 40px; width: 90%; max-width: 500px; text-align: center;
+            box-shadow: 0 0 50px rgba(252, 175, 23, 0.2);
+            transform: scale(0.9); transition: 0.3s;
+        }
+        .modal-box h2 { font-family: 'Teko'; font-size: 2.5rem; color: var(--r-yellow); margin-bottom: 15px; text-transform: uppercase; }
+        .modal-box p { color: #ccc; margin-bottom: 30px; line-height: 1.5; }
+        .modal-active { display: flex !important; }
+        .modal-active .modal-box { transform: scale(1); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">CrownForge Support</div>
+        <div class="nav-links">
+            <a href="#" class="active">Submit Ticket</a>
+            <a href="feedback-user.html">My Tickets</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="loginSection" class="auth-box show">
+            <h1>Identity Required</h1>
+            <p style="color:#aaa; margin-bottom:20px;">Please login to submit a support ticket.</p>
+            <button onclick="login()">Login with Google</button>
+        </div>
+
+        <div id="formSection" class="form-box">
+            <div class="user-info">
+                <img id="userImg" src="" class="avatar">
+                <div>
+                    <div id="userName" style="font-weight:bold;">User</div>
+                    <div style="font-size:0.8rem; color:#aaa;">Authenticated Agent</div>
+                </div>
+            </div>
+
+            <h1>Submit Feedback</h1>
+            <p style="color:#aaa; margin-bottom: 20px;">Describe your issue or suggestion.</p>
+            <label>Message Content</label>
+            <textarea id="feedbackText" placeholder="Type your feedback here..."></textarea>
+            <button onclick="sendFeedback()">Transmit Data</button>
+        </div>
+    </div>
+
+    <div id="customModal" class="modal-overlay">
+        <div class="modal-box">
+            <h2>Transmission Complete</h2>
+            <p>Your data has been securely uploaded to our support servers. Our team will review your ticket shortly.</p>
+            <button onclick="goToHistory()">View Ticket Status</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+       const firebaseConfig = {
+    apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
+    authDomain: "crownforgestudio-2581a.firebaseapp.com",
+    projectId: "crownforgestudio-2581a",
+    storageBucket: "crownforgestudio-2581a.appspot.com",
+    messagingSenderId: "223324386293",
+    appId: "1:223324386293:web:783a3e64f0d10b1ab026bc"
+  };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('loginSection').classList.remove('show');
+                document.getElementById('formSection').classList.add('show');
+                document.getElementById('userName').innerText = user.displayName;
+                document.getElementById('userImg').src = user.photoURL;
+            } else {
+                document.getElementById('loginSection').classList.add('show');
+                document.getElementById('formSection').classList.remove('show');
+            }
+        });
+
+        window.login = () => signInWithPopup(auth, provider);
+
+        window.sendFeedback = async () => {
+            const text = document.getElementById('feedbackText').value;
+            const user = auth.currentUser;
+
+            if (text.trim() === "") return; // Don't send empty
+
+            try {
+                await addDoc(collection(db, "usersFeedBacks"), {
+                    uid: user.uid,
+                    email: user.email,
+                    name: user.displayName,
+                    message: text,
+                    confirmed: false, 
+                    adminReply: "", // New field for reply
+                    timestamp: serverTimestamp()
+                });
+                
+                // Show Custom Modal instead of Alert
+                document.getElementById('customModal').classList.add('modal-active');
+                document.getElementById('feedbackText').value = "";
+                
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                alert("Transmission Failed.");
+            }
+        };
+
+        window.goToHistory = () => {
+            window.location.href = "feedback-user.html";
+        }
+    </script>
+</body>
+</html>

@@ -3,250 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CrownForge Studio | Connect</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <title>CrownForge Support</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Teko:wght@600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #020617;
-            --neon-blue: #00f2ff;
-            --neon-pink: #ff00e5;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
+            --r-black: #101010;
+            --r-dark-grey: #1f1f1f;
+            --r-light-grey: #2d2d2d;
+            --r-yellow: #fcaf17; /* Rockstar Yellow */
+            --r-white: #ffffff;
+            --text-grey: #b3b3b3;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-dark);
-            color: #fff;
-            overflow-x: hidden;
+            background-color: var(--r-black);
+            font-family: 'Roboto', sans-serif;
+            color: var(--r-white);
+            display: flex;
+            flex-direction: column;
             min-height: 100vh;
         }
 
-        /* --- ANIMATED BACKGROUND --- */
-        .bg-canvas {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%);
-        }
-
-        .blob {
-            position: absolute;
-            width: 500px; height: 500px;
-            background: linear-gradient(var(--neon-blue), var(--neon-pink));
-            filter: blur(120px);
-            border-radius: 50%;
-            opacity: 0.15;
-            animation: move 20s infinite alternate;
-        }
-
-        @keyframes move {
-            from { transform: translate(-10%, -10%); }
-            to { transform: translate(20%, 20%); }
-        }
-
-        /* --- PREMIUM NAV --- */
+        /* --- NAVBAR --- */
         nav {
+            background-color: #000;
+            height: 60px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 20px 6%;
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border);
+            justify-content: space-between;
+            padding: 0 40px;
+            border-bottom: 2px solid var(--r-yellow);
             position: sticky;
-            top: 0; z-index: 1000;
+            top: 0;
+            z-index: 100;
         }
 
-        .logo-box {
+        .brand-box {
             display: flex;
             align-items: center;
             gap: 15px;
-            font-family: 'Orbitron';
-            letter-spacing: 2px;
-            font-size: 1.2rem;
-            color: var(--neon-blue);
-        }
-
-        .logo-box img {
-            width: 45px; height: 45px;
-            border-radius: 12px;
-            border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 15px var(--neon-blue);
-        }
-
-        nav ul { display: flex; gap: 30px; list-style: none; }
-        nav ul li a {
             text-decoration: none;
-            color: rgba(255,255,255,0.7);
+        }
+
+        .brand-logo {
+            height: 32px;
+            width: 32px;
+            border-radius: 4px;
+        }
+
+        .brand-text {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.8rem;
+            color: var(--r-white);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-link {
+            color: var(--r-white);
+            text-decoration: none;
+            font-weight: 700;
             font-size: 0.9rem;
-            font-weight: 600;
             text-transform: uppercase;
             transition: 0.3s;
         }
-        nav ul li a:hover { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+        .nav-link:hover { color: var(--r-yellow); }
 
-        /* --- HEADER --- */
+        /* --- HERO HEADER --- */
         header {
-            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1492551557933-34265f7af79e?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
             padding: 80px 20px 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--r-light-grey);
         }
 
-        header h1 {
-            font-family: 'Orbitron';
-            font-size: clamp(2.5rem, 8vw, 4rem);
-            background: linear-gradient(to right, #fff, var(--neon-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
         }
 
         header p {
-            color: rgba(255,255,255,0.5);
+            color: var(--text-grey);
+            font-size: 1.1rem;
             max-width: 600px;
             margin: 0 auto;
-            line-height: 1.8;
         }
 
-        /* --- CONTACT CARDS --- */
-        .contact-grid {
+        /* --- MAIN CONTENT --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--r-yellow);
+            padding-left: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- GRID SYSTEM --- */
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            max-width: 1000px;
-            margin: 50px auto;
-            padding: 0 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
         }
 
-        .contact-card {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
-            padding: 35px 25px;
-            border-radius: 24px;
+        /* --- CARD STYLE --- */
+        .card {
+            background-color: var(--r-dark-grey);
+            border-radius: 4px;
+            padding: 40px 30px;
             text-decoration: none;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .contact-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(0, 242, 255, 0.15), transparent 40%);
-            z-index: 0;
-        }
-
-        .contact-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: var(--neon-blue);
-            background: rgba(0, 242, 255, 0.05);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-
-        .contact-card img {
-            width: 60px; height: 60px;
-            z-index: 1;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
-        }
-
-        .contact-card span {
-            color: #fff;
-            font-weight: 600;
-            z-index: 1;
-            font-size: 0.95rem;
-            word-break: break-all;
             text-align: center;
+            transition: all 0.2s ease-in-out;
+            border-bottom: 4px solid transparent;
+            position: relative;
         }
+
+        .card:hover {
+            background-color: var(--r-light-grey);
+            transform: translateY(-4px);
+            border-bottom: 4px solid var(--r-yellow);
+        }
+
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            background-color: #000;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+            border: 1px solid #333;
+        }
+
+        .icon-circle img {
+            width: 35px;
+            height: 35px;
+            filter: invert(1);
+        }
+
+        .card h3 {
+            color: var(--r-white);
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .card span {
+            color: var(--text-grey);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .card:hover h3 { color: var(--r-yellow); }
 
         /* --- FOOTER --- */
         footer {
+            background-color: #000;
+            padding: 40px 20px;
             text-align: center;
-            padding: 60px 20px;
-            color: rgba(255,255,255,0.3);
-            font-size: 0.8rem;
-            letter-spacing: 2px;
+            border-top: 1px solid #333;
         }
 
-        /* Mobile Menu */
-        .menu-btn { display: none; cursor: pointer; color: var(--neon-blue); font-size: 1.5rem; }
+        .footer-logo {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.5rem;
+            color: var(--r-yellow);
+            margin-bottom: 10px;
+            display: inline-block;
+        }
 
-        @media (max-width: 768px) {
-            nav ul { display: none; }
-            .menu-btn { display: block; }
-            .contact-grid { grid-template-columns: 1fr; }
+        footer p {
+            color: #555;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .grid { grid-template-columns: 1fr; }
+            nav { padding: 0 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-canvas">
-        <div class="blob"></div>
-    </div>
-
     <nav>
-        <div class="logo-box">
-            <img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="Logo">
-            <span>CROWNFORGE</span>
-        </div>
-        <ul id="menuList">
-            <li><a href="Crownforgepage.html">Home</a></li>
-            <li><a href="Games.html">Games</a></li>
-            <li><a href="tralers.html">Videos</a></li>
-            <li><a href="#" style="color:var(--neon-blue)">Contact</a></li>
-        </ul>
-        <div class="menu-btn">☰</div>
+        <a href="Crownforgepage.html" class="brand-box">
+            <img src="https://i.ibb.co/JwZthyvB/channels4-profile.jpg" alt="Logo" class="brand-logo">
+            <span class="brand-text">CrownForge</span>
+        </a>
+        <a href="Crownforgepage.html" class="nav-link">Back to Home</a>
     </nav>
 
     <header>
-        <h1>Let's Connect</h1>
-        <p>Join the Forge. Whether you have a query or just want to vibe with our community, choose your platform below.</p>
+        <h1>How Can We Help?</h1>
+        <p>Select a channel below to initiate communication with the team.</p>
     </header>
 
-    <div class="contact-grid">
-        <a href="mailto:crownforgebusiness@gmail.com" class="contact-card">
-            <img src="https://img.icons8.com/fluency/96/mail.png" alt="Email">
-            <span>crownforgebusiness@gmail.com</span>
-        </a>
+    <div class="container">
+        <div class="section-title">Select Department</div>
+        
+        <div class="grid">
+            <a href="mailto:crownforgebusiness@gmail.com?subject=BUSINESS%20INQUIRY%20-%20%5BYour%20Organization%5D&body=Name%3A%20%0D%0AOrganization%3A%20%0D%0APurpose%20of%20Contact%3A%20" class="card">
+                <div class="icon-circle">
+                    <img src="https://img.icons8.com/ios-filled/100/000000/mail.png" alt="Email">
+                </div>
+                <h3>Business Inquiry crownforgebusiness@gmail.com </h3>
+                <span>Partnerships, quotes, and official business matters.</span>
+            </a>
 
-        <a href="https://www.instagram.com/crownforge_official" target="_blank" class="contact-card">
-            <img src="https://img.icons8.com/fluency/96/instagram-new.png" alt="Instagram">
-            <span>@crownforge_official</span>
-        </a>
+            <a href="https://discord.gg/C9rtFRtWax" target="_blank" class="card">
+                <div class="icon-circle">
+                    <img src="https://img.icons8.com/ios-filled/100/000000/discord-logo.png" alt="Discord">
+                </div>
+                <h3>Community Support</h3>
+                <span>Join the server for live chat and community updates.</span>
+            </a>
 
-        <a href="https://discord.gg/C9rtFRtWax" target="_blank" class="contact-card">
-            <img src="https://img.icons8.com/fluency/96/discord-logo.png" alt="Discord">
-            <span>Official Discord</span>
-        </a>
+            <a href="https://www.instagram.com/crownforge_official" target="_blank" class="card">
+                <div class="icon-circle">
+                    <img src="https://img.icons8.com/ios-filled/100/000000/instagram-new.png" alt="Instagram">
+                </div>
+                <h3>Social Media</h3>
+                <span>Follow us for daily updates and behind the scenes.</span>
+            </a>
 
-        <a href="https://www.youtube.com/@CrownForgeStudio" target="_blank" class="contact-card">
-            <img src="https://img.icons8.com/fluency/96/youtube-play.png" alt="YouTube">
-            <span>CrownForge Studio</span>
-        </a>
+            <a href="https://www.youtube.com/@CrownForgeStudio" target="_blank" class="card">
+                <div class="icon-circle">
+                    <img src="https://img.icons8.com/ios-filled/100/000000/youtube-play.png" alt="YouTube">
+                </div>
+                <h3>Media Content</h3>
+                <span>Watch our latest projects, tutorials, and showcases.</span>
+            </a>
+        </div>
     </div>
 
     <footer>
-        &copy; 2026 CROWNFORGE STUDIO • BUILT FOR THE FUTURE
+        <span class="footer-logo">CROWNFORGE STUDIO</span>
+        <p>© 2026 CrownForge Studio. All rights reserved.</p>
     </footer>
 
-    <script>
-        // Mouse Tracking Glow Effect
-        const cards = document.querySelectorAll('.contact-card');
-        cards.forEach(card => {
-            card.onmousemove = e => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty('--mouse-x', `${x}px`);
-                card.style.setProperty('--mouse-y', `${y}px`);
-            };
-        });
-    </script>
 </body>
 </html>
