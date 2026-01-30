@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini AI Pro Assistant</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #eef2f7; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .chat-container { width: 100%; max-width: 450px; height: 80vh; background: white; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow: hidden; }
+        .header { background: #1a73e8; color: white; padding: 20px; text-align: center; font-size: 1.2rem; font-weight: 600; }
+        #chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: #f9fbff; }
+        .msg { padding: 12px 16px; border-radius: 15px; font-size: 14px; line-height: 1.6; max-width: 85%; word-wrap: break-word; }
+        .user { align-self: flex-end; background: #1a73e8; color: white; border-bottom-right-radius: 2px; }
+        .bot { align-self: flex-start; background: #fff; color: #333; border: 1px solid #e0e0e0; border-bottom-left-radius: 2px; }
+        .input-area { padding: 15px; background: white; border-top: 1px solid #eee; display: flex; gap: 10px; }
+        input { flex: 1; border: 1px solid #ddd; padding: 12px 18px; border-radius: 30px; outline: none; font-size: 14px; }
+        input:focus { border-color: #1a73e8; }
+        button { background: #1a73e8; color: white; border: none; padding: 10px 20px; border-radius: 30px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #1557b0; }
+        .typing { font-size: 12px; color: #888; margin-bottom: 5px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="header">Smart AI Assistant</div>
+    <div id="chat-box">
+        <div class="msg bot">Hello! I am powered by Gemini. Ask me anything, and I can search the web for the latest info!</div>
+    </div>
+    <div id="status" class="typing" style="padding-left: 20px;">AI is thinking...</div>
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="Type a message...">
+        <button onclick="askAI()">Send</button>
+    </div>
+</div>
+
+<script type="module">
+    // --- 1. SETTINGS ---
+    const API_KEY = "AIzaSyAz6X2lDBC0eGr-4icMKWuTIf0-XYEe518"; 
+    // This uses the latest Gemini 1.5 Flash for speed and Search Grounding
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
+    const chatBox = document.getElementById("chat-box");
+    const status = document.getElementById("status");
+
+    // --- 2. THE AI FUNCTION ---
+    window.askAI = async () => {
+        const input = document.getElementById("user-input");
+        const userText = input.value.trim();
+        if (!userText) return;
+
+        // Show user message
+        addMessage(userText, 'user');
+        input.value = "";
+        status.style.display = "block";
+
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: userText }] }],
+                    // THIS IS THE SECRET FOR REAL-TIME WEB SEARCH
+                    tools: [{ google_search_retrieval: {} }] 
+                })
+            });
+
+            const data = await response.json();
+            
+            // Extract the text from the complex JSON response
+            const aiText = data.candidates[0].content.parts[0].text;
+            
+            status.style.display = "none";
+            addMessage(aiText, 'bot');
+
+        } catch (error) {
+            console.error("AI Error:", error);
+            status.style.display = "none";
+            addMessage("I'm sorry, I'm having trouble connecting to my brain. Please check your internet or API key.", 'bot');
+        }
+    };
+
+    function addMessage(text, sender) {
+        const div = document.createElement("div");
+        div.className = `msg ${sender}`;
+        div.innerText = text;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Allow Enter key to send
+    document.getElementById("user-input").addEventListener("keypress", (e) => {
+        if (e.key === "Enter") askAI();
+    });
+</script>
+
+</body>
+</html>

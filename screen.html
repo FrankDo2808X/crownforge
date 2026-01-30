@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickShare | Live Server Fix</title>
+    <style>
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 40px; margin: 0; }
+        .container { background: var(--card); padding: 2rem; border-radius: 20px; width: 100%; max-width: 800px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        input { flex: 1; padding: 15px; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: white; font-size: 1rem; }
+        .btns { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        button { padding: 15px; border-radius: 10px; border: none; cursor: pointer; font-weight: 800; text-transform: uppercase; transition: 0.2s; }
+        .btn-share { background: var(--accent); color: #0f172a; }
+        .btn-join { background: #10b981; color: white; }
+        button:hover { opacity: 0.9; transform: scale(0.98); }
+        #status { margin: 15px 0; color: #94a3b8; font-weight: bold; }
+        .video-container { position: relative; width: 100%; margin-top: 20px; background: #000; border-radius: 15px; overflow: hidden; min-height: 400px; }
+        video { width: 100%; height: 100%; object-fit: contain; }
+        #localPreview { position: absolute; bottom: 20px; right: 20px; width: 180px; border: 2px solid var(--accent); border-radius: 10px; z-index: 10; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 style="margin-top:0">QuickShare 📡</h1>
+    <div class="input-group">
+        <input type="text" id="roomId" placeholder="Enter or Generate Room ID...">
+        <button onclick="document.getElementById('roomId').value = Math.random().toString(36).substring(2, 12)" style="background:#475569; color:white; width: auto;">Random ID</button>
+    </div>
+    
+    <div class="btns">
+        <button class="btn-share" id="startBtn">Start Sharing</button>
+        <button class="btn-join" id="joinBtn">Join Stream</button>
+    </div>
+
+    <p id="status">Ready. Enter an ID to begin.</p>
+    
+    <div class="video-container">
+        <video id="localPreview" autoplay playsinline muted></video>
+        <video id="remoteVideo" autoplay playsinline></video>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, onSnapshot, updateDoc, collection, addDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // FIREBASE CONFIG
+    const firebaseConfig = {
+        apiKey: "AIzaSyDNy1J7zVJMLGLsyUxRT1EIaIBruI_p2G8",
+        authDomain: "crownforgestudio-2581a.firebaseapp.com",
+        projectId: "crownforgestudio-2581a",
+        storageBucket: "crownforgestudio-2581a.appspot.com",
+        messagingSenderId: "223324386293",
+        appId: "1:223324386293:web:9d7919c6b2e93781b026bc"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    let pc = new RTCPeerConnection({
+        iceServers: [{ urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302'] }]
+    });
+
+    const status = document.getElementById('status');
+    const remoteVideo = document.getElementById('remoteVideo');
+    const localPreview = document.getElementById('localPreview');
+
+    // --- SHARER LOGIC ---
+    document.getElementById('startBtn').onclick = async () => {
+        const roomId = document.getElementById('roomId').value;
+        if(!roomId) return alert("Enter a Room ID first!");
+
+        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+        localPreview.srcObject = stream;
+        stream.getTracks().forEach(track => pc.addTrack(track, stream));
+
+        const roomRef = doc(db, "rooms", roomId);
+        const callerCandidates = collection(roomRef, "callerCandidates");
+
+        pc.onicecandidate = (e) => e.candidate && addDoc(callerCandidates, e.candidate.toJSON());
+
+        const offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
+        await setDoc(roomRef, { offer: { type: offer.type, sdp: offer.sdp } });
+
+        onSnapshot(roomRef, (snapshot) => {
+            const data = snapshot.data();
+            if (!pc.currentRemoteDescription && data?.answer) {
+                pc.setRemoteDescription(new RTCSessionDescription(data.answer));
+            }
+        });
+
+        onSnapshot(collection(roomRef, "calleeCandidates"), (snap) => {
+            snap.docChanges().forEach(change => {
+                if (change.type === "added") pc.addIceCandidate(new RTCIceCandidate(change.doc.data()));
+            });
+        });
+
+        status.innerText = "LIVE: Sharing screen in " + roomId;
+    };
+
+    // --- JOINER LOGIC ---
+    document.getElementById('joinBtn').onclick = async () => {
+        const roomId = document.getElementById('roomId').value;
+        if(!roomId) return alert("Enter the Room ID to join!");
+
+        const roomRef = doc(db, "rooms", roomId);
+        const roomSnap = await getDoc(roomRef);
+
+        if (!roomSnap.exists()) return alert("Room doesn't exist yet! Ask the sharer to start first.");
+
+        pc.ontrack = (e) => {
+            remoteVideo.srcObject = e.streams[0];
+            status.innerText = "CONNECTED: Watching " + roomId;
+        };
+
+        const calleeCandidates = collection(roomRef, "calleeCandidates");
+        pc.onicecandidate = (e) => e.candidate && addDoc(calleeCandidates, e.candidate.toJSON());
+
+        const offer = roomSnap.data().offer;
+        await pc.setLocalDescription(new RTCSessionDescription()); // Reset state
+        await pc.setRemoteDescription(new RTCSessionDescription(offer));
+
+        const answer = await pc.createAnswer();
+        await pc.setLocalDescription(answer);
+        await updateDoc(roomRef, { answer: { type: answer.type, sdp: answer.sdp } });
+
+        onSnapshot(collection(roomRef, "callerCandidates"), (snap) => {
+            snap.docChanges().forEach(change => {
+                if (change.type === "added") pc.addIceCandidate(new RTCIceCandidate(change.doc.data()));
+            });
+        });
+    };
+</script>
+</body>
+</html>
